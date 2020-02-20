@@ -12,4 +12,7 @@ public class Controller {
 	public Model getModel() {
 		return model;
 	}
+
+	//Testing that the commit works
+
 }
