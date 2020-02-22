@@ -10,7 +10,7 @@ public class Impression {
     private LocalDateTime dateTime; // date and time
     private String ID; // Uniquely identifies a user
     private Gender gender;
-    //Age group of user: <25 / 25-34 / 35-44 / 45-/ >54 @TODO data structure???
+    private AgeGroup ageGroup;
     private Income income; // Low, Medium or High
     private Context context; // Context of ad, e.g. Blog, News, Shopping
     private float impressionCost; // in pence
@@ -68,4 +68,3 @@ public class Impression {
         }
     }
 }
-
