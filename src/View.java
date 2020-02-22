@@ -5,23 +5,23 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * Displays Model's information by responding to updates.
+ * Displays Campaign's information by responding to updates.
  * Passes user input to the controller.
  */
 public class View extends JFrame implements Observer {
 
 	private Controller controller;
-	private Model model;
+	private Campaign campaign;
 
-	/*
-	Display initial GUI
-	Currently uses Swing (to be changed)
+	/**
+	 * Display initial GUI
+	 * Currently uses Swing (to be changed)
 	 */
 	public View(Controller controller) {
 		super("Detail View");
 		this.controller = controller;
-		this.model = this.controller.getModel();
-		this.model.addObserver(this);
+		this.campaign = this.controller.getCampaign();
+		this.campaign.addObserver(this);
 		updateData();
 		setSize(new Dimension(200, 170));
 
@@ -33,8 +33,8 @@ public class View extends JFrame implements Observer {
 		setVisible(true);
 	}
 
-	/*
-	Requests data from a model and updates GUI accordingly
+	/**
+	 * Requests data from a campaign and updates GUI accordingly
 	 */
 	private void updateData() {
 		repaint();

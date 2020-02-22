@@ -1,18 +1,15 @@
 /**
- * Translates user actions into operations on the model.
+ * Translates user actions into operations on the campaign.
  */
 public class Controller {
 
-	private Model model;
+	private Campaign campaign;
 
-	public Controller(Model model) {
-		this.model = model;
+	public Controller(Campaign campaign) {
+		this.campaign = campaign;
 	}
 
-	public Model getModel() {
-		return model;
+	public Campaign getCampaign() {
+		return campaign;
 	}
-
-	//Testing that the commit works
-
 }

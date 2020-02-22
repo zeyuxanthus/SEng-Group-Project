@@ -4,8 +4,8 @@
 public class Main {
 
 	public static void main(String[] args) {
-		Model model = new Model();
-		Controller controller = new Controller(model);
+		Campaign campaign = new Campaign();
+		Controller controller = new Controller(campaign);
 		View view = new View(controller);
 	}
 }

@@ -1,5 +1,5 @@
-/*
-Receives notifications of Observable (Model)
+/**
+ * Receives notifications of Observable (Campaign)
  */
 @FunctionalInterface
 public interface Observer {

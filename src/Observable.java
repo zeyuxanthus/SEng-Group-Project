@@ -1,5 +1,5 @@
-/*
-Maintains a list of Observers and notifies them of any changes.
+/**
+ * Maintains a list of Observers and notifies them of any changes.
  */
 @FunctionalInterface
 public interface Observable {
