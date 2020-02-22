@@ -79,4 +79,33 @@ public class Impression {
             this.income = income;
         }
     }
+
+    String getID(){
+        return ID;
+    }
+
+    AgeGroup getAgeGroup(){
+        return ageGroup;
+    }
+
+    Gender getGender(){
+        return gender;
+    }
+
+    Context getContext(){
+        return context;
+    }
+
+    LocalDateTime getDateTime(){
+        return dateTime;
+    }
+
+    Income getIncome(){
+        return income;
+    }
+
+    float getImpressionCost(){
+        return impressionCost;
+    }
+
 }
