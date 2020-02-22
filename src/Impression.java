@@ -16,6 +16,18 @@ public class Impression {
     private float impressionCost; // in pence
                                   // @TODO check if data doesn't contain longer values
 
+    public Impression(String ID, AgeGroup ageGroup, LocalDateTime dateTime, Gender gender, Income income, Context context, float impressionCost){
+
+        this.ID = ID;
+        this.ageGroup = ageGroup;
+        this.dateTime = dateTime;
+        this.gender = gender;
+        this.income = income;
+        this.context = context;
+        this.impressionCost = impressionCost;
+
+    }
+
     enum AgeGroup{
         YOUNGER("<25"),
         YOUNG("25-34"),
