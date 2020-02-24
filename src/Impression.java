@@ -80,31 +80,31 @@ public class Impression {
         }
     }
 
-    String getID(){
+    public String getID(){
         return ID;
     }
 
-    AgeGroup getAgeGroup(){
+    public AgeGroup getAgeGroup(){
         return ageGroup;
     }
 
-    Gender getGender(){
+    public Gender getGender(){
         return gender;
     }
 
-    Context getContext(){
+    public Context getContext(){
         return context;
     }
 
-    LocalDateTime getDateTime(){
+    public LocalDateTime getDateTime(){
         return dateTime;
     }
 
-    Income getIncome(){
+    public Income getIncome(){
         return income;
     }
 
-    float getImpressionCost(){
+    public float getImpressionCost(){
         return impressionCost;
     }
 
