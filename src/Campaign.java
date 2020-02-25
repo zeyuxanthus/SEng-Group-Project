@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -183,5 +184,68 @@ public class Campaign implements Observable {
 		}
 		CPM = (totalImpCost / impressionArray.size())*1000;
 	}
-
+	
+	public Float getTotalImpressions() {
+		return totalImpressions;
+	}
+	
+	public Float getTotalImpressionCost() {
+		return totalImpCost;
+	}
+	
+	public Float getTotalClicks() {
+		return totalClicks;
+	}
+	public Float getTotalClickCost() {
+		return totalClickCost;
+	}
+	
+	public Float getTotalConversions() {
+		return totalConversions;
+	}
+	
+	public Float getTotalBounces() {
+		return bounces;
+	}
+	
+	public Float getBounceRate() {
+		return bounceRate;
+	}
+	
+	public Float getTotalUnique() {
+		return totalUniques;
+	}
+	
+	public Float getCTR() {
+		return CTR;
+	}
+	
+	public Float getCPA() {
+		return CPA;
+	}
+	
+	public Float getCPC() {
+		return CPC;
+	}
+	
+	public Float getCPM() {
+		return CPM;
+	}
+	
+	public ArrayList<Impression> getImpressions() {
+		return impressions;
+	}
+	
+	public ArrayList<ServerEntry> getServerEntries() {
+		return serverEntries;
+	}
+	
+	public ArrayList<Click> getClicks(){
+		return clicks;
+	}
+	
+	public Float getConversionRate() {
+		return conversionRate;
+	}
+	
 }
