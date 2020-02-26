@@ -1,5 +1,7 @@
 package com.company;
 
+import com.sun.security.ntlm.Server;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -130,46 +132,48 @@ public class Campaign implements Observable {
 	}
 	
 	public void loadSeverlog (String serverFileName){
-		String serverLog = serverFileName;
-		File serverLogFile = new File(serverLog);
+		ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
+		File serverLogFile = new File(serverFileName);
 		String serverLine = "";
 
 		//Catch block to check if the serverLogFile is there
 		try {
 			Scanner inputStream = new Scanner(serverLogFile);
 			//To remove the first serverLine (headings)
-			inputStream.nextLine().replaceAll(" ", "");
+			inputStream.nextLine();
 
 			while (inputStream.hasNext()) {
 				try{
-					serverLine = inputStream.nextLine().replaceAll(" ", "-")
-							.replaceAll("n/a","2019-01-01-01:01:01");
-					//	.replaceAll("n/a",null);
-
+					serverLine = inputStream.nextLine();
 					//seperating columns based on comma
 					String[] serverValues = serverLine.split(",");
-					//The replacement date is then replaced with n/a in the toString method
-					//serverValues[2].replaceAll("n/a",null); //this would remove the entire entry of the line with n/a as the exit dateTime
 
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
-
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 					LocalDateTime entryDate = LocalDateTime.parse(serverValues[0], formatter);
+
 					String id = serverValues[1];
-					LocalDateTime exitDate = LocalDateTime.parse(serverValues[2],formatter);
-					Integer pagesViewed = Integer.parseInt(serverValues[3]);
+
+					LocalDateTime exitDate;
+					if(serverValues[2].equals("n/a")){
+						exitDate = null;
+					}
+					else exitDate = LocalDateTime.parse(serverValues[2],formatter);
+
+					int pagesViewed = Integer.parseInt(serverValues[3]);
+
 					String conversion = serverValues[4];
 
 
 					serverEntries.add(new ServerEntry(entryDate,id,exitDate,pagesViewed,conversion));
 				} catch(NullPointerException e) {
-
+					e.printStackTrace();
 				}
-
 			}
 			inputStream.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		this.serverEntries = serverEntries;
 		System.out.println(serverEntries); // entire log
 	}
 
