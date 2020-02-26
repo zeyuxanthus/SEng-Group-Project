@@ -1,3 +1,4 @@
+package com.company;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,7 +37,7 @@ public class Campaign implements Observable {
 
 	// Log information
 	private ArrayList<Impression> impressions = new ArrayList<>(); // Impression Log
-	private ArrayList<Click> clicks = new ArrayList<>(); // Click Log
+	private ArrayList<Click> clicks; // Click Log
 	private ArrayList<ServerEntry> serverEntries = new ArrayList<>(); // Server Log
 
 	/**
@@ -52,25 +53,35 @@ public class Campaign implements Observable {
 	public void addObserver(Observer observer) {
 		observers.add(observer);
 	}
-	
-	public void loadClickLog (String clickFileName){
 
+	/**
+	 * @TODO for other loaders:
+	 * 	1. create local ArrayList to override previous document
+	 * 	2. remove replaceAll()
+	 * 	3. change the pattern of the formatter (to account for space)
+	 * 	4. Campaign's ArrayLists don't need to be initialised
+	 * @param clickFileName - path to the file + its name
+	 */
+	public void loadClickLog (String clickFileName){
+		ArrayList<Click> clicks = new ArrayList<Click>();
 		String clickLog = clickFileName;
 		File clickLogFile = new File(clickLog);
 		String clickLine = "";
 		try {
 			Scanner inputStream = new Scanner(clickLogFile);
 			//To remove the first clickLine (headings)
-			inputStream.nextLine().replaceAll(" ","");
+			inputStream.nextLine();
 
 			while (inputStream.hasNext()){
-				clickLine = inputStream.nextLine().replaceAll(" ", "-");
+				clickLine = inputStream.nextLine();
 				//seperating colums based on comma
 				String[] clickValues = clickLine.split(",");
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
 
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				LocalDateTime formatDateTime = LocalDateTime.parse(clickValues[0],formatter);
+
 				String id = clickValues[1];
+
 				Float clickCost = Float.parseFloat(clickValues[2]);
 
 				clicks.add(new Click(formatDateTime,id,clickCost));
@@ -79,9 +90,7 @@ public class Campaign implements Observable {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
-		System.out.println(clicks);
-
+		this.clicks = clicks;
 	}
 	
 	public void loadImpressionLog (String impressionFileName){
@@ -112,7 +121,6 @@ public class Campaign implements Observable {
 				Float impressionCost = Float.parseFloat(impressionValues[6]);
 
 				impressions.add(new Impression(dateTime,id,gender,ageGroup,income,context,impressionCost));
-
 			}
 			inputStream.close();
 		} catch (FileNotFoundException e) {
