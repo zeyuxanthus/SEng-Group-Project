@@ -9,23 +9,21 @@ public class Impression {
 
     private LocalDateTime dateTime; // date and time
     private String ID; // Uniquely identifies a user
-    private Gender gender;
-    private AgeGroup ageGroup;
-    private Income income; // Low, Medium or High
-    private Context context; // Context of ad, e.g. Blog, News, Shopping
+    private String gender;
+    private String ageGroup;
+    private String income; // Low, Medium or High
+    private String context; // Context of ad, e.g. Blog, News, Shopping
     private float impressionCost; // in pence
                                   // @TODO check if data doesn't contain longer values
 
-    public Impression(String ID, AgeGroup ageGroup, LocalDateTime dateTime, Gender gender, Income income, Context context, float impressionCost){
-
-        this.ID = ID;
-        this.ageGroup = ageGroup;
+   public Impression(LocalDateTime dateTime, String ID, String gender,String ageGroup,String income,String context,Float impressionCost) {
         this.dateTime = dateTime;
+        this.ID = ID;
         this.gender = gender;
+        this.ageGroup = ageGroup;
         this.income = income;
         this.context = context;
         this.impressionCost = impressionCost;
-
     }
 
     enum AgeGroup{
@@ -84,15 +82,15 @@ public class Impression {
         return ID;
     }
 
-    public AgeGroup getAgeGroup(){
+    public String getAgeGroup(){
         return ageGroup;
     }
 
-    public Gender getGender(){
+    public String getGender(){
         return gender;
     }
 
-    public Context getContext(){
+    public String getContext(){
         return context;
     }
 
@@ -100,12 +98,17 @@ public class Impression {
         return dateTime;
     }
 
-    public Income getIncome(){
+    public String getIncome(){
         return income;
     }
 
     public float getImpressionCost(){
         return impressionCost;
+    }
+    
+     @Override
+    public String toString() {
+        return dateTime+" "+ID+" "+gender+" "+ageGroup+" "+income+" "+context+" "+impressionCost+System.lineSeparator();
     }
 
 }
