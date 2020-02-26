@@ -17,17 +17,16 @@ import java.util.*;
  */
 public class Campaign implements Observable {
 
-	private float totalImpressions;
+	private int totalImpressions;
 	private float totalImpCost;
-	private float totalClicks;
+	private int totalClicks;
 	private float totalClickCost;
 	private float totalCost;
-	private float totalConversions;
+	private int totalConversions;
 	private float conversionRate;
-	private float bounces;
+	private int bounces;
 	private float bounceRate;
-	private float totalUniques; // not sure how to calculate uniques
-	private HashSet<String> uniquesHashset = new HashSet<String>();
+	private int totalUniques;
 	private float CTR; // click-through-rate
 	private float CPA; // cost-per-acquisition
 	private float CPC; // cost-per-click
@@ -175,7 +174,6 @@ public class Campaign implements Observable {
 	}
 
 	private void calcImpressions(ArrayList<Impression> impressionArray){
-		totalImpressions = 0;
 		totalImpressions = impressionArray.size();
 	}
 
@@ -187,7 +185,6 @@ public class Campaign implements Observable {
 	}
 
 	private void calcClicks(ArrayList<Click> clickArray){
-		totalClicks = 0;
 		totalClicks = clickArray.size();
 	}
 
@@ -216,7 +213,7 @@ public class Campaign implements Observable {
 	private void calcConversions(ArrayList<ServerEntry> serverEntryArray){
 		totalConversions = 0;
 		for (ServerEntry serverEntry: serverEntryArray) {
-			if (serverEntry.getConversion().toString() == "YES"){
+			if (serverEntry.getConversion().equals("Yes")){
 				totalConversions += 1;
 			}
 		}
@@ -227,11 +224,11 @@ public class Campaign implements Observable {
 		totalClicks = 0;
 		totalClicks = clickArray.size();
 		for (ServerEntry serverEntry: serverEntryArray) {
-			if (serverEntry.getConversion().toString() == "YES") {
+			if (serverEntry.getConversion().equals("Yes")) {
 				totalConversions += 1;
 			}
 		}
-		conversionRate = totalConversions / totalClicks;
+		conversionRate = (float) totalConversions / totalClicks;
 	}
 
 	private void calcBounces(ArrayList<ServerEntry> serverEntryArray){
@@ -252,12 +249,11 @@ public class Campaign implements Observable {
 			}
 		}
 		totalClicks = clickArray.size();
-		bounceRate = bounces / totalClicks;// change to proper divide function
+		bounceRate = (float) bounces / totalClicks;// change to proper divide function
 	}
 
 	private void calcUniques(ArrayList<Click> clickArray){
-		totalUniques = 0;
-		uniquesHashset.clear();
+		HashSet<String> uniquesHashset = new HashSet<String>();
 		for (Click click: clickArray) {
 			uniquesHashset.add(click.getID());
 		}
@@ -265,12 +261,10 @@ public class Campaign implements Observable {
 	}
 
 	private void calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
-		CTR = 0;
-		CTR = clickArray.size() / impressionArray.size();
+		CTR = (float) clickArray.size() / impressionArray.size();
 	}
 
 	private void calcCPA(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray, ArrayList<ServerEntry> serverEntryArray){
-		CPA = 0;
 		totalImpCost = 0;
 		totalClickCost = 0;
 		totalConversions = 0;
@@ -286,7 +280,7 @@ public class Campaign implements Observable {
 		totalCost = totalClickCost + totalImpCost;
 
 		for (ServerEntry serverEntry: serverEntryArray) {
-			if (serverEntry.getConversion().toString() == "YES"){
+			if (serverEntry.getConversion().equals("Yes")){
 				totalConversions += 1;
 			}
 		}
@@ -295,67 +289,70 @@ public class Campaign implements Observable {
 
 	private void calcCPC(ArrayList<Click> clickArray){
 		totalClickCost = 0;
-		CPC = 0;
 		for (Click click: clickArray) {
 			totalClickCost += click.getClickCost();
 		}
-		CPC = totalClickCost / clickArray.size();
+		CPC = (float) totalClickCost / clickArray.size();
 	}
 
 	private void calcCPM(ArrayList<Impression> impressionArray){
 		totalImpCost = 0;
-		CPM = 0;
 		for (Impression imp: impressionArray) {
 			totalImpCost += imp.getImpressionCost();
 		}
-		CPM = (totalImpCost / impressionArray.size())*1000;
+		CPM = (float) totalImpCost / impressionArray.size() / 1000;
 	}
 	
-	public Float getTotalImpressions() {
+	public int getTotalImpressions() {
 		return totalImpressions;
 	}
 	
-	public Float getTotalImpressionCost() {
+	public float getTotalImpressionCost() {
 		return totalImpCost;
 	}
 	
-	public Float getTotalClicks() {
+	public float getTotalClicks() {
 		return totalClicks;
 	}
-	public Float getTotalClickCost() {
+
+	public float getTotalClickCost() {
 		return totalClickCost;
 	}
 	
-	public Float getTotalConversions() {
+	public float getTotalConversions() {
 		return totalConversions;
 	}
 	
-	public Float getTotalBounces() {
+	public float getTotalBounces() {
 		return bounces;
 	}
 	
-	public Float getBounceRate() {
+	public float getBounceRate() {
 		return bounceRate;
 	}
 	
-	public Float getTotalUnique() {
+	public float getTotalUnique() {
 		return totalUniques;
 	}
 	
-	public Float getCTR() {
+	public float getCTR() {
 		return CTR;
 	}
 	
-	public Float getCPA() {
+	public float getCPA() {
 		return CPA;
 	}
 	
-	public Float getCPC() {
+	public float getCPC() {
 		return CPC;
 	}
 	
-	public Float getCPM() {
+	public float getCPM() {
 		return CPM;
+	}
+
+	public float getConversionRate() {
+		return conversionRate;
 	}
 	
 	public ArrayList<Impression> getImpressions() {
@@ -369,9 +366,4 @@ public class Campaign implements Observable {
 	public ArrayList<Click> getClicks(){
 		return clicks;
 	}
-	
-	public Float getConversionRate() {
-		return conversionRate;
-	}
-	
 }
