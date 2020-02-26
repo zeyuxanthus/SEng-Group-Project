@@ -8,12 +8,12 @@ public class ServerEntry {
     private LocalDateTime entryDate;
     private String ID;
     private LocalDateTime exitDate;
-    private float pagesViewed;
-    private Conversion conversion;
+    private int pagesViewed;
+    private String conversion;
 
-    public ServerEntry(LocalDateTime entryDate, String ID, LocalDateTime exitDate, float pagesViewed, Conversion conversion){
+  public ServerEntry(LocalDateTime entryDate, String id, LocalDateTime exitDate, int pagesViewed, String conversion) {
         this.entryDate = entryDate;
-        this.ID = ID;
+        this.ID = id;
         this.exitDate = exitDate;
         this.pagesViewed = pagesViewed;
         this.conversion = conversion;
@@ -42,12 +42,18 @@ public class ServerEntry {
         return exitDate;
     }
 
-    public float getPagesViewed(){
+    public int getPagesViewed(){
         return pagesViewed;
     }
 
-    public Conversion getConversion(){
+    public String getConversion(){
         return conversion;
+    }
+    
+    @Override
+    public String toString() {
+        return entryDate + " " + ID + " " + exitDate.toString().replaceAll("2019-01-01T01:01:01","n/a") +
+                " " + pagesViewed + " " + conversion + System.lineSeparator();
     }
 
 }
