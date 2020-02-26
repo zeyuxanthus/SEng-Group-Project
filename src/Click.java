@@ -27,5 +27,10 @@ public class Click {
     public float getClickCost(){
         return  clickCost;
     }
+    
+     @Override
+    public String toString() {
+        return dateTime + " " + ID + " " + clickCost + System.lineSeparator();
+    }
 
 }
