@@ -30,9 +30,9 @@ public class Campaign implements Observable {
 	private List<Observer> observers = new LinkedList<Observer>();
 
 	// Log information
-	private ArrayList<Impression> impressions; // Impression Log
-	private ArrayList<Click> clicks; // Click Log
-	private ArrayList<ServerEntry> serverEntries; // Server Log
+	private ArrayList<Impression> impressions = new ArrayList<>(); // Impression Log
+	private ArrayList<Click> clicks = new ArrayList<>(); // Click Log
+	private ArrayList<ServerEntry> serverEntries = new ArrayList<>(); // Server Log
 
 	/**
 	 * Should be called whenever anything in the model changes.
@@ -46,6 +46,119 @@ public class Campaign implements Observable {
 
 	public void addObserver(Observer observer) {
 		observers.add(observer);
+	}
+	
+	public void loadClickLog (String clickFileName){
+
+		String clickLog = clickFileName;
+		File clickLogFile = new File(clickLog);
+		String clickLine = "";
+		try {
+			Scanner inputStream = new Scanner(clickLogFile);
+			//To remove the first clickLine (headings)
+			inputStream.nextLine().replaceAll(" ","");
+
+			while (inputStream.hasNext()){
+				clickLine = inputStream.nextLine().replaceAll(" ", "-");
+				//seperating colums based on comma
+				String[] clickValues = clickLine.split(",");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
+
+				LocalDateTime formatDateTime = LocalDateTime.parse(clickValues[0],formatter);
+				String id = clickValues[1];
+				Float clickCost = Float.parseFloat(clickValues[2]);
+
+				clicks.add(new Click(formatDateTime,id,clickCost));
+			}
+			inputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println(clicks);
+
+	}
+	
+	public void loadImpressionLog (String impressionFileName){
+		String impressionLog = impressionFileName;
+		File impressionLogFile = new File(impressionLog);
+		String impressionLine = "";
+
+		//Catch block to check if the impressionLogFile is there
+		try {
+			Scanner inputStream = new Scanner(impressionLogFile);
+			//To remove the first impressionLine (headings)
+			inputStream.nextLine().replaceAll(" ", "");
+
+			while (inputStream.hasNext()) {
+				impressionLine = inputStream.nextLine().replaceAll(" ", "-");
+
+				//seperating columns based on comma
+				String[] impressionValues = impressionLine.split(",");
+
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
+
+				LocalDateTime dateTime = LocalDateTime.parse(impressionValues[0],formatter);
+				String id = impressionValues[1];
+				String gender = impressionValues[2];
+				String ageGroup = impressionValues[3];
+				String income = impressionValues[4];
+				String context = impressionValues[5];
+				Float impressionCost = Float.parseFloat(impressionValues[6]);
+
+				impressions.add(new Impression(dateTime,id,gender,ageGroup,income,context,impressionCost));
+
+			}
+			inputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println(impressions); //printout entire log
+
+	}
+	
+	public void loadSeverlog (String serverFileName){
+		String serverLog = serverFileName;
+		File serverLogFile = new File(serverLog);
+		String serverLine = "";
+
+		//Catch block to check if the serverLogFile is there
+		try {
+			Scanner inputStream = new Scanner(serverLogFile);
+			//To remove the first serverLine (headings)
+			inputStream.nextLine().replaceAll(" ", "");
+
+			while (inputStream.hasNext()) {
+				try{
+					serverLine = inputStream.nextLine().replaceAll(" ", "-")
+							.replaceAll("n/a","2019-01-01-01:01:01");
+					//	.replaceAll("n/a",null);
+
+					//seperating columns based on comma
+					String[] serverValues = serverLine.split(",");
+					//The replacement date is then replaced with n/a in the toString method
+					//serverValues[2].replaceAll("n/a",null); //this would remove the entire entry of the line with n/a as the exit dateTime
+
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
+
+					LocalDateTime entryDate = LocalDateTime.parse(serverValues[0], formatter);
+					String id = serverValues[1];
+					LocalDateTime exitDate = LocalDateTime.parse(serverValues[2],formatter);
+					Integer pagesViewed = Integer.parseInt(serverValues[3]);
+					String conversion = serverValues[4];
+
+
+					serverEntries.add(new ServerEntry(entryDate,id,exitDate,pagesViewed,conversion));
+				} catch(NullPointerException e) {
+
+				}
+
+			}
+			inputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println(serverEntries); // entire log
 	}
 
 	private void calcImpressions(ArrayList<Impression> impressionArray){
