@@ -52,7 +52,7 @@ public class ServerEntry {
     
     @Override
     public String toString() {
-        return entryDate + " " + ID + " " + exitDate.toString().replaceAll("2019-01-01T01:01:01","n/a") +
+        return entryDate + " " + ID + " " + exitDate +
                 " " + pagesViewed + " " + conversion + System.lineSeparator();
     }
 
