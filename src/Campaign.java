@@ -1,4 +1,4 @@
-package com.company;
+
 
 import com.sun.security.ntlm.Server;
 
@@ -37,9 +37,9 @@ public class Campaign implements Observable {
 	private List<Observer> observers = new LinkedList<Observer>();
 
 	// Log information
-	private ArrayList<Impression> impressions = new ArrayList<>(); // Impression Log
+	private ArrayList<Impression> impressions; // Impression Log
 	private ArrayList<Click> clicks; // Click Log
-	private ArrayList<ServerEntry> serverEntries = new ArrayList<>(); // Server Log
+	private ArrayList<ServerEntry> serverEntries; // Server Log
 
 	/**
 	 * Should be called whenever anything in the model changes.
@@ -95,6 +95,7 @@ public class Campaign implements Observable {
 	}
 	
 	public void loadImpressionLog (String impressionFileName){
+		ArrayList<Impression> impressions = new ArrayList<Impression>();
 		String impressionLog = impressionFileName;
 		File impressionLogFile = new File(impressionLog);
 		String impressionLine = "";
@@ -103,15 +104,15 @@ public class Campaign implements Observable {
 		try {
 			Scanner inputStream = new Scanner(impressionLogFile);
 			//To remove the first impressionLine (headings)
-			inputStream.nextLine().replaceAll(" ", "");
+			inputStream.nextLine();
 
 			while (inputStream.hasNext()) {
-				impressionLine = inputStream.nextLine().replaceAll(" ", "-");
+				impressionLine = inputStream.nextLine();
 
 				//seperating columns based on comma
 				String[] impressionValues = impressionLine.split(",");
 
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 				LocalDateTime dateTime = LocalDateTime.parse(impressionValues[0],formatter);
 				String id = impressionValues[1];
@@ -127,6 +128,7 @@ public class Campaign implements Observable {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		this.impressions = impressions
 		System.out.println(impressions); //printout entire log
 
 	}
