@@ -128,7 +128,7 @@ public class Campaign implements Observable {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		this.impressions = impressions
+		this.impressions = impressions;
 		System.out.println(impressions); //printout entire log
 
 	}
