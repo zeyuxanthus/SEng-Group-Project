@@ -188,13 +188,13 @@ public class View extends Application {
 		TableView tableView = new TableView();
 		
 		TableColumn<LocalDateTime, Click> col1 = new TableColumn<>("Date");
-		col1.setCellValueFactory(new PropertyValueFactory<>("date"));
+		col1.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
 		
 		TableColumn<String, Click> col2 = new TableColumn<>("ID");
 		col2.setCellValueFactory(new PropertyValueFactory<>("iD"));
 		
 		TableColumn<Float, Click> col3 = new TableColumn<>("Impression Cost");
-		col3.setCellValueFactory(new PropertyValueFactory<>("cost"));
+		col3.setCellValueFactory(new PropertyValueFactory<>("clickCost"));
 		
 		tableView.getColumns().addAll(col1, col2, col3);
 		tableView.getItems().addAll(campaign.getClicks());
