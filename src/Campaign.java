@@ -1,6 +1,6 @@
 
 
-//import com.sun.security.ntlm.Server;
+import com.sun.security.ntlm.Server;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +17,7 @@ import java.util.*;
  *  Model of MVC
  *  Should be independent of the View (Observer) and the Controller.
  */
-public class Campaign {
+public class Campaign implements Observable {
 
 	private int totalImpressions;
 	private float totalImpCost;
@@ -45,15 +45,15 @@ public class Campaign {
 	 * Should be called whenever anything in the model changes.
 	 * It updates the all the observers, e.g. View
 	 */
-//	private void triggerUpdate() {
-//		for (Observer observer : observers) {
-//			observer.observableChanged(this);
-//		}
-//	}
-//
-//	public void addObserver(Observer observer) {
-//		observers.add(observer);
-//	}
+	private void triggerUpdate() {
+		for (Observer observer : observers) {
+			observer.observableChanged(this);
+		}
+	}
+
+	public void addObserver(Observer observer) {
+		observers.add(observer);
+	}
 
 	/**
 	 * @TODO for other loaders:
@@ -129,7 +129,7 @@ public class Campaign {
 			e.printStackTrace();
 		}
 		this.impressions = impressions;
-		//System.out.println(this.impressions.size()); //printout entire log
+		System.out.println(impressions); //printout entire log
 
 	}
 	
@@ -176,7 +176,7 @@ public class Campaign {
 			e.printStackTrace();
 		}
 		this.serverEntries = serverEntries;
-		//System.out.println(serverEntries); // entire log
+		System.out.println(serverEntries); // entire log
 	}
 
 	private void calcImpressions(ArrayList<Impression> impressionArray){
@@ -309,23 +309,6 @@ public class Campaign {
 		CPM = (float) totalImpCost / impressionArray.size() / 1000;
 	}
 	
-	public void calculateMetrics() {
-		calcCPM(impressions);
-		calcCPC(clicks);
-		calcCPA(impressions, clicks, serverEntries);
-		calcCTR(clicks, impressions);
-		calcBounceRate(serverEntries, clicks);
-		calcBounces(serverEntries);
-		calcClicks(clicks);
-		calcConversions(serverEntries);
-		calcConvRate(serverEntries, clicks);
-		calcImpressions(impressions);
-		calcTotalClickCost(clicks);
-		calcTotalCost(impressions, clicks);
-		calcTotalImpCost(impressions);
-		calcUniques(clicks);
-	}
-	
 	public int getTotalImpressions() {
 		return totalImpressions;
 	}
@@ -379,19 +362,14 @@ public class Campaign {
 	}
 	
 	public ArrayList<Impression> getImpressions() {
-		System.out.println(this.impressions.size());
-		return this.impressions;
+		return impressions;
 	}
 	
 	public ArrayList<ServerEntry> getServerEntries() {
-		return this.serverEntries;
+		return serverEntries;
 	}
 	
 	public ArrayList<Click> getClicks(){
-		return this.clicks;
-	}
-	
-	public String testIsConnected() {
-		return ("connected");
+		return clicks;
 	}
 }
