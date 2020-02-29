@@ -19,6 +19,7 @@ import java.util.*;
  */
 public class Campaign {
 
+	// Campaign's metrics
 	private int totalImpressions;
 	private float totalImpCost;
 	private int totalClicks;
@@ -41,6 +42,8 @@ public class Campaign {
 	private ArrayList<Click> clicks; // Click Log
 	private ArrayList<ServerEntry> serverEntries; // Server Log
 
+
+
 	/**
 	 * Should be called whenever anything in the model changes.
 	 * It updates the all the observers, e.g. View
@@ -56,11 +59,6 @@ public class Campaign {
 //	}
 
 	/**
-	 * @TODO for other loaders:
-	 * 	1. create local ArrayList to override previous document
-	 * 	2. remove replaceAll()
-	 * 	3. change the pattern of the formatter (to account for space)
-	 * 	4. Campaign's ArrayLists don't need to be initialised
 	 * @param clickFileName - path to the file + its name
 	 */
 	public void loadClickLog (String clickFileName){
@@ -83,7 +81,7 @@ public class Campaign {
 
 				String id = clickValues[1];
 
-				Float clickCost = Float.parseFloat(clickValues[2]);
+				float clickCost = Float.parseFloat(clickValues[2]);
 
 				clicks.add(new Click(formatDateTime,id,clickCost));
 			}
@@ -394,4 +392,6 @@ public class Campaign {
 	public String testIsConnected() {
 		return ("connected");
 	}
+
+
 }

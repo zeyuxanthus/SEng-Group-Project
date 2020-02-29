@@ -1,4 +1,4 @@
-package com.company;
+import java.util.ArrayList;
 
 /**
  * Translates user actions into operations on the campaign.
@@ -27,5 +27,9 @@ public class Controller {
 	}
 	public void loadServerLog(String path){
 		campaign.loadSeverlog(path);
+	}
+
+	public void createLineGraph(Metric metric, TimeInterval timeInterval, Observer observer, Campaign campaign){
+		new LineGraph(metric, timeInterval, observer, campaign);
 	}
 }
