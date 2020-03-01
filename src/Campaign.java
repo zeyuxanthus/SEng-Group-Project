@@ -177,53 +177,88 @@ public class Campaign {
 		//System.out.println(serverEntries); // entire log
 	}
 
-	private void calcImpressions(ArrayList<Impression> impressionArray){
-		totalImpressions = impressionArray.size();
+	public float calcImpressions(ArrayList<Impression> impressionArray){
+		float mytotalImpressions = impressionArray.size();
+		return  mytotalImpressions;
 	}
 
-	private void calcTotalImpCost(ArrayList<Impression> impressionArray){
+	public float calcTotalImpCost(ArrayList<Impression> impressionArray){
+		float mytotalImpCost = 0;
+		for (Impression imp: impressionArray) {
+			mytotalImpCost += imp.getImpressionCost();
+		}
+		return mytotalImpCost;
+	}
+
+	public float calcClicks(ArrayList<Click> clickArray){
+
+//		String sql = "SELECT COUNT() FROM clickLog";
+//		float totalClicks = 0;
+//		try(Connection conn = c;
+//			Statement stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery(sql)) {
+//
+//			while(rs.next())
+//				totalClicks = rs.getInt(1);
+//		}catch(SQLException e ){
+//			e.printStackTrace();
+//		}
+//
+//		return (float) totalClicks;
+		
+		
+		float mytotalClicks = clickArray.size();
+		return mytotalClicks;
+	}
+
+	public float calcTotalClickCost(ArrayList<Click> clickArray){
+		float mytotalClickCost = 0;
+		for (Click click: clickArray) {
+			mytotalClickCost += click.getClickCost();
+		}
+		return mytotalClickCost;
+	}
+
+	public float calcTotalCost(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray){
+//		float clicksum = 0;
+//		float impsum = 0;
+//		String sql = "SELECT SUM(i.cost), SUM(c.cost) FROMO Impressions i, Clicks c";
+//		try(Connection conn = c; Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)){
+//			while(rs.next()){
+//				impsum = rs.getInt(1);
+//				clicksum = rs.getInt(2);
+//			}
+//		}catch (SQLException e){
+//			e.printStackTrace();
+//		}
+//
+//		return impsum + clicksum;
+		
+		
+		totalClickCost = 0;
 		totalImpCost = 0;
 		for (Impression imp: impressionArray) {
 			totalImpCost += imp.getImpressionCost();
 		}
-	}
-
-	private void calcClicks(ArrayList<Click> clickArray){
-		totalClicks = clickArray.size();
-	}
-
-	private void calcTotalClickCost(ArrayList<Click> clickArray){
-		totalClickCost = 0;
-		for (Click click: clickArray) {
-			totalClickCost += click.getClickCost();
-		}
-	}
-
-	private void calcTotalCost(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray){
-		totalClickCost = 0;
-		totalImpCost = 0;
-		totalCost = 0;
-		for (Impression imp: impressionArray) {
-			totalImpCost += imp.getImpressionCost();
-		}
-
 		for (Click click: clickArray) {
 			totalClickCost += click.getClickCost();
 		}
 
-		totalCost = totalClickCost + totalImpCost;
+
+		return totalClickCost + totalImpCost;
 	}
 
-	private void calcConversions(ArrayList<ServerEntry> serverEntryArray){
-		totalConversions = 0;
+	public float calcConversions(ArrayList<ServerEntry> serverEntryArray){
+		float mytotalConversions = 0;
 		for (ServerEntry serverEntry: serverEntryArray) {
 			if (serverEntry.getConversion().equals("Yes")){
-				totalConversions += 1;
+				mytotalConversions += 1;
 			}
 		}
+		return mytotalConversions;
 	}
 
-	private void calcConvRate(ArrayList<ServerEntry> serverEntryArray, ArrayList<Click> clickArray){
+	public float calcConvRate(ArrayList<ServerEntry> serverEntryArray, ArrayList<Click> clickArray){
 		totalConversions = 0;
 		totalClicks = 0;
 		totalClicks = clickArray.size();
@@ -232,19 +267,23 @@ public class Campaign {
 				totalConversions += 1;
 			}
 		}
+		System.out.println(totalConversions);
+		System.out.println(totalClicks);
 		conversionRate = (float) totalConversions / totalClicks;
+		return (float) totalConversions / totalClicks;
 	}
 
-	private void calcBounces(ArrayList<ServerEntry> serverEntryArray){
-		bounces = 0;
+	public float calcBounces(ArrayList<ServerEntry> serverEntryArray){
+		float myBounces = 0;
 		for (ServerEntry serverEntry: serverEntryArray) {
 			if (serverEntry.getPagesViewed() <= 1){
-				bounces += 1;
+				myBounces += 1;
 			}
 		}
+		return myBounces;
 	}
 
-	private void calcBounceRate(ArrayList<ServerEntry> serverEntryArray, ArrayList<Click> clickArray){
+	public float calcBounceRate(ArrayList<ServerEntry> serverEntryArray, ArrayList<Click> clickArray){
 		bounces = 0;
 		bounceRate = 0;
 		for (ServerEntry serverEntry: serverEntryArray) {
@@ -254,21 +293,24 @@ public class Campaign {
 		}
 		totalClicks = clickArray.size();
 		bounceRate = (float) bounces / totalClicks;// change to proper divide function
+		return (float) bounces/ totalClicks;
 	}
 
-	private void calcUniques(ArrayList<Click> clickArray){
+	public float calcUniques(ArrayList<Click> clickArray){
 		HashSet<String> uniquesHashset = new HashSet<String>();
 		for (Click click: clickArray) {
 			uniquesHashset.add(click.getID());
 		}
 		totalUniques = uniquesHashset.size();
+		return uniquesHashset.size();
 	}
 
-	private void calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
+	public float calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
 		CTR = (float) clickArray.size() / impressionArray.size();
+		return (float) clickArray.size() / impressionArray.size();
 	}
 
-	private void calcCPA(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray, ArrayList<ServerEntry> serverEntryArray){
+	public float calcCPA(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray, ArrayList<ServerEntry> serverEntryArray){
 		totalImpCost = 0;
 		totalClickCost = 0;
 		totalConversions = 0;
@@ -289,49 +331,35 @@ public class Campaign {
 			}
 		}
 		CPA = totalCost / totalConversions;
+		return totalCost / totalConversions;
 	}
 
-	private void calcCPC(ArrayList<Click> clickArray){
+	public float calcCPC(ArrayList<Click> clickArray){
 		totalClickCost = 0;
 		for (Click click: clickArray) {
 			totalClickCost += click.getClickCost();
 		}
 		CPC = (float) totalClickCost / clickArray.size();
+		return (float) totalClickCost / clickArray.size();
 	}
 
-	private void calcCPM(ArrayList<Impression> impressionArray){
+	public float calcCPM(ArrayList<Impression> impressionArray){
 		totalImpCost = 0;
 		for (Impression imp: impressionArray) {
 			totalImpCost += imp.getImpressionCost();
 		}
 		CPM = (float) totalImpCost / impressionArray.size() / 1000;
+		return (float) totalImpCost / impressionArray.size() / 1000;
 	}
-	
-	public void calculateMetrics() {
-		calcCPM(impressions);
-		calcCPC(clicks);
-		calcCPA(impressions, clicks, serverEntries);
-		calcCTR(clicks, impressions);
-		calcBounceRate(serverEntries, clicks);
-		calcBounces(serverEntries);
-		calcClicks(clicks);
-		calcConversions(serverEntries);
-		calcConvRate(serverEntries, clicks);
-		calcImpressions(impressions);
-		calcTotalClickCost(clicks);
-		calcTotalCost(impressions, clicks);
-		calcTotalImpCost(impressions);
-		calcUniques(clicks);
-	}
-	
+
 	public int getTotalImpressions() {
 		return totalImpressions;
 	}
-	
+
 	public float getTotalImpressionCost() {
 		return totalImpCost;
 	}
-	
+
 	public float getTotalClicks() {
 		return totalClicks;
 	}
@@ -339,35 +367,35 @@ public class Campaign {
 	public float getTotalClickCost() {
 		return totalClickCost;
 	}
-	
+
 	public float getTotalConversions() {
 		return totalConversions;
 	}
-	
+
 	public float getTotalBounces() {
 		return bounces;
 	}
-	
+
 	public float getBounceRate() {
 		return bounceRate;
 	}
-	
+
 	public float getTotalUnique() {
 		return totalUniques;
 	}
-	
+
 	public float getCTR() {
 		return CTR;
 	}
-	
+
 	public float getCPA() {
 		return CPA;
 	}
-	
+
 	public float getCPC() {
 		return CPC;
 	}
-	
+
 	public float getCPM() {
 		return CPM;
 	}
@@ -375,19 +403,19 @@ public class Campaign {
 	public float getConversionRate() {
 		return conversionRate;
 	}
-	
+
 	public ArrayList<Impression> getImpressions() {
-		System.out.println(this.impressions.size());
-		return this.impressions;
+		return impressions;
 	}
-	
+
 	public ArrayList<ServerEntry> getServerEntries() {
-		return this.serverEntries;
+		return serverEntries;
 	}
-	
+
 	public ArrayList<Click> getClicks(){
-		return this.clicks;
+		return clicks;
 	}
+
 	
 	public String testIsConnected() {
 		return ("connected");
