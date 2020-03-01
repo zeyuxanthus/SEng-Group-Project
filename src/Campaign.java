@@ -81,17 +81,31 @@ public class Campaign {
 
 				String id = clickValues[1];
 
-				float clickCost = Float.parseFloat(clickValues[2]);
-
-				clicks.add(new Click(formatDateTime,id,clickCost));
+				try{
+					float clickCost = Float.parseFloat(clickValues[2]);
+					if(clickCost < 0 ){
+						throw new IllegalArgumentException("Cost can't be negative");
+					} else {
+						clicks.add(new Click(formatDateTime,id,clickCost));
+					}
+				} catch (IllegalArgumentException e ){
+					e.printStackTrace();
+				}
 			}
 			inputStream.close();
+			if(!clicks.isEmpty()){
+				this.clicks = clicks;
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (ArrayIndexOutOfBoundsException e){
+			e.printStackTrace();
+		} catch (NumberFormatException e){
+			e.printStackTrace();
 		}
-		this.clicks = clicks;
+
 	}
-	
+
 	public void loadImpressionLog (String impressionFileName){
 		ArrayList<Impression> impressions = new ArrayList<Impression>();
 		String impressionLog = impressionFileName;
@@ -118,19 +132,30 @@ public class Campaign {
 				String ageGroup = impressionValues[3];
 				String income = impressionValues[4];
 				String context = impressionValues[5];
-				Float impressionCost = Float.parseFloat(impressionValues[6]);
-
-				impressions.add(new Impression(dateTime,id,gender,ageGroup,income,context,impressionCost));
+				try{
+					float impressionCost = Float.parseFloat(impressionValues[6]);
+					if(impressionCost < 0){
+						throw new IllegalArgumentException("Cost can't be negative");
+					}else {
+						impressions.add(new Impression(dateTime,id,gender,ageGroup,income,context,impressionCost));
+					}
+				} catch (IllegalArgumentException e){
+					e.printStackTrace();
+				}
 			}
 			inputStream.close();
+			if(!impressions.isEmpty()){
+				this.impressions = impressions; 
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		}catch (ArrayIndexOutOfBoundsException e){
+			e.printStackTrace();
 		}
-		this.impressions = impressions;
-		//System.out.println(this.impressions.size()); //printout entire log
+		System.out.println(impressions); //printout entire log
 
 	}
-	
+
 	public void loadSeverlog (String serverFileName){
 		ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
 		File serverLogFile = new File(serverFileName);
@@ -159,23 +184,37 @@ public class Campaign {
 					}
 					else exitDate = LocalDateTime.parse(serverValues[2],formatter);
 
-					int pagesViewed = Integer.parseInt(serverValues[3]);
+					try{
+						int pagesViewed = Integer.parseInt(serverValues[3]);
+						if(pagesViewed < 0){
+							throw new IllegalArgumentException("Pages views can't be less than 0");
+						} else {
+							String conversion = serverValues[4];
+							serverEntries.add(new ServerEntry(entryDate,id,exitDate,pagesViewed,conversion));
+						}
+						
+					}catch (IllegalArgumentException e){
+						e.printStackTrace();
+					}
+					
 
-					String conversion = serverValues[4];
 
-
-					serverEntries.add(new ServerEntry(entryDate,id,exitDate,pagesViewed,conversion));
 				} catch(NullPointerException e) {
 					e.printStackTrace();
 				}
 			}
 			inputStream.close();
+			if(!serverEntries.isEmpty()){
+				this.serverEntries = serverEntries; 
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		}catch (ArrayIndexOutOfBoundsException e){
+			e.printStackTrace();
 		}
-		this.serverEntries = serverEntries;
-		//System.out.println(serverEntries); // entire log
+		System.out.println(serverEntries); // entire log
 	}
+
 
 	public float calcImpressions(ArrayList<Impression> impressionArray){
 		float mytotalImpressions = impressionArray.size();
