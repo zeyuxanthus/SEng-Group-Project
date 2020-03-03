@@ -297,7 +297,7 @@ public class MyTests {
     public void calcCPA(){
         Campaign campaign = new Campaign();
         assertEquals(55, campaign.calcCPA(impressions, clicks, serverEntryArrayList2));
-        assertEquals(12.22222222, campaign.calcCPA(impressions, clicks, serverEntryArrayList9));
+        assertEquals(12.222222222222221, campaign.calcCPA(impressions, clicks, serverEntryArrayList9));
     }
 
     @Test
@@ -309,7 +309,7 @@ public class MyTests {
     @Test
     public void calcCPM(){
         Campaign campaign = new Campaign();
-        assertEquals(550, campaign.calcCPM(impressions));
+        assertEquals(5500, campaign.calcCPM(impressions));
     }
 
 
