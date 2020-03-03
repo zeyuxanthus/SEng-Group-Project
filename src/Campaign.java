@@ -429,6 +429,23 @@ public class Campaign {
 		CPM = (float) (totalImpCost / impressionArray.size()) * 1000;
 		return (double) (totalImpCost / impressionArray.size()) * 1000;
 	}
+		public void calculateMetrics() {
+		calcUniques(clicks);
+		calcTotalImpCost(impressions);
+		calcTotalClickCost(clicks);
+		calcClicks(clicks);
+		calcConversions(serverEntries);
+		calcImpressions(impressions);
+		calcBounces(serverEntries);
+		calcConvRate(serverEntries, clicks);
+		calcTotalCost(impressions, clicks);
+		calcBounceRate(serverEntries, clicks);
+		calcCPM(impressions);
+		calcCPC(clicks);
+		calcCPA(impressions, clicks, serverEntries);
+		calcCTR(clicks, impressions);
+		
+	}
 
 	public int getTotalImpressions() {
 		return totalImpressions;
