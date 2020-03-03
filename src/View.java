@@ -1,9 +1,12 @@
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,12 +14,17 @@ import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class View extends Application {
 
 	private static Controller controller;
 	private static Campaign campaign;
+	private static File impressionFile;
+	private static File clicksFile;
+	private static File serverFile;
+	
 	
 	public View() {
 		
@@ -25,6 +33,7 @@ public class View extends Application {
 	public View(Controller con) {
 		this.controller = con;
 		this.campaign = controller.getCampaign();
+
 		System.out.print(campaign.testIsConnected());
 		View.launch(View.class);
 	}
@@ -34,6 +43,79 @@ public class View extends Application {
 	}
 	
 	public void start(Stage primaryStage) throws Exception {
+		
+		VBox buttons = new VBox(10);
+		Button loadImpressions = new Button("Load Impression file");
+		Button loadClicks = new Button("Load Clicks file");
+		Button loadServer = new Button("Load Server file");
+		
+		
+		loadImpressions.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Choose Impressions File");
+				impressionFile = fileChooser.showOpenDialog(primaryStage);
+			}
+		});
+		
+		loadClicks.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Choose Clicks File");
+				clicksFile = fileChooser.showOpenDialog(primaryStage);
+				
+			}
+		});
+		
+		loadServer.setOnAction(new EventHandler<ActionEvent>() {
+		
+			@Override
+			public void handle(ActionEvent event) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Choose Server File");
+				serverFile = fileChooser.showOpenDialog(primaryStage);
+				
+			}
+		
+		});
+		
+		
+		
+		Button startButton = new Button("Continue");
+		startButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				if (impressionFile != null && clicksFile != null && serverFile != null) {
+					campaign.loadImpressionLog(impressionFile.getAbsolutePath());
+					campaign.loadClickLog(clicksFile.getAbsolutePath());
+					campaign.loadSeverlog(serverFile.getAbsolutePath());
+					campaign.calculateMetrics();
+					primaryStage.getScene().setRoot(createTableWindow());
+					primaryStage.setWidth(600);
+					primaryStage.setHeight(600);
+				}
+				
+			}
+		
+		});
+		
+		buttons.getChildren().addAll(loadImpressions, loadClicks, loadServer, startButton);
+		Scene scene = new Scene(buttons);
+		primaryStage.setScene(scene);
+		
+		primaryStage.setTitle("Ad Auction");
+		primaryStage.sizeToScene();
+		primaryStage.show();
+				
+	}
+
+	
+	public Group createTableWindow() {
 		Group root = new Group();
 		System.out.print(campaign.testIsConnected());
 		
@@ -126,7 +208,7 @@ public class View extends Application {
 		impressionMetrics.getChildren().addAll(impTable, totImprBox, totImprCostBox, CPABox, CPMBox, totUniquesBox);
 		
 		VBox clickMetrics = new VBox(10);
-		clickMetrics.getChildren().addAll(clickTable, totClicksBox, totClickCostsBox, CTRBox, CPCBox);
+		clickMetrics.getChildren().addAll( clickTable, totClicksBox, totClickCostsBox, CTRBox, CPCBox);
 		
 		VBox serverMetrics = new VBox(10);
 		serverMetrics.getChildren().addAll(serverTable, totBouncesBox, bounceRateBox, totConversionsBox, conversionRateBox);
@@ -142,13 +224,8 @@ public class View extends Application {
 		VBox vbox = new VBox(tabPane);
 		root.getChildren().add(vbox);
 		
-		Scene scene = new Scene(root, 1200, 900);
-		primaryStage.setScene(scene);
-		primaryStage.setTitle("Ad Auction");
-		primaryStage.show();
-				
+		return root;
 	}
-
 	
 	//functions that generate the tables for all three logs and fills them
 	private TableView generateImpressionTable() {
@@ -177,8 +254,6 @@ public class View extends Application {
 		
 		tableView.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
 		tableView.getItems().addAll(campaign.getImpressions());
-		//tableView.getItems().add(new Impression("a7sf82", AgeGroup.YOUNG,LocalDateTime.of(2017, 11, 25, 9, 45), Impression.Gender.FEMALE, Impression.Income.HIGH, Impression.Context.Hobbies, new Float(0.2)));
-		//tableView.getItems().add(new Impression("23.4.2014 09:34:06", "B44216", Gender.FEMALE, "25-34", "High", "Travel", 0.001));
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		tableView.getSelectionModel().setCellSelectionEnabled(true);
 		return tableView;
@@ -198,8 +273,6 @@ public class View extends Application {
 		
 		tableView.getColumns().addAll(col1, col2, col3);
 		tableView.getItems().addAll(campaign.getClicks());
-		//tableView.getItems().add(new ClickObj("2.11.2013 16:22:36", "A34122", 0.002));
-		//tableView.getItems().add(new ClickObj("23.4.2014 09:34:06", "B44216", 0.001));
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		tableView.getSelectionModel().setCellSelectionEnabled(true);
 		return tableView;
@@ -225,8 +298,6 @@ public class View extends Application {
 		
 		tableView.getColumns().addAll(col1, col2, col3, col4, col5);
 		tableView.getItems().addAll(campaign.getServerEntries());
-		//tableView.getItems().add(new ServerObj("2.11.2013 16:22:36", "A34122", "23.4.2014 09:34:06", 2, "Yes"));
-		//tableView.getItems().add(new ServerObj("23.4.2014 09:34:06", "B44216", "2.11.2013 16:22:36", 1, "No"));
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		tableView.getSelectionModel().setCellSelectionEnabled(true);
 		return tableView;
