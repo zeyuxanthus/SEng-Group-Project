@@ -21,19 +21,19 @@ public class Campaign {
 
 	// Campaign's metrics
 	private int totalImpressions;
-	private float totalImpCost;
+	private double totalImpCost;
 	private int totalClicks;
-	private float totalClickCost;
-	private float totalCost;
+	private double totalClickCost;
+	private double totalCost;
 	private int totalConversions;
-	private float conversionRate;
+	private double conversionRate;
 	private int bounces;
-	private float bounceRate;
+	private double bounceRate;
 	private int totalUniques;
-	private float CTR; // click-through-rate
-	private float CPA; // cost-per-acquisition
-	private float CPC; // cost-per-click
-	private float CPM; // cost-per-thousand impressions
+	private double CTR; // click-through-rate
+	private double CPA; // cost-per-acquisition
+	private double CPC; // cost-per-click
+	private double CPM; // cost-per-thousand impressions
 
 	private List<Observer> observers = new LinkedList<Observer>();
 
@@ -236,7 +236,7 @@ public class Campaign {
 		return  mytotalImpressions;
 	}
 
-	public float calcTotalImpCost(ArrayList<Impression> impressionArray){
+	public double calcTotalImpCost(ArrayList<Impression> impressionArray){
 
 
 //		float impsum = 0;
@@ -256,7 +256,7 @@ public class Campaign {
 		for (Impression imp: impressionArray) {
 			mytotalImpCost += imp.getImpressionCost();
 		}
-		return mytotalImpCost;
+		return (double) mytotalImpCost;
 	}
 
 	public int calcClicks(ArrayList<Click> clickArray){
@@ -281,7 +281,7 @@ public class Campaign {
 		return mytotalClicks;
 	}
 
-	public float calcTotalClickCost(ArrayList<Click> clickArray){
+	public double calcTotalClickCost(ArrayList<Click> clickArray){
 
 
 		//		float clicksum = 0;
@@ -299,10 +299,10 @@ public class Campaign {
 		for (Click click: clickArray) {
 			mytotalClickCost += click.getClickCost();
 		}
-		return mytotalClickCost;
+		return (double) mytotalClickCost;
 	}
 
-	public float calcTotalCost(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray){
+	public double calcTotalCost(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray){
 //		float clicksum = 0;
 //		float impsum = 0;
 //		String sql = "SELECT SUM(i.cost), SUM(c.cost) FROM Impressions i, clickLog c";
@@ -328,7 +328,7 @@ public class Campaign {
 		}
 
 
-		return totalClickCost + totalImpCost;
+		return (double) totalClickCost + totalImpCost;
 	}
 
 	public int calcConversions(ArrayList<ServerEntry> serverEntryArray){
@@ -407,7 +407,7 @@ public class Campaign {
 		return (double) bounces/ totalClicks;
 	}
 
-	public float calcUniques(ArrayList<Click> clickArray){
+	public int calcUniques(ArrayList<Click> clickArray){
 		HashSet<String> uniquesHashset = new HashSet<String>();
 		for (Click click: clickArray) {
 			uniquesHashset.add(click.getID());
@@ -416,9 +416,9 @@ public class Campaign {
 		return uniquesHashset.size();
 	}
 
-	public float calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
-		CTR = (float) clickArray.size() / impressionArray.size();
-		return (float) clickArray.size() / impressionArray.size();
+	public double calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
+		CTR = (double) clickArray.size() / impressionArray.size();
+		return (double) clickArray.size() / impressionArray.size();
 	}
 
 	public double calcCPA(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray, ArrayList<ServerEntry> serverEntryArray){
@@ -467,51 +467,51 @@ public class Campaign {
 		return totalImpressions;
 	}
 
-	public float getTotalImpressionCost() {
+	public double getTotalImpressionCost() {
 		return totalImpCost;
 	}
 
-	public float getTotalClicks() {
+	public double getTotalClicks() {
 		return totalClicks;
 	}
 
-	public float getTotalClickCost() {
+	public double getTotalClickCost() {
 		return totalClickCost;
 	}
 
-	public float getTotalConversions() {
+	public double getTotalConversions() {
 		return totalConversions;
 	}
 
-	public float getTotalBounces() {
+	public double getTotalBounces() {
 		return bounces;
 	}
 
-	public float getBounceRate() {
+	public double getBounceRate() {
 		return bounceRate;
 	}
 
-	public float getTotalUnique() {
+	public int getTotalUnique() {
 		return totalUniques;
 	}
 
-	public float getCTR() {
+	public double getCTR() {
 		return CTR;
 	}
 
-	public float getCPA() {
+	public double getCPA() {
 		return CPA;
 	}
 
-	public float getCPC() {
+	public double getCPC() {
 		return CPC;
 	}
 
-	public float getCPM() {
+	public double getCPM() {
 		return CPM;
 	}
 
-	public float getConversionRate() {
+	public double getConversionRate() {
 		return conversionRate;
 	}
 
@@ -526,7 +526,6 @@ public class Campaign {
 	public ArrayList<Click> getClicks(){
 		return clicks;
 	}
-	
 	public String testIsConnected() {
 		return ("connected");
 	}
