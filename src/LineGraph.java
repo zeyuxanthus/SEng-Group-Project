@@ -14,7 +14,7 @@ public class LineGraph implements Chart, Observable {
 
     private Metric metric;
     private TimeInterval timeInterval;
-    private ArrayList<Pair> dataPoints;
+    private ArrayList<DataPoint> dataPoints;
 
     private List<Observer> observers = new LinkedList<Observer>(); // this will contain the window that displays the chart
 
@@ -43,10 +43,12 @@ public class LineGraph implements Chart, Observable {
      * TriggerUpdate at the end so the View can get the dataPoints.
      */
     private void calculateDataPoints(){
-
         switch (metric){
             case TOTAL_IMPRESSIONS:
                 //impression
+                ArrayList<Impression> impressions = filterImpressionLog();
+                ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
+
                 break;
             case TOTAL_IMPRESSION_COST:
                 //impression
@@ -57,26 +59,35 @@ public class LineGraph implements Chart, Observable {
             case TOTAL_CLICK_COST:
                 //click
                 break;
-            case TOTAL_COST:
-                //cost
+            case TOTAL_COST: // TODO possibly split into 3 costs
+                //cost and impression
                 break;
             case TOTAL_CONVERSIONS:
+                // server
                 break;
             case CONVERSION_RATE:
+                // server and click
                 break;
             case BOUNCES:
+                // server
                 break;
             case BOUNCE_RATE:
+                // server and click
                 break;
             case TOTAL_UNIQUES:
+                // click
                 break;
             case CTR:
+                // click and impression
                 break;
             case CPA:
+                // imperssion, click and server
                 break;
             case CPC:
+                // click
                 break;
             case CPM:
+                // impression
                 break;
         }
 
@@ -146,7 +157,7 @@ public class LineGraph implements Chart, Observable {
         calculateDataPoints();
     }
 
-    public ArrayList<Pair> getDataPoints(){ return dataPoints; }
+    public ArrayList<DataPoint> getDataPoints(){ return dataPoints; }
 
     @Override
     public void addObserver(Observer observer) {
