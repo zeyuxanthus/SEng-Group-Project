@@ -7,4 +7,12 @@ public class DataPoint<M, LocalDateTime> {
         this.metric = metric;
         this.startTime = startTime;
     }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public M getMetric() {
+        return metric;
+    }
 }

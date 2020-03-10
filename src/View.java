@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class View extends Application {
+public class View extends Application implements Observer {
 
 	private static Controller controller;
 	private static Campaign campaign;
@@ -99,9 +99,10 @@ public class View extends Application {
 					primaryStage.setWidth(600);
 					primaryStage.setHeight(600);
 				}
-				
+				//TODO remove (this is just for testing)
+				controller.createLineGraph(Metric.TOTAL_IMPRESSIONS, TimeInterval.HOUR, null, campaign);
 			}
-		
+
 		});
 		
 		buttons.getChildren().addAll(loadImpressions, loadClicks, loadServer, startButton);
@@ -111,7 +112,8 @@ public class View extends Application {
 		primaryStage.setTitle("Ad Auction");
 		primaryStage.sizeToScene();
 		primaryStage.show();
-				
+
+
 	}
 
 	
@@ -301,5 +303,10 @@ public class View extends Application {
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		tableView.getSelectionModel().setCellSelectionEnabled(true);
 		return tableView;
+	}
+
+	@Override
+	public void observableChanged(Observable observable) {
+
 	}
 }

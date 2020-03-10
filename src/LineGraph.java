@@ -16,7 +16,7 @@ public class LineGraph implements Chart, Observable {
 
     private Metric metric;
     private TimeInterval timeInterval;
-    private ArrayList<DataPoint> dataPoints;
+    private ArrayList dataPoints;
 
     private List<Observer> observers = new LinkedList<Observer>(); // this will contain the window that displays the chart
 
@@ -48,12 +48,32 @@ public class LineGraph implements Chart, Observable {
         switch (metric){
             case TOTAL_IMPRESSIONS:
                 ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-                ArrayList<Impression> impressions = filterImpressionLog();
-                Collections.sort(impressions);
-                LocalDateTime startDateTime = impressions.get(0).getDateTime();
+                ArrayList<Impression> impressionLog = filterImpressionLog();
+                Collections.sort(impressionLog);
+                LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
+
                 LocalDateTime endDateTime = getEndDateTime(startDateTime);
+                int i = 0;
+                ArrayList<Impression> impressions = new ArrayList<Impression>();
+                while(impressionLog.size() > i){
+                    Impression impression = impressionLog.get(i);
+                    if(impression.getDateTime().isBefore(endDateTime)){
+                        impressions.add(impression);
+                    }
+                    else{
+                        dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcImpressions(impressions), startDateTime));
 
-
+                        startDateTime = endDateTime;
+                        endDateTime = getEndDateTime(startDateTime);
+                        impressions = new ArrayList<Impression>();
+                        i--;
+                    }
+                    i++;
+                }
+                for(DataPoint dp : dataPoints){
+                    System.out.println(dp.getMetric() + " :: " + dp.getStartTime());
+                }
+                this.dataPoints = dataPoints;
                 break;
             case TOTAL_IMPRESSION_COST:
                 //impression
@@ -96,8 +116,6 @@ public class LineGraph implements Chart, Observable {
                 break;
         }
 
-
-
         triggerUpdate();
     }
 
@@ -110,26 +128,26 @@ public class LineGraph implements Chart, Observable {
         LocalDateTime endDateTime;
         switch(timeInterval){
             case HOUR:
-                endDateTime = startDate.plusHours(1);
+                endDateTime = startDateTime.plusHours(1);
                 break;
             case DAY:
-                endDateTime = startDate.plusDays(1);
+                endDateTime = startDateTime.plusDays(1);
                 break;
             case WEEK:
-                endDateTime= startDate.plusWeeks(1);
+                endDateTime= startDateTime.plusWeeks(1);
                 break;
             case MONTH:
-                endDateTime = startDate.plusMonths(1);
+                endDateTime = startDateTime.plusMonths(1);
                 break;
             default:
-                endDateTime = startDate; //TODO handle this case differently
+                endDateTime = startDateTime; //TODO handle this case differently
                  break;
         }
         return endDateTime;
     }
 
     private ArrayList<Impression> filterImpressionLog(){
-        ArrayList<Impression> impressions = new ArrayList<Impression>();
+        ArrayList<Impression> impressions = campaign.getImpressions();
 
         return impressions;
     }
@@ -202,7 +220,12 @@ public class LineGraph implements Chart, Observable {
      */
     private void triggerUpdate() {
         for (Observer observer : observers) {
-            observer.observableChanged(this);
+            if(observer==null){
+
+            }
+            else{
+                observer.observableChanged(this);
+            }
         }
     }
 }
