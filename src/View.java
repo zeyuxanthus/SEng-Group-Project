@@ -100,7 +100,7 @@ public class View extends Application implements Observer {
 					primaryStage.setHeight(600);
 				}
 				//TODO remove (this is just for testing)
-				controller.createLineGraph(Metric.TOTAL_IMPRESSIONS, TimeInterval.HOUR, null, campaign);
+				controller.createHistogram(null, campaign, 7);
 			}
 
 		});

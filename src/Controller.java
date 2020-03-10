@@ -29,7 +29,24 @@ public class Controller {
 		campaign.loadSeverlog(path);
 	}
 
+	/**
+	 *
+	 * @param metric - values shown on y axis
+	 * @param timeInterval - interval over which each data point is computed
+	 * @param observer - window/object displaying the graph
+	 * @param campaign - reference for data
+	 */
 	public void createLineGraph(Metric metric, TimeInterval timeInterval, Observer observer, Campaign campaign){
 		new LineGraph(metric, timeInterval, observer, campaign);
+	}
+
+	/**
+	 *
+	 * @param observer - window/object displaying the graph
+	 * @param campaign - reference for data
+	 * @param noBars - number of bars/classes in the histogram
+	 */
+	public void createHistogram(Observer observer, Campaign campaign, int noBars){
+		new Histogram(observer, campaign, noBars);
 	}
 }

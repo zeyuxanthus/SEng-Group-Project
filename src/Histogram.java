@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,17 +31,53 @@ public class Histogram implements Chart, Observable {
         addObserver(observer);
         this.campaign = campaign;
         this.noBars = noBars;
-        calculateDataPoints();
+        calculateBars();
     }
 
     /**
-     * Calculate data Points to draw bars on the histogram
+     * Calculate bar ranges and their frequencies to draw them on the histogram
      * Trigger Update for Observers to fetch data
+     * //TODO Rounding values according to accuracy
      */
-    private void calculateDataPoints(){
+    private void calculateBars(){
         ArrayList<Bar> bars = new ArrayList<Bar>();
         ArrayList<Click> clicks = filterClickLog();
-        //TODO implement calculation
+        Collections.sort(clicks);
+
+        // Find range of values
+        double lowestCost = clicks.get(0).getClickCost();
+        double highestCost = clicks.get(clicks.size() - 1).getClickCost();
+
+        //For partitioning the range
+        double lowerBound = (highestCost - lowestCost) / noBars;
+        double upperBound = (highestCost - lowestCost) / (noBars - 1);
+        double barWidth = (upperBound + lowerBound) / 2;
+
+        // Calculate frequency for each Bar
+        double min = lowestCost;
+        double max = min + barWidth;
+        int frequency = 0;
+        for(Click click : clicks){
+
+            double clickCost = click.getClickCost();
+            if(clickCost >= min && clickCost < max){
+                ++frequency;
+            }
+            else{
+                do{
+                    bars.add(new Bar(frequency, min, max));
+                    min = max;
+                    max = min + barWidth;
+                    frequency = 0;
+                }while(clickCost > max);
+                frequency = 1;
+            }
+        }
+        bars.add(new Bar(frequency, min, max));
+        for(Bar bar : bars){
+            System.out.println(bar.getLowerBound() + " - " + bar.getUpperBound() + " - " + bar.getFrequency());
+        }
+
         this.bars = bars;
         triggerUpdate();
     }
@@ -62,7 +99,8 @@ public class Histogram implements Chart, Observable {
      */
     private void triggerUpdate() {
         for (Observer observer : observers) {
-                observer.observableChanged(this);
+                if(observer != null) observer.observableChanged(this);
+                // TODO remove check after testing
         }
     }
 

@@ -8,9 +8,8 @@ public class Bar {
     private double upperBound;
 
     /**
-     *
      * @param frequency - number of costs that fit in the bounds
-     * @param lowerBound - minimum cost (inclusive
+     * @param lowerBound - minimum cost
      * @param upperBound - maximum cost
      */
     public Bar(int frequency, double lowerBound, double upperBound){
