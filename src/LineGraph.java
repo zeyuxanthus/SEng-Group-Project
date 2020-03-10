@@ -43,8 +43,61 @@ public class LineGraph implements Chart, Observable {
      * TriggerUpdate at the end so the View can get the dataPoints.
      */
     private void calculateDataPoints(){
-        //@TODO implement
+
+        switch (metric){
+            case TOTAL_IMPRESSIONS:
+                //impression
+                break;
+            case TOTAL_IMPRESSION_COST:
+                //impression
+                break;
+            case TOTAL_CLICKS:
+                //click
+                break;
+            case TOTAL_CLICK_COST:
+                //click
+                break;
+            case TOTAL_COST:
+                //cost
+                break;
+            case TOTAL_CONVERSIONS:
+                break;
+            case CONVERSION_RATE:
+                break;
+            case BOUNCES:
+                break;
+            case BOUNCE_RATE:
+                break;
+            case TOTAL_UNIQUES:
+                break;
+            case CTR:
+                break;
+            case CPA:
+                break;
+            case CPC:
+                break;
+            case CPM:
+                break;
+        }
+
+
+
         triggerUpdate();
+    }
+
+    private ArrayList<Impression> filterImpressionLog(){
+
+        return null;
+    }
+
+    private ArrayList<Click> filterServerLog(){
+
+        return null;
+    }
+
+    private ArrayList<ServerEntry> filterClickLog(){
+
+        return null;
     }
 
     public void setDateRange(LocalDateTime startDate, LocalDateTime endDate){
