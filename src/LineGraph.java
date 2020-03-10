@@ -70,9 +70,6 @@ public class LineGraph implements Chart, Observable {
                     }
                     i++;
                 }
-                for(DataPoint dp : dataPoints){
-                    System.out.println(dp.getMetric() + " :: " + dp.getStartTime());
-                }
                 this.dataPoints = dataPoints;
                 break;
             case TOTAL_IMPRESSION_COST:
