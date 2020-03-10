@@ -1,7 +1,9 @@
 import javafx.util.Pair;
 
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,9 +47,12 @@ public class LineGraph implements Chart, Observable {
     private void calculateDataPoints(){
         switch (metric){
             case TOTAL_IMPRESSIONS:
-                //impression
-                ArrayList<Impression> impressions = filterImpressionLog();
                 ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
+                ArrayList<Impression> impressions = filterImpressionLog();
+                Collections.sort(impressions);
+                LocalDateTime startDateTime = impressions.get(0).getDateTime();
+                LocalDateTime endDateTime = getEndDateTime(startDateTime);
+
 
                 break;
             case TOTAL_IMPRESSION_COST:
@@ -96,9 +101,37 @@ public class LineGraph implements Chart, Observable {
         triggerUpdate();
     }
 
-    private ArrayList<Impression> filterImpressionLog(){
+    /**
+     * Increments the startDate of the interval by the amount corresponding to timeInterval
+     * @param startDateTime starting dateTime of the interval
+     * @return ending dateTime of the interval
+     */
+    private LocalDateTime getEndDateTime(LocalDateTime startDateTime){
+        LocalDateTime endDateTime;
+        switch(timeInterval){
+            case HOUR:
+                endDateTime = startDate.plusHours(1);
+                break;
+            case DAY:
+                endDateTime = startDate.plusDays(1);
+                break;
+            case WEEK:
+                endDateTime= startDate.plusWeeks(1);
+                break;
+            case MONTH:
+                endDateTime = startDate.plusMonths(1);
+                break;
+            default:
+                endDateTime = startDate; //TODO handle this case differently
+                 break;
+        }
+        return endDateTime;
+    }
 
-        return null;
+    private ArrayList<Impression> filterImpressionLog(){
+        ArrayList<Impression> impressions = new ArrayList<Impression>();
+
+        return impressions;
     }
 
     private ArrayList<Click> filterServerLog(){
