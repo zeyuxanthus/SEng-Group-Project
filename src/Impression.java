@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
  * An impression occurs	whenever an ad is shown to a user, regardless of whether
  * they	click onit.
  */
-public class Impression implements Comparable<Impression> {
+public class Impression {
 
     private LocalDateTime dateTime; // date and time
     private String ID; // Uniquely identifies a user
@@ -111,8 +111,4 @@ public class Impression implements Comparable<Impression> {
         return dateTime+" "+ID+" "+gender+" "+ageGroup+" "+income+" "+context+" "+impressionCost+System.lineSeparator();
     }
 
-    @Override
-    public int compareTo(Impression i) {
-        return dateTime.compareTo(i.getDateTime());
-    }
 }
