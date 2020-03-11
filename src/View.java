@@ -91,6 +91,8 @@ public class View extends Application implements Observer {
 			@Override
 			public void handle(ActionEvent event) {
 				if (impressionFile != null && clicksFile != null && serverFile != null) {
+					campaign.initialise(clicksFile.getAbsolutePath(),impressionFile.getAbsolutePath(),
+							    serverFile.getAbsolutePath());
 					campaign.loadImpressionLog(impressionFile.getAbsolutePath());
 					campaign.loadClickLog(clicksFile.getAbsolutePath());
 					campaign.loadSeverlog(serverFile.getAbsolutePath());
