@@ -3,7 +3,7 @@ import java.time.LocalDateTime;
 /**
  * Information about a single Click
  */
-public class Click {
+public class Click implements Comparable<Click> {
 
     private LocalDateTime dateTime; // date and time
     private String ID; // uniquely identifies a user
@@ -28,9 +28,19 @@ public class Click {
         return  clickCost;
     }
     
-     @Override
+    @Override
     public String toString() {
         return dateTime + " " + ID + " " + clickCost + System.lineSeparator();
     }
 
+    @Override
+    public int compareTo(Click click) {
+        if(clickCost < click.getClickCost()){
+            return -1;
+        }
+        else if (clickCost > click.getClickCost()){
+            return 1;
+        }
+        return 0;
+    }
 }
