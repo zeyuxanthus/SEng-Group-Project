@@ -45,8 +45,9 @@ public class Controller {
 	 * @param observer - window/object displaying the graph
 	 * @param campaign - reference for data
 	 * @param noBars - number of bars/classes in the histogram
+	 * @param accuracy - number of decimal places the boundaries of bars are rounded to
 	 */
-	public void createHistogram(Observer observer, Campaign campaign, int noBars){
-		new Histogram(observer, campaign, noBars);
+	public void createHistogram(Observer observer, Campaign campaign, int noBars, int accuracy){
+		new Histogram(observer, campaign, noBars, accuracy);
 	}
 }

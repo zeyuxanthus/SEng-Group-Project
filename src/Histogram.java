@@ -13,6 +13,7 @@ public class Histogram implements Chart, Observable {
     private List<Observer> observers = new LinkedList<Observer>();
 
     private int noBars;
+    private int accuracy;
     private ArrayList<Bar> bars = new ArrayList<Bar>();
 
     // Filters (null/empty means all values are accepted)
@@ -26,11 +27,14 @@ public class Histogram implements Chart, Observable {
     /**
      * @param observer the view that displays the chart
      * @param campaign reference for accessing campaign's data
+     * @param noBars - number of bars/classes in the histogram
+     * @param accuracy - number of decimal places the boundaries of bars are rounded to
      */
-    public Histogram(Observer observer, Campaign campaign, int noBars){
+    public Histogram(Observer observer, Campaign campaign, int noBars, int accuracy){
         addObserver(observer);
         this.campaign = campaign;
         this.noBars = noBars;
+        this.accuracy = accuracy;
         calculateBars();
     }
 
@@ -48,17 +52,20 @@ public class Histogram implements Chart, Observable {
         double lowestCost = clicks.get(0).getClickCost();
         double highestCost = clicks.get(clicks.size() - 1).getClickCost();
 
-        //For partitioning the range
+        // Calculate bar width
         double lowerBound = (highestCost - lowestCost) / noBars;
         double upperBound = (highestCost - lowestCost) / (noBars - 1);
-        double barWidth = (upperBound + lowerBound) / 2;
+        double round = 1.0;
+        for(int i = 0; i < accuracy; i++){
+            round *= 10.0;
+        }
+        double barWidth = Math.round(((upperBound + lowerBound) / 2) * round) / round;
 
         // Calculate frequency for each Bar
         double min = lowestCost;
         double max = min + barWidth;
         int frequency = 0;
         for(Click click : clicks){
-
             double clickCost = click.getClickCost();
             if(clickCost >= min && clickCost < max){
                 ++frequency;
