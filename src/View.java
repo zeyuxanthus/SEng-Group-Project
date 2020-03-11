@@ -102,7 +102,7 @@ public class View extends Application implements Observer {
 					primaryStage.setHeight(600);
 				}
 				//TODO remove (this is just for testing)
-				controller.createHistogram(null, campaign, 7);
+				controller.createHistogram(null, campaign, 7, 2);
 			}
 
 		});
