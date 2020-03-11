@@ -44,6 +44,10 @@ public class Campaign {
 	private ArrayList<Impression> impressions; // Impression Log
 	private ArrayList<Click> clicks; // Click Log
 	private ArrayList<ServerEntry> serverEntries; // Server Log
+	
+	private static Connection c;
+	private static Boolean hasData = false;
+	int batchSize = 20;
 
 	/**
 	 * Should be called whenever anything in the model changes.
@@ -59,14 +63,201 @@ public class Campaign {
 //		observers.add(observer);
 //	}
 
-	/**
-	 * @TODO for other loaders:
-	 * 	1. create local ArrayList to override previous document
-	 * 	2. remove replaceAll()
-	 * 	3. change the pattern of the formatter (to account for space)
-	 * 	4. Campaign's ArrayLists don't need to be initialised
-	 * @param clickFileName - path to the file + its name
-	 */
+	private void  getC() throws ClassNotFoundException, SQLException{
+		Class.forName("org.sqlite.JDBC");
+		//  c=DriverManager.getConnection("jdbc:sqlite:/Users/wangzeyu/Desktop/sqlite/test.db");
+		c= DriverManager.getConnection("jdbc:sqlite:test.db");
+	//	initialise(clicklogN,implogN,serverlogN);
+		//initialiseImpression();
+	}
+	
+	public void initialise(String clickName,String impressionName,String serverName){
+		if (!hasData){
+			hasData = true;
+		}
+
+		try{
+			if (c == null) {
+				getC();
+			}
+
+		String sqlClick = "CREATE TABLE IF NOT EXISTS clickLog (\n"
+				+ "entry_date TIMESTAMP NOT NULL,\n"
+				+ "id TEXT NOT NULL,\n "
+				+ "click_cost REAL NOT NULL \n"
+				+ ");";
+
+		String sqlImpression = "CREATE TABLE IF NOT EXISTS impressionLog (\n"
+				+ "entry_date TIMESTAMP NOT NULL,\n"
+				+ "id TEXT NOT NULL,\n "
+				+ "gender TEXT NOT NULL,\n"
+				+ "age TEXT NOT NULL,\n"
+				+ "income TEXT NOT NULL,\n"
+				+ "context TEXT NOT NULL, \n"
+				+ "impression_cost REAL NOT NULL \n"
+				+ ");";
+
+		String sqlServer = "CREATE TABLE IF NOT EXISTS serverLog (\n"
+				+ "entry_date TIMESTAMP NOT NULL,\n"
+				+ "id TEXT NOT NULL,\n "
+				+ "exit_date TIMESTAMP,\n"
+				+ "pagesViewed INTEGER NOT NULL,\n"
+				+ "conversion TEXT NOT NULL \n"
+				+ ");";
+
+
+
+
+
+		Statement state = c.createStatement();
+		state.execute(sqlImpression);
+		state.execute(sqlClick);
+		state.execute(sqlServer);
+
+
+
+			c.setAutoCommit(false);
+			PreparedStatement prepClick = c.prepareStatement("INSERT INTO clickLog values(?,?,?);");
+			PreparedStatement prepImpression = c.prepareStatement("INSERT INTO impressionLog values(?,?,?,?,?,?,?);");
+			PreparedStatement prepServer = c.prepareStatement("INSERT INTO serverLog values(?,?,?,?,?);");
+
+
+			BufferedReader lineReader = new BufferedReader(new FileReader(clickName));
+			String lineText = null;
+			int count = 0;
+			lineReader.readLine(); //skip header line
+			while ((lineText = lineReader.readLine()) != null){
+				String[] data = lineText.split(",");
+				String date = data[0];
+				String id = data[1];
+				String clickCost = data[2];
+
+				//Timestamp sqlTimestamp = Timestamp.valueOf(date);
+				//prepClick.setTimestamp(1,sqlTimestamp);
+
+				prepClick.setString(1,String.valueOf(Timestamp.valueOf(date)));
+
+				prepClick.setString(2,id);
+
+			//	float clickcosts = Float.parseFloat(clickCost);
+			//	prepClick.setFloat(3,clickcosts);
+				prepClick.setString(3,String.valueOf(Float.valueOf(clickCost)));
+
+				prepClick.addBatch();
+
+				if (count % batchSize == 0){
+					prepClick.executeBatch();
+				}
+
+			}
+
+			lineReader.close();
+
+			BufferedReader implineReader = new BufferedReader(new FileReader(impressionName));
+			String impLineText = null;
+			int impCount = 0;
+			implineReader.readLine(); //skip header line
+			while ((impLineText = implineReader.readLine()) != null){
+			//	System.out.println(serverLineText);
+				String[] data = impLineText.split(",");
+				String date = data[0];
+				String id = data[1];
+				String gender = data[2];
+				String age = data[3];
+				String income = data[4];
+				String context = data[5];
+				String impressionCost = data[6];
+
+			//	Timestamp sqlTimestamp = Timestamp.valueOf(date);
+			//	prepImpression.setTimestamp(1,sqlTimestamp);
+
+				prepImpression.setString(1,String.valueOf(Timestamp.valueOf(date)));
+
+				prepImpression.setString(2,id);
+				prepImpression.setString(3,gender);
+				prepImpression.setString(4,age);
+				prepImpression.setString(5,income);
+				prepImpression.setString(6,context);
+
+			//	float impressionCosts = Float.parseFloat(impressionCost);
+			//	prepImpression.setFloat(7,impressionCosts);
+
+				prepImpression.setString(7,String.valueOf(Float.valueOf(impressionCost)));
+
+				prepImpression.addBatch();
+
+				if (impCount % batchSize == 0){
+					prepImpression.executeBatch();
+				}
+
+
+			}
+			implineReader.close();
+
+			BufferedReader serverlineReader = new BufferedReader(new FileReader(serverName));
+			String serverLineText = null;
+			int serverCount = 0;
+			serverlineReader.readLine(); //skip header line
+			while ((serverLineText = serverlineReader.readLine()) != null){
+				//	System.out.println(serverLineText);
+				String[] data = serverLineText.split(",");
+				String entryDate = data[0];
+				String id = data[1];
+				String exitDate = data[2];
+				String pagesViewed = data[3];
+				String conversion = data[4];
+
+			//	Timestamp sqlTimestamp = Timestamp.valueOf(entryDate);
+			//	prepServer.setTimestamp(1,sqlTimestamp);
+				prepServer.setString(1,String.valueOf(Timestamp.valueOf(entryDate)));
+
+				prepServer.setString(2,id);
+
+				if(exitDate.equals("n/a")){
+				//	Timestamp sqlExitTime = Timestamp.valueOf(exitDate);
+				//	prepServer.setTimestamp(3,sqlExitTime);
+					prepServer.setNull(3,Types.TIMESTAMP);
+				} else {
+					prepServer.setString(3,String.valueOf(Timestamp.valueOf(exitDate)));
+				}
+
+
+				int pagesview = Integer.parseInt(pagesViewed);
+				prepServer.setInt(4,pagesview);
+
+				prepServer.setString(5,conversion);
+
+				prepServer.addBatch();
+
+				if (serverCount % batchSize == 0){
+					prepServer.executeBatch();
+				}
+
+			}
+			serverlineReader.close();
+
+
+			prepServer.executeBatch();
+			prepImpression.executeBatch();
+			prepClick.executeBatch();
+			c.commit();
+			//   c.close();
+		} catch (IOException e){
+
+		} catch (ClassNotFoundException e){
+
+		} catch(SQLException e){
+
+		}
+
+		try {
+			c.rollback();
+		} catch (SQLException e){
+
+		}
+
+	}
+	
 	public void loadClickLog (String clickFileName){
 		ArrayList<Click> clicks = new ArrayList<Click>();
 		String clickLog = clickFileName;
