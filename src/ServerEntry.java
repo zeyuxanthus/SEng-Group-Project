@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
  * A single entry from a Server Log
  * Contains information about user's interaction with website after clicking an add
  */
-public class ServerEntry {
+public class ServerEntry implements Comparable<ServerEntry>{
     private LocalDateTime entryDate;
     private String ID;
     private LocalDateTime exitDate;
@@ -17,6 +17,11 @@ public class ServerEntry {
         this.exitDate = exitDate;
         this.pagesViewed = pagesViewed;
         this.conversion = conversion;
+    }
+
+    @Override
+    public int compareTo(ServerEntry i) {
+        return entryDate.compareTo(i.getEntryDate());
     }
 
     enum Conversion{

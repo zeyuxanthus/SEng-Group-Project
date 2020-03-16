@@ -1,4 +1,3 @@
-import com.sun.security.ntlm.Server;
 import javafx.util.Pair;
 
 import java.time.LocalDateTime;
@@ -119,7 +118,30 @@ public class LineGraph implements Chart, Observable {
     }
 
     private ArrayList<DataPoint<Double, LocalDateTime>> calculateImpressionCosts() {
-        return null;
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<Impression> impressionLog = filterImpressionLog();
+        Collections.sort(impressionLog);
+        LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
+
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<Impression> impressions = new ArrayList<Impression>();
+        while(impressionLog.size() > i){
+            Impression impression = impressionLog.get(i);
+            if(impression.getDateTime().isBefore(endDateTime)){
+                impressions.add(impression);
+            }
+            else{
+                dataPoints.add(new DataPoint<Double, LocalDateTime>(campaign.calcTotalImpCost(impressions), startDateTime));
+
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                impressions = new ArrayList<Impression>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
     }
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalClicks() {
@@ -187,7 +209,30 @@ public class LineGraph implements Chart, Observable {
     }
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalConversions() {
-        return null;
+        ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
+        ArrayList<ServerEntry> serverEntriesLog = filterServerLog();
+        Collections.sort(serverEntriesLog);
+        LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
+
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
+        while(serverEntriesLog.size() > i){
+            ServerEntry serverEntry = serverEntriesLog.get(i);
+            if(serverEntry.getEntryDate().isBefore(endDateTime)){
+                serverEntries.add(serverEntry);
+            }
+            else{
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcConversions(serverEntries), startDateTime));
+
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                serverEntries = new ArrayList<ServerEntry>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
     }
 
     private  ArrayList<DataPoint<Double, LocalDateTime>> calculateConversionRates() {
@@ -203,7 +248,30 @@ public class LineGraph implements Chart, Observable {
     }
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateBounces() {
-        return null;
+        ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
+        ArrayList<ServerEntry> serverEntriesLog = filterServerLog();
+        Collections.sort(serverEntriesLog);
+        LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
+
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
+        while(serverEntriesLog.size() > i){
+            ServerEntry serverEntry = serverEntriesLog.get(i);
+            if(serverEntry.getEntryDate().isBefore(endDateTime)){
+                serverEntries.add(serverEntry);
+            }
+            else{
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcBounces(serverEntries), startDateTime));
+
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                serverEntries = new ArrayList<ServerEntry>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
     }
 
     private ArrayList<DataPoint<Double, LocalDateTime>> calculateBounceRates() {
