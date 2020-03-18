@@ -1,0 +1,22 @@
+/* 
+    Document   : controlStyle1
+*/
+
+.root{
+
+}
+
+.combo-box-base {
+	-fx-background-color: -fx-outer-border, -fx-inner-border, white;
+	-fx-shadow-highlight-color: lightgray;
+  	-fx-background-radius: 1px, 1px, 1px, 1px;
+	
+}
+
+.region {
+	-fx-background-color: blue;
+}
+
+.combo-box .arrow, .combo-box .arrow-button{
+    -fx-background-color: transparent;
+}

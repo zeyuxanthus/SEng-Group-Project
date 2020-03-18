@@ -1,11 +1,9 @@
+import com.sun.security.ntlm.Server;
 import javafx.util.Pair;
 
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Contains all data and methods needed to display the line chart.
@@ -47,66 +45,43 @@ public class LineGraph implements Chart, Observable {
     private void calculateDataPoints(){
         switch (metric){
             case TOTAL_IMPRESSIONS:
-                ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-                ArrayList<Impression> impressionLog = filterImpressionLog();
-                Collections.sort(impressionLog);
-                LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
-
-                LocalDateTime endDateTime = getEndDateTime(startDateTime);
-                int i = 0;
-                ArrayList<Impression> impressions = new ArrayList<Impression>();
-                while(impressionLog.size() > i){
-                    Impression impression = impressionLog.get(i);
-                    if(impression.getDateTime().isBefore(endDateTime)){
-                        impressions.add(impression);
-                    }
-                    else{
-                        dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcImpressions(impressions), startDateTime));
-
-                        startDateTime = endDateTime;
-                        endDateTime = getEndDateTime(startDateTime);
-                        impressions = new ArrayList<Impression>();
-                        i--;
-                    }
-                    i++;
-                }
-                this.dataPoints = dataPoints;
+                dataPoints = calculateTotalImpressions();
                 break;
             case TOTAL_IMPRESSION_COST:
-                //impression
+                dataPoints = calculateImpressionCosts();
                 break;
             case TOTAL_CLICKS:
-                //click
+                dataPoints = calculateTotalClicks();
                 break;
             case TOTAL_CLICK_COST:
-                //click
+                dataPoints = calculateClickCosts();
                 break;
-            case TOTAL_COST: // TODO possibly split into 3 costs
-                //cost and impression
+            case TOTAL_COST:
+                dataPoints = calculateTotalCosts();
                 break;
             case TOTAL_CONVERSIONS:
-                // server
+                dataPoints = calculateTotalConversions();
                 break;
             case CONVERSION_RATE:
-                // server and click
+                dataPoints = calculateConversionRates();
                 break;
             case BOUNCES:
-                // server
+                dataPoints = calculateBounces();
                 break;
             case BOUNCE_RATE:
-                // server and click
+                dataPoints = calculateBounceRates();
                 break;
             case TOTAL_UNIQUES:
-                // click
+                dataPoints = calculateTotalUniques();
                 break;
             case CTR:
-                // click and impression
+                dataPoints = calculateCTRs();
                 break;
             case CPA:
-                // imperssion, click and server
+                dataPoints = calculateCPAs();
                 break;
             case CPC:
-                // click
+                dataPoints = calculateCPCs();
                 break;
             case CPM:
                 // impression
@@ -114,6 +89,208 @@ public class LineGraph implements Chart, Observable {
         }
 
         triggerUpdate();
+    }
+
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalImpressions(){
+        ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
+        ArrayList<Impression> impressionLog = filterImpressionLog();
+        Collections.sort(impressionLog);
+        LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
+
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<Impression> impressions = new ArrayList<Impression>();
+        while(impressionLog.size() > i){
+            Impression impression = impressionLog.get(i);
+            if(impression.getDateTime().isBefore(endDateTime)){
+                impressions.add(impression);
+            }
+            else{
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcImpressions(impressions), startDateTime));
+
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                impressions = new ArrayList<Impression>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateImpressionCosts() {
+        return null;
+    }
+
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalClicks() {
+        ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
+        ArrayList<Click> clickLog = filterClickLog();
+        clickLog.sort(getClickComparator());
+
+        LocalDateTime startDateTime = clickLog.get(0).getDateTime();
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<Click> clicks = new ArrayList<Click>();
+        while(clickLog.size() > i){
+            Click click = clickLog.get(i);
+            if(click.getDateTime().isBefore(endDateTime)){
+                clicks.add(click);
+            }
+            else{
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcClicks(clicks), startDateTime));
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                clicks = new ArrayList<Click>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateClickCosts() {
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<Click> clickLog = filterClickLog();
+        clickLog.sort(getClickComparator());
+
+        LocalDateTime startDateTime = clickLog.get(0).getDateTime();
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<Click> clicks = new ArrayList<Click>();
+        while(clickLog.size() > i){
+            Click click = clickLog.get(i);
+            if(click.getDateTime().isBefore(endDateTime)){
+                clicks.add(click);
+            }
+            else{
+                dataPoints.add(new DataPoint<Double, LocalDateTime>(campaign.calcTotalClickCost(clicks), startDateTime));
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                clicks = new ArrayList<Click>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateTotalCosts() {
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<DataPoint<Double, LocalDateTime>> clickCosts = calculateClickCosts();
+        ArrayList<DataPoint<Double, LocalDateTime>> impressionCosts = calculateImpressionCosts();
+
+        for(int i = 0; i < clickCosts.size(); i++){
+            dataPoints.add(new DataPoint<Double, LocalDateTime>((clickCosts.get(i).getMetric() + impressionCosts.get(i).getMetric()), clickCosts.get(i).getStartTime()));
+        }
+
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalConversions() {
+        return null;
+    }
+
+    private  ArrayList<DataPoint<Double, LocalDateTime>> calculateConversionRates() {
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<DataPoint<Integer, LocalDateTime>> totalConversions = calculateTotalConversions();
+        ArrayList<DataPoint<Integer, LocalDateTime>> totalClicks = calculateTotalClicks();
+
+        for(int i = 0; i < totalConversions.size(); i++){
+            dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(totalConversions.get(i).getMetric() / totalClicks.get(i).getMetric()), totalConversions.get(i).getStartTime()));
+        }
+
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateBounces() {
+        return null;
+    }
+
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateBounceRates() {
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<DataPoint<Integer, LocalDateTime>> bounces = calculateBounces();
+        ArrayList<DataPoint<Integer, LocalDateTime>> impressionCosts = calculateTotalImpressions();
+
+        for(int i = 0; i < bounces.size(); i++){
+            dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(bounces.get(i).getMetric() / impressionCosts.get(i).getMetric()), bounces.get(i).getStartTime()));
+        }
+
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalUniques() {
+        ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
+        ArrayList<Click> clickLog = filterClickLog();
+        clickLog.sort(getClickComparator());
+
+        LocalDateTime startDateTime = clickLog.get(0).getDateTime();
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<Click> clicks = new ArrayList<Click>();
+        while(clickLog.size() > i){
+            Click click = clickLog.get(i);
+            if(click.getDateTime().isBefore(endDateTime)){
+                clicks.add(click);
+            }
+            else{
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcUniques(clicks), startDateTime));
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                clicks = new ArrayList<Click>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCTRs() {
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<DataPoint<Integer, LocalDateTime>> clicks = calculateTotalClicks();
+        ArrayList<DataPoint<Integer, LocalDateTime>> impressions = calculateTotalImpressions();
+
+        for(int i = 0; i < clicks.size(); i++){ //TODO add protection when arraylists have different sizes
+            dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(clicks.get(i).getMetric() / impressions.get(i).getMetric()), clicks.get(i).getStartTime()));
+        }
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPAs() {
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<DataPoint<Double, LocalDateTime>> totalCosts = calculateTotalCosts();
+        ArrayList<DataPoint<Integer, LocalDateTime>> totalConversions = calculateTotalConversions();
+
+        for(int i = 0; i < totalCosts.size(); i++){
+            dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(totalCosts.get(i).getMetric() / totalConversions.get(i).getMetric()), totalCosts.get(i).getStartTime()));
+        }
+
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPCs() {
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<Click> clickLog = filterClickLog();
+        clickLog.sort(getClickComparator());
+
+        LocalDateTime startDateTime = clickLog.get(0).getDateTime();
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<Click> clicks = new ArrayList<Click>();
+        while(clickLog.size() > i){
+            Click click = clickLog.get(i);
+            if(click.getDateTime().isBefore(endDateTime)){
+                clicks.add(click);
+            }
+            else{
+                dataPoints.add(new DataPoint<Double, LocalDateTime>(campaign.calcCPC(clicks), startDateTime));
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                clicks = new ArrayList<Click>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
     }
 
     /**
@@ -149,14 +326,15 @@ public class LineGraph implements Chart, Observable {
         return impressions;
     }
 
-    private ArrayList<Click> filterServerLog(){
+    private ArrayList<ServerEntry> filterServerLog(){
 
         return null;
     }
 
-    private ArrayList<ServerEntry> filterClickLog(){
+    private ArrayList<Click> filterClickLog(){
+        ArrayList<Click> clicks = campaign.getClicks();
 
-        return null;
+        return clicks;
     }
 
     public void setDateRange(LocalDateTime startDate, LocalDateTime endDate){
@@ -224,5 +402,16 @@ public class LineGraph implements Chart, Observable {
                 observer.observableChanged(this);
             }
         }
+    }
+
+    private Comparator<Click> getClickComparator(){
+        Comparator<Click> dateComparator = new Comparator<Click>(){
+
+            @Override
+            public int compare(Click c1, Click c2) {
+                return c1.getDateTime().compareTo(c2.getDateTime());
+            }
+        };
+        return dateComparator;
     }
 }
