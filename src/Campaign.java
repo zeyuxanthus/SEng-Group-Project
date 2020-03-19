@@ -78,7 +78,7 @@ public class Campaign {
 		// SQLite connection string
 		if(c == null) {
 			try {
-				String url = "jdbc:sqlite:reset.db";
+				String url = "jdbc:sqlite:test.db";
 				c = DriverManager.getConnection(url);
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
