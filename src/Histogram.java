@@ -119,4 +119,8 @@ public class Histogram implements Chart, Observable {
     public int getNoBars() {
         return noBars;
     }
+
+    public ArrayList<Bar> getBars() {
+        return bars;
+    }
 }
