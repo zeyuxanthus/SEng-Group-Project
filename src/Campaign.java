@@ -97,6 +97,89 @@ public class Campaign {
 		//initialiseImpression();
 	}
 	
+		
+	public ArrayList<Click> getClickData(){
+		
+		String sql = "SELECT * FROM clickLog";
+		ArrayList<Click> clickList = new ArrayList<>(); 
+
+		try(
+				Connection conn = this.connect();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
+
+			while(rs.next()){
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
+				LocalDateTime dateTime = LocalDateTime.parse(rs.getString("entry_date"), formatter);
+				Click click = new Click(dateTime, rs.getString("id"), rs.getFloat("click_cost"));
+				clickList.add(click);
+			}
+
+				
+
+		}catch(SQLException e ){
+			e.printStackTrace();
+		}
+		return clickList;
+	}
+
+
+	public ArrayList<Impression> getImpressionData(){
+
+		String sql = "SELECT * FROM impressionLog";
+		ArrayList<Impression> impressionList = new ArrayList<>();
+
+		try(
+				Connection conn = this.connect();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
+
+			while(rs.next()){
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
+				LocalDateTime dateTime = LocalDateTime.parse(rs.getString("entry_date"),formatter);
+				Impression imp = new Impression(dateTime, rs.getString("id"), rs.getString("gender"), rs.getString("age"), rs.getString("income"), rs.getString("context"), rs.getFloat("impression_cost"));
+				impressionList.add(imp);
+			}
+
+
+
+		}catch(SQLException e ){
+			e.printStackTrace();
+		}
+		return impressionList;
+	}
+
+	
+	public ArrayList<ServerEntry> getServerEntry(){
+
+		String sql = "SELECT * FROM serverEntry";
+		ArrayList<ServerEntry> entryList = new ArrayList<>();
+
+		try(
+				Connection conn = this.connect();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
+
+			while(rs.next()){
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
+				LocalDateTime entry_date = LocalDateTime.parse(rs.getString("entry_date"),formatter);
+				LocalDateTime exit_date = null;
+				if(rs.getString("exit_date") != null){
+					exit_date = LocalDateTime.parse(rs.getString("exit_date"), formatter);
+				}
+				ServerEntry entry = new ServerEntry(entry_date, rs.getString("id"), exit_date, rs.getInt("pagesViewed"), rs.getString("conversion"));
+				entryList.add(entry);
+			}
+
+
+
+		}catch(SQLException e ){
+			e.printStackTrace();
+		}
+		return entryList;
+	}
+	
+	
 	public void initialise(String clickName,String impressionName,String serverName){
 		if (!hasData){
 			hasData = true;
