@@ -14,6 +14,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -290,6 +294,16 @@ public class GUI extends Application {
 		
 		Button createChart = new Button("Create");
 		
+		createChart.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				createHistogram();
+			}
+			
+		});
+		
 		fileChecks.getChildren().addAll(clicksCheck, impressionsCheck, serverCheck);
 		
 		metricsGranularity.getChildren().addAll(granularity);
@@ -372,7 +386,35 @@ public class GUI extends Application {
 		return filters;
 	}
 	
-	
+	private void createHistogram() {
+		Histogram histogram = new Histogram(campaign, 5, 2);
+		ArrayList<Bar> bars = histogram.getBars();
+		
+		final CategoryAxis xAxis = new CategoryAxis();
+		final NumberAxis yAxis = new NumberAxis();
+		final BarChart<String, Number> chart = new BarChart<String, Number>(xAxis, yAxis);
+		
+		xAxis.setLabel("Cost Range");
+		yAxis.setLabel("Frequency");
+		chart.setTitle("Total Cost Histogram");
+		XYChart.Series series1 = new XYChart.Series();
+		
+		for (Bar b : bars) {
+			series1.getData().add(new XYChart.Data(b.getLowerBound() + " - " + b.getUpperBound(), b.getFrequency()));
+		}
+		
+		chart.getData().addAll(series1);
+		
+		Stage window = new Stage();
+		Label chartLabel = new Label("Histogram for cost variation");
+		VBox vbox = new VBox(15);
+		vbox.getChildren().addAll(chartLabel, chart);
+		
+		Scene scene = new Scene(vbox, 700, 700);
+		window.setScene(scene);
+		window.show();
+		
+	}
 	
 	private void fileChooserWindow() {
 		
@@ -401,6 +443,9 @@ public class GUI extends Application {
 		Label serverFileLabel = new Label();
 		Label clickFileLabel = new Label();
 		Label impressionFileLabel = new Label();
+		
+		Label bounceLabel = new Label("How many pages define a bounce:");
+		TextField bounceDefiner = new TextField("1");
 		
 		loadImpressions.setOnAction(new EventHandler<ActionEvent>() {
 			
@@ -445,6 +490,7 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				if (serverFile != null && clicksFile != null && impressionFile != null) {
+					//campaign.setBounceDefinition(Integer.parseInt(bounceDefiner.getText()));
 					campaign.initialise(clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), serverFile.getAbsolutePath());
 				}
 				fileOption.setValue("File");
