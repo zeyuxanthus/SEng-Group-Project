@@ -320,22 +320,350 @@ public class LineGraph implements Chart, Observable {
         return endDateTime;
     }
 
-    private ArrayList<Impression> filterImpressionLog(){
-        ArrayList<Impression> impressions = campaign.getImpressions();
 
-        return impressions;
+    /**
+     * filters for impression log
+     * @param predicate
+     * @return
+     */
+    public ArrayList<Impression> filterImpressionLog(String predicate){
+
+        ArrayList<Impression> impList = new ArrayList();
+        String[] predicates = predicate.split(",");
+
+
+        try {
+
+            Connection conn = campaign.connect();
+
+
+            String sqlString = "SELECT * FROM impressionLog WHERE 1 = 1";
+
+            for(int i = 1; i < predicates.length + 1; i++){
+
+                if(predicates[i - 1].contains(":") && predicates[i - 1].contains("+")){
+                    String[] dates = predicates[i - 1].split(" \\+ ");
+                    sqlString += " and entry_date > ";
+                    sqlString += "\'" + dates[0] + "\'";
+                    sqlString += " and entry_date < ";
+                    sqlString +=  "\'"  + dates[1] + "\'";
+                }
+                    switch (predicates[i - 1]){
+                    case "Male":
+                        sqlString += " and gender='Male'";
+                        break;
+
+                    case "Female":
+                        sqlString += " and gender='Female'";
+                        break;
+
+                    case "Social Media":
+                        sqlString += " and context='Social Media'";
+                        break;
+
+                    case "News":
+                       sqlString += " and context='News'";
+                        break;
+
+                    case "Shopping":
+                        sqlString += " and context='Shopping'";
+                        break;
+
+                    case "Blog":
+                        sqlString += " and context='Blog'";
+                        break;
+
+                    case "Low":
+                        sqlString += " and income='Low'";
+                        break;
+
+                    case "Medium":
+                        sqlString += " and income='Medium'";
+                        break;
+
+                    case "High":
+                        sqlString += " and income='High'";
+                        break;
+
+                    case "<25":
+                        sqlString += " and age='<25'";
+                        break;
+
+                    case "25-34":
+                        sqlString += " and age='25-34'";
+                        break;
+
+                    case "35-44":
+                        sqlString += " and age='35-44'";
+                        break;
+
+                    case "44-54":
+                        sqlString += " and age='45-54'";
+                        break;
+
+                    case ">54":
+                        sqlString += " and age='>54'";
+                        break;
+
+                }
+
+
+            }
+
+            System.out.println(sqlString);
+            PreparedStatement staten = conn.prepareStatement(sqlString);
+            ResultSet rs = staten.executeQuery();
+
+            while(rs.next()){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
+                LocalDateTime dateTime = LocalDateTime.parse(rs.getString("entry_date"),formatter);
+                Impression imp = new Impression(dateTime, rs.getString("id"), rs.getString("gender"), rs.getString("age"), rs.getString("income"), rs.getString("context"), rs.getFloat("impression_cost"));
+                impList.add(imp);
+            }
+
+
+
+        }catch(SQLException e){
+           e.printStackTrace();
+        }
+
+
+        return impList;
     }
 
-    private ArrayList<ServerEntry> filterServerLog(){
 
-        return null;
+    /**
+     * filter for the click log
+     * @param predicate
+     * @return
+     */
+
+    public ArrayList<Click> filterClickLog(String predicate){
+
+        ArrayList<Click> clickList = new ArrayList<>();
+        String[] predicates = predicate.split(",");
+
+
+        try {
+            Connection conn = campaign.connect();
+            String sqlString = "SELECT * FROM (SELECT  clickLog.entry_date, clickLog.id, clickLog.click_cost, impressionLog.age, impressionLog.context, impressionLog.gender, impressionLog.income, impressionLog.impression_cost  FROM clickLog INNER JOIN  impressionLog ON impressionLog.id = clickLog.id  GROUP BY  clickLog.id, clickLog.entry_date) WHERE 1 = 1 ";
+
+            for(int i = 1; i < predicates.length + 1; i++) {
+
+                if (predicates[i - 1].contains(":") && predicates[i - 1].contains("+")) {
+                    String[] dates = predicates[i - 1].split(" \\+ ");
+                    System.out.println(dates[0]);
+                    sqlString += " and entry_date > ";
+                    sqlString += "\'" + dates[0] + "\'";
+                    sqlString += " and entry_date < ";
+                    sqlString += "\'" + dates[1] + "\'";
+                }
+                switch (predicates[i - 1]) {
+                    case "Male":
+                        sqlString += " and gender='Male'";
+                        break;
+
+                    case "Female":
+                        sqlString += " and gender='Female'";
+                        break;
+
+                    case "Social Media":
+                        sqlString += " and context='Social Media'";
+                        break;
+
+                    case "News":
+                        sqlString += " and context='News'";
+                        break;
+
+                    case "Shopping":
+                        sqlString += " and context='Shopping'";
+                        break;
+
+                    case "Blog":
+                        sqlString += " and context='Blog'";
+                        break;
+
+                    case "Low":
+                        sqlString += " and income='Low'";
+                        break;
+
+                    case "Medium":
+                        sqlString += " and income='Medium'";
+                        break;
+
+                    case "High":
+                        sqlString += " and income='High'";
+                        break;
+
+                    case "<25":
+                        sqlString += " and age='<25'";
+                        break;
+
+                    case "25-34":
+                        sqlString += " and age='25-34'";
+                        break;
+
+                    case "35-44":
+                        sqlString += " and age='35-44'";
+                        break;
+
+                    case "44-54":
+                        sqlString += " and age='45-54'";
+                        break;
+
+                    case ">54":
+                        sqlString += " and age='>54'";
+                        break;
+
+
+                }
+
+            }
+
+                PreparedStatement staten = conn.prepareStatement(sqlString);
+                System.out.println(sqlString);
+                ResultSet rs = staten.executeQuery();
+
+
+                while (rs.next()) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
+                    LocalDateTime dateTime = LocalDateTime.parse(rs.getString("entry_date"), formatter);
+                    Click click = new Click(dateTime, rs.getString("id"), rs.getFloat("click_cost"));
+                    clickList.add(click);
+                }
+
+
+        }catch(SQLException e){
+            System.out.println(e.getErrorCode());
+        }
+
+        return clickList;
     }
 
-    private ArrayList<Click> filterClickLog(){
-        ArrayList<Click> clicks = campaign.getClicks();
 
-        return clicks;
+    /**
+     * filter for the Server database
+     * @param predicate
+     * @return
+     */
+    public ArrayList<ServerEntry> filterServerLog(String predicate){
+
+        ArrayList<ServerEntry> entryList = new ArrayList<>();
+        String[] predicates = predicate.split(",");
+
+        try{
+            Connection conn = campaign.connect();
+            String sqlString = "SELECT * FROM (SELECT  impressionLog.id, impressionLog.impression_cost, impressionLog.entry_date, impressionLog.age, impressionLog.context, impressionLog.gender, impressionLog.income, serverLog.conversion, serverLog.pagesViewed, serverLog.exit_date  FROM serverLog INNER JOIN  impressionLog ON impressionLog.id = serverLog.id  GROUP BY  serverLog.id, serverLog.entry_date)  WHERE 1 = 1 ";
+
+
+
+            for(int i = 1; i < predicates.length + 1  ; i++) {
+
+                if(predicates[i - 1].contains(":") && predicates[i - 1].contains("+")){
+                    String[] dates = predicates[i - 1].split(" \\+ ");
+                    System.out.println(dates[0]);
+                    sqlString += " and entry_date > ";
+                    sqlString += "\'" + dates[0] + "\'";
+                    sqlString += " and entry_date < ";
+                    sqlString +=  "\'"  + dates[1] + "\'";
+                }
+                switch (predicates[i - 1]) {
+                    case "Male":
+                        sqlString += " and gender='Male'";
+                        break;
+
+                    case "Female":
+                        sqlString += " and gender='Female'";
+                        break;
+
+                    case "Social Media":
+                        sqlString += " and context='Social Media'";
+                        break;
+
+                    case "News":
+                        sqlString += " and context='News'";
+                        break;
+
+                    case "Shopping":
+                        sqlString += " and context='Shopping'";
+                        break;
+
+                    case "Blog":
+                        sqlString += " and context='Blog'";
+                        break;
+
+                    case "Low":
+                        sqlString += " and income='Low'";
+                        break;
+
+                    case "Medium":
+                        sqlString += " and income='Medium'";
+                        break;
+
+                    case "High":
+                        sqlString += " and income='High'";
+                        break;
+
+                    case "<25":
+                        sqlString += " and age='<25'";
+                        break;
+
+                    case "25-34":
+                        sqlString += " and age='25-34'";
+                        break;
+
+                    case "35-44":
+                        sqlString += " and age='35-44'";
+                        break;
+
+                    case "44-54":
+                        sqlString += " and age='45-54'";
+                        break;
+
+                    case ">54":
+                        sqlString += " and age='>54'";
+                        break;
+
+                    case "No":
+                        sqlString += " and conversion='No'";
+                        break;
+
+                    case "Yes":
+                        sqlString += " and conversion='Yes'";
+                        break;
+
+                    case "pagesViewed":
+                        sqlString += " and pagesViewed <";
+                        sqlString += predicates[i];
+                        break;
+
+
+                }
+            }
+
+
+            System.out.println(sqlString);
+            PreparedStatement staten = conn.prepareStatement(sqlString);
+            ResultSet rs = staten.executeQuery();
+
+            while(rs.next()){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
+                LocalDateTime entry_date = LocalDateTime.parse(rs.getString("entry_date"),formatter);
+                LocalDateTime exit_date = null;
+                if(rs.getString("exit_date") != null){
+                     exit_date = LocalDateTime.parse(rs.getString("exit_date"), formatter);
+                }
+                ServerEntry entry = new ServerEntry(entry_date, rs.getString("id"), exit_date, rs.getInt("pagesViewed"), rs.getString("conversion"));
+                entryList.add(entry);
+            }
+
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+
+        return entryList;
     }
+
 
     public void setDateRange(LocalDateTime startDate, LocalDateTime endDate){
         this.startDate = startDate;
