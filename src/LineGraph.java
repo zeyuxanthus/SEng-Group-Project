@@ -1,8 +1,10 @@
 import javafx.util.Pair;
 
+import java.sql.*;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 
 /**
  * Contains all data and methods needed to display the line chart.
@@ -17,20 +19,31 @@ public class LineGraph implements Chart, Observable {
 
     private List<Observer> observers = new LinkedList<Observer>(); // this will contain the window that displays the chart
 
-    // Filters (null/empty means all values are accepted)
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private ArrayList<String> contexts = new ArrayList<String>();
-    private String gender;
-    private ArrayList<String> ageGroups = new ArrayList<String>();
-    private ArrayList<String> incomes = new ArrayList<String>();
 
-    public LineGraph(Metric metric, TimeInterval timeInterval, Observer observer, Campaign campaign){
+    public LineGraph(Metric metric, TimeInterval timeInterval, Observer observer, Campaign campaign, String predicate){
         this.metric = metric;
         this.timeInterval = timeInterval;
         observers.add(observer);
         this.campaign = campaign;
-        calculateDataPoints();
+
+        try {
+            this.campaign.connect().setAutoCommit(false);
+        } catch (SQLException e ){
+            System.out.println(e);
+        }
+        calculateDataPoints(metric, predicate);
+    }
+
+    /**
+     * maybe the controller should call this method when as it also creates the linegraph
+     * @param name
+     */
+    public void saveGraph(String name){
+
+    }
+
+    public LineGraph(Campaign campaign){
+        this.campaign = campaign;
     }
 
     /**
@@ -41,58 +54,90 @@ public class LineGraph implements Chart, Observable {
      * (e.g. <30 bounces, 9am - 10am on 29/02/2020>)
      * TriggerUpdate at the end so the View can get the dataPoints.
      */
-    private void calculateDataPoints(){
+    /**
+     * Use campaign's reference to get Campaign's data and calculation methods.
+     * Apply filters to campaign's data
+     * Calculates data points to be displayed on the chart.
+     * dataPoints' Pair contains value of the metric computed over some time and that time period
+     * (e.g. <30 bounces, 9am - 10am on 29/02/2020>)
+     * TriggerUpdate at the end so the View can get the dataPoints.
+     */
+    private void calculateDataPoints(Metric metric, String predicate){
+
         switch (metric){
             case TOTAL_IMPRESSIONS:
-                dataPoints = calculateTotalImpressions();
+                dataPoints = calculateTotalImpressions(predicate);
                 break;
             case TOTAL_IMPRESSION_COST:
-                dataPoints = calculateImpressionCosts();
+                dataPoints = calculateImpressionCosts(predicate);
                 break;
             case TOTAL_CLICKS:
-                dataPoints = calculateTotalClicks();
+                dataPoints = calculateTotalClicks(predicate);
                 break;
             case TOTAL_CLICK_COST:
-                dataPoints = calculateClickCosts();
+                dataPoints = calculateClickCosts(predicate);
                 break;
             case TOTAL_COST:
-                dataPoints = calculateTotalCosts();
+                dataPoints = calculateTotalCosts(predicate);
                 break;
             case TOTAL_CONVERSIONS:
-                dataPoints = calculateTotalConversions();
+                dataPoints = calculateTotalConversions(predicate);
                 break;
             case CONVERSION_RATE:
-                dataPoints = calculateConversionRates();
+                dataPoints = calculateConversionRates(predicate);
                 break;
             case BOUNCES:
-                dataPoints = calculateBounces();
+                dataPoints = calculateBounces(predicate);
                 break;
             case BOUNCE_RATE:
-                dataPoints = calculateBounceRates();
+                dataPoints = calculateBounceRates(predicate);
                 break;
             case TOTAL_UNIQUES:
-                dataPoints = calculateTotalUniques();
+                dataPoints = calculateTotalUniques(predicate);
                 break;
             case CTR:
-                dataPoints = calculateCTRs();
+                dataPoints = calculateCTRs(predicate);
                 break;
             case CPA:
-                dataPoints = calculateCPAs();
+                dataPoints = calculateCPAs(predicate);
                 break;
             case CPC:
-                dataPoints = calculateCPCs();
+                dataPoints = calculateCPCs(predicate);
                 break;
             case CPM:
                 // impression
                 break;
+
         }
 
         triggerUpdate();
     }
 
-    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalImpressions(){
+    private LocalDateTime getEndDateTime(LocalDateTime startDateTime){
+        LocalDateTime endDateTime;
+        switch(timeInterval){
+            case HOUR:
+                endDateTime = startDateTime.plusHours(1);
+                break;
+            case DAY:
+                endDateTime = startDateTime.plusDays(1);
+                break;
+            case WEEK:
+                endDateTime= startDateTime.plusWeeks(1);
+                break;
+            case MONTH:
+                endDateTime = startDateTime.plusMonths(1);
+                break;
+            default:
+                endDateTime = startDateTime; //TODO handle this case differently
+                break;
+        }
+        return endDateTime;
+    }
+
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalImpressions(String predicate){
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<Impression> impressionLog = filterImpressionLog();
+        ArrayList<Impression> impressionLog = filterImpressionLog(predicate);
         Collections.sort(impressionLog);
         LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
 
@@ -117,36 +162,13 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    private ArrayList<DataPoint<Double, LocalDateTime>> calculateImpressionCosts() {
-        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<Impression> impressionLog = filterImpressionLog();
-        Collections.sort(impressionLog);
-        LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
-
-        LocalDateTime endDateTime = getEndDateTime(startDateTime);
-        int i = 0;
-        ArrayList<Impression> impressions = new ArrayList<Impression>();
-        while(impressionLog.size() > i){
-            Impression impression = impressionLog.get(i);
-            if(impression.getDateTime().isBefore(endDateTime)){
-                impressions.add(impression);
-            }
-            else{
-                dataPoints.add(new DataPoint<Double, LocalDateTime>(campaign.calcTotalImpCost(impressions), startDateTime));
-
-                startDateTime = endDateTime;
-                endDateTime = getEndDateTime(startDateTime);
-                impressions = new ArrayList<Impression>();
-                i--;
-            }
-            i++;
-        }
-        return dataPoints;
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateImpressionCosts(String predicate) {
+        return null;
     }
 
-    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalClicks() {
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalClicks(String predicate) {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<Click> clickLog = filterClickLog();
+        ArrayList<Click> clickLog = filterClickLog(predicate);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -170,9 +192,9 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    private ArrayList<DataPoint<Double, LocalDateTime>> calculateClickCosts() {
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateClickCosts(String predicate) {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<Click> clickLog = filterClickLog();
+        ArrayList<Click> clickLog = filterClickLog(predicate);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -196,10 +218,10 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    private ArrayList<DataPoint<Double, LocalDateTime>> calculateTotalCosts() {
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateTotalCosts(String predicate) {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<DataPoint<Double, LocalDateTime>> clickCosts = calculateClickCosts();
-        ArrayList<DataPoint<Double, LocalDateTime>> impressionCosts = calculateImpressionCosts();
+        ArrayList<DataPoint<Double, LocalDateTime>> clickCosts = calculateClickCosts(predicate);
+        ArrayList<DataPoint<Double, LocalDateTime>> impressionCosts = calculateImpressionCosts(predicate);
 
         for(int i = 0; i < clickCosts.size(); i++){
             dataPoints.add(new DataPoint<Double, LocalDateTime>((clickCosts.get(i).getMetric() + impressionCosts.get(i).getMetric()), clickCosts.get(i).getStartTime()));
@@ -208,37 +230,14 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalConversions() {
-        ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<ServerEntry> serverEntriesLog = filterServerLog();
-        Collections.sort(serverEntriesLog);
-        LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
-
-        LocalDateTime endDateTime = getEndDateTime(startDateTime);
-        int i = 0;
-        ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
-        while(serverEntriesLog.size() > i){
-            ServerEntry serverEntry = serverEntriesLog.get(i);
-            if(serverEntry.getEntryDate().isBefore(endDateTime)){
-                serverEntries.add(serverEntry);
-            }
-            else{
-                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcConversions(serverEntries), startDateTime));
-
-                startDateTime = endDateTime;
-                endDateTime = getEndDateTime(startDateTime);
-                serverEntries = new ArrayList<ServerEntry>();
-                i--;
-            }
-            i++;
-        }
-        return dataPoints;
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalConversions(String predicate) {
+        return null;
     }
 
-    private  ArrayList<DataPoint<Double, LocalDateTime>> calculateConversionRates() {
+    private  ArrayList<DataPoint<Double, LocalDateTime>> calculateConversionRates(String predicate) {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<DataPoint<Integer, LocalDateTime>> totalConversions = calculateTotalConversions();
-        ArrayList<DataPoint<Integer, LocalDateTime>> totalClicks = calculateTotalClicks();
+        ArrayList<DataPoint<Integer, LocalDateTime>> totalConversions = calculateTotalConversions(predicate);
+        ArrayList<DataPoint<Integer, LocalDateTime>> totalClicks = calculateTotalClicks(predicate);
 
         for(int i = 0; i < totalConversions.size(); i++){
             dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(totalConversions.get(i).getMetric() / totalClicks.get(i).getMetric()), totalConversions.get(i).getStartTime()));
@@ -247,37 +246,14 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateBounces() {
-        ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<ServerEntry> serverEntriesLog = filterServerLog();
-        Collections.sort(serverEntriesLog);
-        LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
-
-        LocalDateTime endDateTime = getEndDateTime(startDateTime);
-        int i = 0;
-        ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
-        while(serverEntriesLog.size() > i){
-            ServerEntry serverEntry = serverEntriesLog.get(i);
-            if(serverEntry.getEntryDate().isBefore(endDateTime)){
-                serverEntries.add(serverEntry);
-            }
-            else{
-                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcBounces(serverEntries), startDateTime));
-
-                startDateTime = endDateTime;
-                endDateTime = getEndDateTime(startDateTime);
-                serverEntries = new ArrayList<ServerEntry>();
-                i--;
-            }
-            i++;
-        }
-        return dataPoints;
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateBounces(String predicate) {
+        return null;
     }
 
-    private ArrayList<DataPoint<Double, LocalDateTime>> calculateBounceRates() {
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateBounceRates(String predicate) {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<DataPoint<Integer, LocalDateTime>> bounces = calculateBounces();
-        ArrayList<DataPoint<Integer, LocalDateTime>> impressionCosts = calculateTotalImpressions();
+        ArrayList<DataPoint<Integer, LocalDateTime>> bounces = calculateBounces(predicate);
+        ArrayList<DataPoint<Integer, LocalDateTime>> impressionCosts = calculateTotalImpressions(predicate);
 
         for(int i = 0; i < bounces.size(); i++){
             dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(bounces.get(i).getMetric() / impressionCosts.get(i).getMetric()), bounces.get(i).getStartTime()));
@@ -286,9 +262,9 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalUniques() {
+    private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalUniques(String predicate) {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<Click> clickLog = filterClickLog();
+        ArrayList<Click> clickLog = filterClickLog(predicate);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -312,10 +288,10 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCTRs() {
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCTRs(String predicate) {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<DataPoint<Integer, LocalDateTime>> clicks = calculateTotalClicks();
-        ArrayList<DataPoint<Integer, LocalDateTime>> impressions = calculateTotalImpressions();
+        ArrayList<DataPoint<Integer, LocalDateTime>> clicks = calculateTotalClicks(predicate);
+        ArrayList<DataPoint<Integer, LocalDateTime>> impressions = calculateTotalImpressions(predicate);
 
         for(int i = 0; i < clicks.size(); i++){ //TODO add protection when arraylists have different sizes
             dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(clicks.get(i).getMetric() / impressions.get(i).getMetric()), clicks.get(i).getStartTime()));
@@ -323,10 +299,10 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPAs() {
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPAs(String predicate) {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<DataPoint<Double, LocalDateTime>> totalCosts = calculateTotalCosts();
-        ArrayList<DataPoint<Integer, LocalDateTime>> totalConversions = calculateTotalConversions();
+        ArrayList<DataPoint<Double, LocalDateTime>> totalCosts = calculateTotalCosts(predicate);
+        ArrayList<DataPoint<Integer, LocalDateTime>> totalConversions = calculateTotalConversions(predicate);
 
         for(int i = 0; i < totalCosts.size(); i++){
             dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(totalCosts.get(i).getMetric() / totalConversions.get(i).getMetric()), totalCosts.get(i).getStartTime()));
@@ -335,9 +311,9 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPCs() {
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPCs(String predicate) {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<Click> clickLog = filterClickLog();
+        ArrayList<Click> clickLog = filterClickLog(predicate);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -361,32 +337,6 @@ public class LineGraph implements Chart, Observable {
         return dataPoints;
     }
 
-    /**
-     * Increments the startDate of the interval by the amount corresponding to timeInterval
-     * @param startDateTime starting dateTime of the interval
-     * @return ending dateTime of the interval
-     */
-    private LocalDateTime getEndDateTime(LocalDateTime startDateTime){
-        LocalDateTime endDateTime;
-        switch(timeInterval){
-            case HOUR:
-                endDateTime = startDateTime.plusHours(1);
-                break;
-            case DAY:
-                endDateTime = startDateTime.plusDays(1);
-                break;
-            case WEEK:
-                endDateTime= startDateTime.plusWeeks(1);
-                break;
-            case MONTH:
-                endDateTime = startDateTime.plusMonths(1);
-                break;
-            default:
-                endDateTime = startDateTime; //TODO handle this case differently
-                 break;
-        }
-        return endDateTime;
-    }
 
 
     /**
@@ -498,6 +448,52 @@ public class LineGraph implements Chart, Observable {
 
         return impList;
     }
+
+
+
+
+
+
+
+
+//    public ArrayList<Click> streamFilterClickLog(String predicate){
+//        String[] predicates = predicate.split(",");
+//        ArrayList<Click> campaignList = campaign.getClicks();
+//
+//        for(int i = 0; i < predicates.length; i++){
+//            String[] keys = predicates[i].split("=");
+//            if(keys[0] == "Gender"){
+//                campaignList = streamGender(campaignList, keys[1]);
+//            } else if(keys[0] == "Income"){
+//                campaignList = streamGender(campaignList, keys[1]);
+//            }
+//        }
+//
+//
+//        return campaignList;
+//    }
+//
+//
+//    public ArrayList<Click> streamGender(ArrayList<Click> campaignList,String gender){
+//        ArrayList<Click> clickList = campaignList.stream().filter(c -> c.getClickGender() == gender);
+//        return clickList;
+//    }
+//
+//
+//    public ArrayList<Click> streamIncome(ArrayList<Click> campaignList, String income){
+//        ArrayList<Click> clickList = campaignList.stream().filter(c -> c.getClickIncome() == income);
+//        return clickList;
+//    }
+//
+
+
+
+
+
+
+
+
+
 
 
     /**
@@ -732,52 +728,6 @@ public class LineGraph implements Chart, Observable {
         return entryList;
     }
 
-
-    public void setDateRange(LocalDateTime startDate, LocalDateTime endDate){
-        this.startDate = startDate;
-        this.endDate = endDate;
-        calculateDataPoints();
-    }
-
-    public void removeDateRange(){
-        startDate = null;
-        endDate = null;
-    }
-
-    public void addContext(String context){
-        contexts.add(context);
-        calculateDataPoints();
-    }
-
-    public void removeContext(String context){
-        contexts.remove(context);
-        calculateDataPoints();
-    }
-
-    public void setGender(String gender){
-        this.gender = gender;
-        calculateDataPoints();
-    }
-
-    public void addAgeGroup(String ageGroup){
-        ageGroups.add(ageGroup);
-        calculateDataPoints();
-    }
-
-    public void removeAgeGroup(String ageGroup){
-        ageGroups.remove(ageGroup);
-        calculateDataPoints();
-    }
-
-    public void addIncome(String income){
-        incomes.add(income);
-        calculateDataPoints();
-    }
-
-    public void removeIncome(String income){
-        incomes.remove(income);
-        calculateDataPoints();
-    }
 
     public ArrayList<DataPoint> getDataPoints(){ return dataPoints; }
 
