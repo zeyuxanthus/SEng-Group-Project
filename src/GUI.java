@@ -443,6 +443,7 @@ public class GUI extends Application {
 		chart.setTitle("Total Cost Histogram");
 		XYChart.Series series1 = new XYChart.Series();
 		chart.setBarGap(0);
+		chart.setCategoryGap(0);
 		
 		for (Bar b : bars) {
 			series1.getData().add(new XYChart.Data(b.getLowerBound() + " - " + b.getUpperBound(), b.getFrequency()));
