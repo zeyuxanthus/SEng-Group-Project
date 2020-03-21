@@ -7,6 +7,6 @@ public class Main {
 		Campaign campaign = new Campaign();
 		
 		Controller controller = new Controller(campaign);
-		View view = new View(controller);
+		GUI gui = new GUI(controller);
 	}
 }

@@ -11,7 +11,17 @@ public class ServerEntry {
     private int pagesViewed;
     private String conversion;
 
-  public ServerEntry(LocalDateTime entryDate, String id, LocalDateTime exitDate, int pagesViewed, String conversion) {
+
+
+    private String gender;
+    private String income;
+    private String ageGroup;
+    private String context;
+    private float impressionCost;
+
+
+
+    public ServerEntry(LocalDateTime entryDate, String id, LocalDateTime exitDate, int pagesViewed, String conversion) {
         this.entryDate = entryDate;
         this.ID = id;
         this.exitDate = exitDate;
@@ -28,6 +38,31 @@ public class ServerEntry {
         Conversion(String conversion){
             this.conversion = conversion;
         }
+    }
+
+
+    public void setGender(String gender){
+        this.gender = gender;
+    }
+
+    public void setIncome(String income){
+        this.income = income;
+    }
+
+    public void setAgeGroup(String ageGroup){
+        this.ageGroup = ageGroup;
+    }
+
+    public void setContext(String context){
+        this.context = context;
+    }
+
+    public void setImpressionCost(float impCost){
+        this.impressionCost = impCost;
+    }
+
+    public String getGender(){
+        return gender;
     }
 
     public LocalDateTime getEntryDate(){
@@ -49,7 +84,7 @@ public class ServerEntry {
     public String getConversion(){
         return conversion;
     }
-    
+
     @Override
     public String toString() {
         return entryDate + " " + ID + " " + exitDate +
@@ -57,4 +92,3 @@ public class ServerEntry {
     }
 
 }
-

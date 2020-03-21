@@ -1,29 +1,12 @@
 
 
-//import com.sun.security.ntlm.Server;
 
-/*
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-*/
 import java.io.*;
-import java.sql.*;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 /**
  *  Domain of the application. (Basically backend)
@@ -54,10 +37,8 @@ public class Campaign {
 	private ArrayList<Impression> impressions; // Impression Log
 	private ArrayList<Click> clicks; // Click Log
 	private ArrayList<ServerEntry> serverEntries; // Server Log
-	
-	private static Connection c;
-	private static Boolean hasData = false;
-	int batchSize = 20;
+	private HashMap<String, Impression> impressionSet;
+
 
 	/**
 	 * Should be called whenever anything in the model changes.
@@ -72,301 +53,20 @@ public class Campaign {
 //	public void addObserver(Observer observer) {
 //		observers.add(observer);
 //	}
-	
 
-	public Connection connect() {
-		// SQLite connection string
-		if(c == null) {
-			try {
-				String url = "jdbc:sqlite:test.db";
-				c = DriverManager.getConnection(url);
-			} catch (SQLException e) {
-				System.out.println(e.getMessage());
-			}
-			return c;
-		} else {
-			return c;
-		}
-	}
 
-	private void  getC() throws ClassNotFoundException, SQLException{
-		Class.forName("org.sqlite.JDBC");
-		//  c=DriverManager.getConnection("jdbc:sqlite:/Users/wangzeyu/Desktop/sqlite/test.db");
-		c= DriverManager.getConnection("jdbc:sqlite:test.db");
-	//	initialise(clicklogN,implogN,serverlogN);
-		//initialiseImpression();
-	}
-	
-		
-	public ArrayList<Click> getClickData(){
-		
-		String sql = "SELECT * FROM clickLog";
-		ArrayList<Click> clickList = new ArrayList<>(); 
 
-		try(
-				Connection conn = this.connect();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
 
-			while(rs.next()){
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
-				LocalDateTime dateTime = LocalDateTime.parse(rs.getString("entry_date"), formatter);
-				Click click = new Click(dateTime, rs.getString("id"), rs.getFloat("click_cost"));
-				clickList.add(click);
-			}
 
-				
+	public void loadLogs(String serverName, String clickName, String impressionName){
 
-		}catch(SQLException e ){
-			e.printStackTrace();
-		}
-		return clickList;
+		loadImpressionLog(impressionName);
+		loadSeverlog(serverName);
+		loadClickLog(clickName);
+
 	}
 
 
-	public ArrayList<Impression> getImpressionData(){
-
-		String sql = "SELECT * FROM impressionLog";
-		ArrayList<Impression> impressionList = new ArrayList<>();
-
-		try(
-				Connection conn = this.connect();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
-
-			while(rs.next()){
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
-				LocalDateTime dateTime = LocalDateTime.parse(rs.getString("entry_date"),formatter);
-				Impression imp = new Impression(dateTime, rs.getString("id"), rs.getString("gender"), rs.getString("age"), rs.getString("income"), rs.getString("context"), rs.getFloat("impression_cost"));
-				impressionList.add(imp);
-			}
-
-
-
-		}catch(SQLException e ){
-			e.printStackTrace();
-		}
-		return impressionList;
-	}
-
-	
-	public ArrayList<ServerEntry> getServerEntry(){
-
-		String sql = "SELECT * FROM serverEntry";
-		ArrayList<ServerEntry> entryList = new ArrayList<>();
-
-		try(
-				Connection conn = this.connect();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
-
-			while(rs.next()){
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
-				LocalDateTime entry_date = LocalDateTime.parse(rs.getString("entry_date"),formatter);
-				LocalDateTime exit_date = null;
-				if(rs.getString("exit_date") != null){
-					exit_date = LocalDateTime.parse(rs.getString("exit_date"), formatter);
-				}
-				ServerEntry entry = new ServerEntry(entry_date, rs.getString("id"), exit_date, rs.getInt("pagesViewed"), rs.getString("conversion"));
-				entryList.add(entry);
-			}
-
-
-
-		}catch(SQLException e ){
-			e.printStackTrace();
-		}
-		return entryList;
-	}
-	
-	
-	public void initialise(String clickName,String impressionName,String serverName){
-		if (!hasData){
-			hasData = true;
-		}
-
-		try{
-			if (c == null) {
-				getC();
-			}
-
-		String sqlClick = "CREATE TABLE IF NOT EXISTS clickLog (\n"
-				+ "entry_date TIMESTAMP NOT NULL,\n"
-				+ "id TEXT NOT NULL,\n "
-				+ "click_cost REAL NOT NULL \n"
-				+ ");";
-
-		String sqlImpression = "CREATE TABLE IF NOT EXISTS impressionLog (\n"
-				+ "entry_date TIMESTAMP NOT NULL,\n"
-				+ "id TEXT NOT NULL,\n "
-				+ "gender TEXT NOT NULL,\n"
-				+ "age TEXT NOT NULL,\n"
-				+ "income TEXT NOT NULL,\n"
-				+ "context TEXT NOT NULL, \n"
-				+ "impression_cost REAL NOT NULL \n"
-				+ ");";
-
-		String sqlServer = "CREATE TABLE IF NOT EXISTS serverLog (\n"
-				+ "entry_date TIMESTAMP NOT NULL,\n"
-				+ "id TEXT NOT NULL,\n "
-				+ "exit_date TIMESTAMP,\n"
-				+ "pagesViewed INTEGER NOT NULL,\n"
-				+ "conversion TEXT NOT NULL \n"
-				+ ");";
-
-
-
-
-
-		Statement state = c.createStatement();
-		state.execute(sqlImpression);
-		state.execute(sqlClick);
-		state.execute(sqlServer);
-
-
-
-			c.setAutoCommit(false);
-			PreparedStatement prepClick = c.prepareStatement("INSERT INTO clickLog values(?,?,?);");
-			PreparedStatement prepImpression = c.prepareStatement("INSERT INTO impressionLog values(?,?,?,?,?,?,?);");
-			PreparedStatement prepServer = c.prepareStatement("INSERT INTO serverLog values(?,?,?,?,?);");
-
-
-			BufferedReader lineReader = new BufferedReader(new FileReader(clickName));
-			String lineText = null;
-			int count = 0;
-			lineReader.readLine(); //skip header line
-			while ((lineText = lineReader.readLine()) != null){
-				String[] data = lineText.split(",");
-				String date = data[0];
-				String id = data[1];
-				String clickCost = data[2];
-
-				//Timestamp sqlTimestamp = Timestamp.valueOf(date);
-				//prepClick.setTimestamp(1,sqlTimestamp);
-
-				prepClick.setString(1,String.valueOf(Timestamp.valueOf(date)));
-
-				prepClick.setString(2,id);
-
-			//	float clickcosts = Float.parseFloat(clickCost);
-			//	prepClick.setFloat(3,clickcosts);
-				prepClick.setString(3,String.valueOf(Float.valueOf(clickCost)));
-
-				prepClick.addBatch();
-
-				if (count % batchSize == 0){
-					prepClick.executeBatch();
-				}
-
-			}
-
-			lineReader.close();
-
-			BufferedReader implineReader = new BufferedReader(new FileReader(impressionName));
-			String impLineText = null;
-			int impCount = 0;
-			implineReader.readLine(); //skip header line
-			while ((impLineText = implineReader.readLine()) != null){
-			//	System.out.println(serverLineText);
-				String[] data = impLineText.split(",");
-				String date = data[0];
-				String id = data[1];
-				String gender = data[2];
-				String age = data[3];
-				String income = data[4];
-				String context = data[5];
-				String impressionCost = data[6];
-
-			//	Timestamp sqlTimestamp = Timestamp.valueOf(date);
-			//	prepImpression.setTimestamp(1,sqlTimestamp);
-
-				prepImpression.setString(1,String.valueOf(Timestamp.valueOf(date)));
-
-				prepImpression.setString(2,id);
-				prepImpression.setString(3,gender);
-				prepImpression.setString(4,age);
-				prepImpression.setString(5,income);
-				prepImpression.setString(6,context);
-
-			//	float impressionCosts = Float.parseFloat(impressionCost);
-			//	prepImpression.setFloat(7,impressionCosts);
-
-				prepImpression.setString(7,String.valueOf(Float.valueOf(impressionCost)));
-
-				prepImpression.addBatch();
-
-				if (impCount % batchSize == 0){
-					prepImpression.executeBatch();
-				}
-
-
-			}
-			implineReader.close();
-
-			BufferedReader serverlineReader = new BufferedReader(new FileReader(serverName));
-			String serverLineText = null;
-			int serverCount = 0;
-			serverlineReader.readLine(); //skip header line
-			while ((serverLineText = serverlineReader.readLine()) != null){
-				//	System.out.println(serverLineText);
-				String[] data = serverLineText.split(",");
-				String entryDate = data[0];
-				String id = data[1];
-				String exitDate = data[2];
-				String pagesViewed = data[3];
-				String conversion = data[4];
-
-			//	Timestamp sqlTimestamp = Timestamp.valueOf(entryDate);
-			//	prepServer.setTimestamp(1,sqlTimestamp);
-				prepServer.setString(1,String.valueOf(Timestamp.valueOf(entryDate)));
-
-				prepServer.setString(2,id);
-
-				if(exitDate.equals("n/a")){
-				//	Timestamp sqlExitTime = Timestamp.valueOf(exitDate);
-				//	prepServer.setTimestamp(3,sqlExitTime);
-					prepServer.setNull(3,Types.TIMESTAMP);
-				} else {
-					prepServer.setString(3,String.valueOf(Timestamp.valueOf(exitDate)));
-				}
-
-
-				int pagesview = Integer.parseInt(pagesViewed);
-				prepServer.setInt(4,pagesview);
-
-				prepServer.setString(5,conversion);
-
-				prepServer.addBatch();
-
-				if (serverCount % batchSize == 0){
-					prepServer.executeBatch();
-				}
-
-			}
-			serverlineReader.close();
-
-
-			prepServer.executeBatch();
-			prepImpression.executeBatch();
-			prepClick.executeBatch();
-			c.commit();
-			//   c.close();
-		} catch (IOException e){
-
-		} catch (ClassNotFoundException e){
-
-		} catch(SQLException e){
-
-		}
-
-		try {
-			c.rollback();
-		} catch (SQLException e){
-
-		}
-
-	}
-	
 	public void loadClickLog (String clickFileName){
 		ArrayList<Click> clicks = new ArrayList<Click>();
 		String clickLog = clickFileName;
@@ -392,12 +92,32 @@ public class Campaign {
 				clicks.add(new Click(formatDateTime,id,clickCost));
 			}
 			inputStream.close();
+		
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+
+		long startTime = System.nanoTime();
+		for(Click c : clicks){
+
+			String ageGroup = impressionSet.get(c.getID()).getAgeGroup();
+			String context = impressionSet.get(c.getID()).getContext();
+			String income = impressionSet.get(c.getID()).getIncome();
+			String gender = impressionSet.get(c.getID()).getGender();
+			float impCost = impressionSet.get(c.getID()).getImpressionCost();
+
+			c.setAgeGroup(ageGroup);
+			c.setContext(context);
+			c.setGender(gender);
+			c.setIncome(income);
+			c.setImpressionCost(impCost);
+
+		}
 		this.clicks = clicks;
+		long endTime = System.nanoTime();
+		System.out.println("Method took:" + (endTime - startTime) / 1000000);
 	}
-	
+
 	public void loadImpressionLog (String impressionFileName){
 		ArrayList<Impression> impressions = new ArrayList<Impression>();
 		String impressionLog = impressionFileName;
@@ -428,15 +148,19 @@ public class Campaign {
 
 				impressions.add(new Impression(dateTime,id,gender,ageGroup,income,context,impressionCost));
 			}
-			inputStream.close();
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
+		} 
 		this.impressions = impressions;
-		//System.out.println(this.impressions.size()); //printout entire log
+		impressionSet = new HashMap<>();
+		for(Impression i: impressions){
+			impressionSet.put(i.getID(), i);
+		}
+
 
 	}
-	
+
 	public void loadSeverlog (String serverFileName){
 		ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
 		File serverLogFile = new File(serverFileName);
@@ -476,301 +200,49 @@ public class Campaign {
 				}
 			}
 			inputStream.close();
+	
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		for(ServerEntry s : serverEntries){
+			String ageGroup = impressionSet.get(s.getID()).getAgeGroup();
+			String context = impressionSet.get(s.getID()).getContext();
+			String income = impressionSet.get(s.getID()).getIncome();
+			String gender = impressionSet.get(s.getID()).getGender();
+			float impCost = impressionSet.get(s.getID()).getImpressionCost();
+
+			s.setAgeGroup(ageGroup);
+			s.setContext(context);
+			s.setGender(gender);
+			s.setIncome(income);
+			s.setImpressionCost(impCost);
+		}
+
+
 		this.serverEntries = serverEntries;
-		//System.out.println(serverEntries); // entire log
-	}
-
-/**
-	 * These are the SQL calculations when the whole data set is being used 
-	 * @return
-	 */
-
-	public int calcImpressions(){
-
-		String sql = "SELECT COUNT() FROM impressionLog";
-
-		int totalImpressions = 0;
-
-		try(
-				Connection conn = this.connect();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
-
-			while(rs.next())
-
-				totalImpressions = rs.getInt(1);
-
-		}catch(SQLException e ){
-			e.printStackTrace();
-		}
-		this.totalImpressions = totalImpressions;
-		return totalImpressions;
-
-
-	}
-
-	public double calcTotalImpCost() {
-
-
-		double impressionCost  = 0;
-
-		String sql = "SELECT SUM(i.impression_cost) FROM impressionLog i";
-		try (
-				Connection conn = this.connect();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
-
-			while (rs.next()) {
-				impressionCost = rs.getFloat(1);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		this.totalImpCost = impressionCost;
-		return impressionCost;
-	}
-
-
-	public int calcClicks(){
-
-		String sql = "SELECT COUNT() FROM clickLog";
-
-		int totalClicks = 0;
-
-		try(
-				Connection conn = this.connect();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql))
-		{
-
-			while(rs.next())
-
-				totalClicks = rs.getInt(1);
-
-		}catch(SQLException e ){
-			e.printStackTrace();
-		}
-		this.totalClicks = totalClicks;
-		return totalClicks;
-
-	}
-
-	public double calcTotalClickCost(){
-
-
-		double totalClickCost = 0;
-		String sql = "SELECT SUM(c.click_cost) FROM clickLog c";
-		try(Connection conn = this.connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)){
-			while(rs.next()){
-				totalClickCost = rs.getInt(1);
-			}
-		}catch (SQLException e){
-			e.printStackTrace();
-		}
-		this.totalClickCost = totalClickCost;
-		return totalClickCost;
-
-	}
-
-	public double calcTotalCost(){
-		double clicksum = 0;
-		double impsum = 0;
-
-		String sql   = "SELECT SUM(i.impression_cost) AS impCost   FROM impressionLog i";
-		String sql1  = "SELECT SUM(c.click_cost)      AS clickCost FROM clickLog      c";
-
-
-		try(
-                Connection conn  = this.connect();
-                Statement  stmt  = conn.createStatement();
-                ResultSet  rs    = stmt.executeQuery(sql)){
-
-            while(rs.next()){
-                impsum = rs.getDouble(1);
-            }
-        }
-        catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-
-        try(
-                Connection conn  = this.connect();
-                Statement  stmt  = conn.createStatement();
-                ResultSet  rs    = stmt.executeQuery(sql1)){
-
-            while(rs.next()){
-                clicksum = rs.getDouble(1);
-            }
-
-        }
-        catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-
-        this.totalClickCost = clicksum;
-        this.totalImpCost   = impsum;
-        this.totalCost      = impsum + clicksum;
-
-		return impsum + clicksum;
-
-	}
-
-	public int calcConversions(){
-
-		int totalConversions = 0;
-
-		String sql = "SELECT COUNT() FROM serverLog WHERE conversion = 'Yes' ";
-
-		try(
-				Connection conn = this.connect();
-				Statement stmt  = conn.createStatement();
-				ResultSet rs    = stmt.executeQuery(sql)){
-
-			while(rs.next()){
-
-				totalConversions = rs.getInt(1);
-			}
-		}catch (SQLException e){
-			e.printStackTrace();
-		}
-
-		this.totalConversions = totalConversions;
-		return totalConversions;
-
 
 	}
 
 
+	public void calculateMetrics(ArrayList<Click> clickList, ArrayList<Impression> impList, ArrayList<ServerEntry> serverEntries) {
 
-	public double calcConvRate(){
+		calcClicks(clickList);
+		calcTotalImpCost(impList);
+		calcImpressions(impList);
+		calcBounces(serverEntries);
+		calcUniques(clickList);
+		calcConversions(serverEntries);
 
-		this.conversionRate = ((double) totalConversions / totalClicks);
-		return conversionRate;
+		calcTotalCost(impList, clickList);
+		calcTotalClickCost(clickList);
 
-	}
+		calcConvRate(serverEntries, clickList);
+		calcBounceRate(serverEntries, clickList);
 
-
-
-
-	public int calcBounces(){
-		int bounces = 0;
-
-		String sql = "SELECT COUNT() FROM serverLog s WHERE pagesViewed = 0";
-
-		try(
-				Connection conn = this.connect();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql))
-		{
-
-			while(rs.next()){
-
-				bounces = rs.getInt(1);
-
-			}
-
-		} catch (SQLException e){
-			e.printStackTrace();
-		}
-
-		this.bounces = bounces;
-		return bounces;
-	}
-
-	public double calcBounceRate(){
-
-		this.bounces     = calcBounces();
-		this.totalClicks = calcClicks() ;
-
-		return ((double)bounces/totalClicks);
-	}
-
-
-
-	public int calcUniques(){
-
-		int totalUniques = 0;
-
-		String sql = "SELECT COUNT(DISTINCT id) FROM clickLog";
-		try(
-				Connection conn = this.connect();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql))
-		{
-
-			while(rs.next()){
-
-				totalUniques = rs.getInt(1);
-
-			}
-
-		} catch (SQLException e){
-			e.printStackTrace();
-		}
-
-		this.totalUniques = totalUniques;
-		return totalUniques;
-
-	}
-
-
-
-
-	public double calcCTR(){
-
-		double CTR =  ((double)totalClicks/ totalImpressions);
-		this.CTR   = CTR;
-		return CTR;
-
-	}
-
-
-
-
-	public double calcCPA(){
-
-		CPA = totalCost / totalConversions;
-		return CPA;
-
-	}
-
-	public double calcCPC(){
-
-		CPC = totalCost / totalClicks;
-		return CPA;
-
-	}
-
-	public double calcCPM(){
-
-		CPM =  (totalCost / totalImpressions) * 1000;
-		return CPM;
-
-	}
-
-	public void calculateMetrics() {
-
-		calcClicks();
-		calcTotalImpCost();
-		calcImpressions();
-		calcBounces();
-		calcUniques();
-		calcConversions();
-
-		calcTotalCost();
-		calcTotalClickCost();
-
-		calcConvRate();
-		calcBounceRate();
-
-		calcCPM();
-		calcCPC();
-		calcCPA();
-		calcCTR();
+		calcCPM(impList);
+		calcCPC(clickList);
+		calcCPA(impList, clickList, serverEntries);
+		calcCTR(clickList, impList);
 
 	}
 
@@ -1000,15 +472,5 @@ public class Campaign {
 	public ArrayList<Click> getClicks(){
 		return clicks;
 	}
-	public String testIsConnected() {
-		return ("connected");
-	}
-	
-	public ArrayList filterArray(ArrayList array, Predicate predicate){
-		Stream filtered = array.stream().filter(predicate);
-		List list = (List) filtered.collect(Collectors.toList());
-		ArrayList filt = new ArrayList(list);
-		return array;
-	}
-	
+
 }

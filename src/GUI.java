@@ -8,10 +8,12 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.BarChart;
@@ -51,6 +53,7 @@ public class GUI extends Application {
 	private final String[] ageGroups = {"<25", "25-34", "35-44", "45-54", ">54"};
 	private final String[] incomeGroups = {"Low", "Medium", "High"};
 	private final String[] contextGroups = {"News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel"};
+	private Observer observer;
 	
 	public GUI() {}
 	
@@ -298,8 +301,61 @@ public class GUI extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-
-				createHistogram();
+				
+				ArrayList<String> filters = new ArrayList<String>();
+				ObservableList<Node> filterNodes = null;
+				
+				if (impressionsCheck.isSelected()) {
+					filterNodes = impressionFilterOptions.getChildren();
+				}
+				else if (serverCheck.isSelected()) {
+					filterNodes = serverFilterOptions.getChildren();
+				}
+				else if(clicksCheck.isSelected()) {
+					filterNodes = clickFilterOptions.getChildren();
+				}
+				for (Node n : filterNodes) {
+					if (n instanceof TextField) {
+							filters.add(((TextField) n).getText());
+					}
+					else if (n instanceof ComboBox) {
+							filters.add((String) ((ComboBox) n).getValue());
+					}
+				}
+				
+				String filterString = "";
+				
+				if (filters.size() == 0) {
+					System.out.println("empty");
+					createHistogram("");
+				}
+				else if (filters.get(0) != null) {
+					 if (filters.get(0).contains(":")) {
+						filterString += (filters.get(0) + " + " + filters.get(1) + ",");
+						for (int i = 2; i < filters.size(); i++) {
+							filterString += filters.get(i) + ",";
+						}
+						System.out.println(filterString);
+						createHistogram(filterString);
+					}
+					 else {
+							for (int i = 0; i < filters.size(); i++) {
+								filterString += filters.get(i) + ",";
+							}
+							System.out.println(filterString);
+							createHistogram(filterString);
+						}
+				}
+				 else {
+						for (int i = 0; i < filters.size(); i++) {
+							filterString += filters.get(i) + ",";
+						}
+						System.out.println(filterString);
+						createHistogram(filterString);
+					}
+				
+				
+				
 			}
 			
 		});
@@ -331,15 +387,13 @@ public class GUI extends Application {
 		filters.setPrefColumns(3);
 		filters.setPrefRows(2);
 		
-		TextField entryDate = new TextField("Date from");
-		TextField exitDate = new TextField("Date Until");
-		TextField iD = new TextField("ID");
-		TextField pagesViewed = new TextField("Pages Viewed");
-		String[] yesNo = {"Yes","No"};
-		ComboBox<String> conversion = new ComboBox<String>(FXCollections.observableArrayList(yesNo));
-		conversion.setValue("Conversion?");
+		TextField entryDate = new TextField();
+		TextField exitDate = new TextField();
 		
-		filters.getChildren().addAll(entryDate, exitDate, iD, pagesViewed, conversion);
+		entryDate.setPromptText("Date From");
+		exitDate.setPromptText("Date Until");
+		
+		filters.getChildren().addAll(entryDate, exitDate);
 		
 		return filters;
 	}
@@ -350,13 +404,11 @@ public class GUI extends Application {
 		filters.setPrefColumns(3);
 		filters.setPrefRows(2);
 		
-		TextField entryDate = new TextField("Date from");
-		TextField exitDate = new TextField("Date Until");
-		TextField iD = new TextField("ID");
-		ComboBox<String> conversion = new ComboBox<String>(FXCollections.observableArrayList());
-		
-		
-		filters.getChildren().addAll(entryDate, exitDate, iD);
+		TextField entryDate = new TextField();
+		TextField exitDate = new TextField();
+		entryDate.setPromptText("Date From");
+		exitDate.setPromptText("Date Until");
+		filters.getChildren().addAll(entryDate, exitDate);
 		
 		
 		
@@ -371,23 +423,24 @@ public class GUI extends Application {
 		
 		TextField entryDate = new TextField("Date from");
 		TextField exitDate = new TextField("Date Until");
-		TextField iD = new TextField("ID");
+		entryDate.setPromptText("Date From");
+		exitDate.setPromptText("Date Until");
 		ComboBox<String> age = new ComboBox<String>(FXCollections.observableArrayList(ageGroups));
 		ComboBox<String> context = new ComboBox<String>(FXCollections.observableArrayList(contextGroups));
 		ComboBox<String> gender = new ComboBox<String>(FXCollections.observableArrayList(genders));
 		
-		age.setValue("Age Group");
-		context.setValue("Context");
-		gender.setValue("Gender");
+		age.setPromptText("Age Group");
+		context.setPromptText("Context");
+		gender.setPromptText("Gender");
 		
 		
-		filters.getChildren().addAll(entryDate, exitDate, iD, age, context, gender);
+		filters.getChildren().addAll(entryDate, exitDate, age, context, gender);
 		
 		return filters;
 	}
 	
-	private void createHistogram() {
-		Histogram histogram = new Histogram(campaign, 5, 2);
+	private void createHistogram(String filters) {
+		Histogram histogram = new Histogram(campaign, 5, 2, filters);
 		ArrayList<Bar> bars = histogram.getBars();
 		
 		final CategoryAxis xAxis = new CategoryAxis();
@@ -398,6 +451,8 @@ public class GUI extends Application {
 		yAxis.setLabel("Frequency");
 		chart.setTitle("Total Cost Histogram");
 		XYChart.Series series1 = new XYChart.Series();
+		chart.setBarGap(0);
+		chart.setCategoryGap(0);
 		
 		for (Bar b : bars) {
 			series1.getData().add(new XYChart.Data(b.getLowerBound() + " - " + b.getUpperBound(), b.getFrequency()));
