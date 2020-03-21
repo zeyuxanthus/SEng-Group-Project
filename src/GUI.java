@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.plaf.basic.BasicScrollPaneUI.ViewportChangeHandler;
@@ -60,8 +62,6 @@ public class GUI extends Application {
 	public GUI(Controller con) {
 		this.controller = con;
 		this.campaign = controller.getCampaign();
-
-		//System.out.print(campaign.testIsConnected());
 		GUI.launch(GUI.class);
 	}
 
@@ -201,17 +201,17 @@ public class GUI extends Application {
 		TextField cpmField = new TextField();
 		TextField totalCostField = new TextField();
 		
-		bounceRateField.setText("" + campaign.calcBounceRate());
-		noImpressionsField.setText("" + campaign.calcImpressions());
-		noClicksField.setText("" + campaign.calcClicks());
-		noUniquesField.setText("" +campaign.calcUniques());
-		noBouncesField.setText("" + campaign.calcBounces());
-		noConversionsField.setText("" + campaign.calcConversions());
-		ctrField.setText("" + campaign.calcCTR());
-		cpaField.setText("" + campaign.calcCPA());
-		cpcField.setText("" + campaign.calcCPC());
-		cpmField.setText("" + campaign.calcCPM());
-		totalCostField.setText("" + campaign.calcTotalCost());
+		bounceRateField.setText("" + campaign.getBounceRate());
+		noImpressionsField.setText("" + campaign.getImpressions());
+		noClicksField.setText("" + campaign.getClicks());
+		noUniquesField.setText("" +campaign.getTotalUnique());
+		noBouncesField.setText("" + campaign.getTotalBounces());
+		noConversionsField.setText("" + campaign.getTotalConversions());
+		ctrField.setText("" + campaign.getCTR());
+		cpaField.setText("" + campaign.getCPA());
+		cpcField.setText("" + campaign.getCPC());
+		cpmField.setText("" + campaign.getCPM());
+		totalCostField.setText("" + campaign.getTotalImpressionCost());
 		
 		
 		Label granularityLabel = new Label("Granularity");
@@ -314,6 +314,8 @@ public class GUI extends Application {
 				else if(clicksCheck.isSelected()) {
 					filterNodes = clickFilterOptions.getChildren();
 				}
+				
+				
 				for (Node n : filterNodes) {
 					if (n instanceof TextField) {
 							filters.add(((TextField) n).getText());
@@ -323,37 +325,34 @@ public class GUI extends Application {
 					}
 				}
 				
-				String filterString = "";
-				
-				if (filters.size() == 0) {
-					System.out.println("empty");
-					createHistogram("");
+				LocalDateTime startDate = null;
+				LocalDateTime endDate = null;
+				ArrayList<String> contexts = new ArrayList<String>();
+				ArrayList<String> ageGroups = new ArrayList<String>();
+				ArrayList<String> incomes = new ArrayList<String>();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				if(filters.get(1).equals("") == false) {
+					startDate = LocalDateTime.parse(filters.get(0), formatter);
 				}
-				else if (filters.get(0) != null) {
-					 if (filters.get(0).contains(":")) {
-						filterString += (filters.get(0) + " + " + filters.get(1) + ",");
-						for (int i = 2; i < filters.size(); i++) {
-							filterString += filters.get(i) + ",";
-						}
-						System.out.println(filterString);
-						createHistogram(filterString);
-					}
-					 else {
-							for (int i = 0; i < filters.size(); i++) {
-								filterString += filters.get(i) + ",";
-							}
-							System.out.println(filterString);
-							createHistogram(filterString);
-						}
-				}
-				 else {
-						for (int i = 0; i < filters.size(); i++) {
-							filterString += filters.get(i) + ",";
-						}
-						System.out.println(filterString);
-						createHistogram(filterString);
-					}
+				if(filters.get(1).equals("") == false) {
+					endDate = LocalDateTime.parse(filters.get(1), formatter);
+				}	
 				
+				
+				if (impressionsCheck.isSelected()) {
+					if (filters.get(2) != null)
+						contexts.add(filters.get(2));
+					if (filters.get(4) != null)
+						ageGroups.add(filters.get(4));
+					if (filters.get(5) != null)
+						incomes.add(filters.get(5));
+					Filter filter = new Filter(startDate, endDate, contexts, filters.get(3), ageGroups, incomes);
+					createHistogram(filter);
+				}
+				else {
+					Filter filter = new Filter(startDate, endDate,  contexts, null, ageGroups, incomes);
+					createHistogram(filter);
+				}
 				
 				
 			}
@@ -421,25 +420,26 @@ public class GUI extends Application {
 		filters.setPrefColumns(3);
 		filters.setPrefRows(2);
 		
-		TextField entryDate = new TextField("Date from");
-		TextField exitDate = new TextField("Date Until");
+		TextField entryDate = new TextField();
+		TextField exitDate = new TextField();
 		entryDate.setPromptText("Date From");
 		exitDate.setPromptText("Date Until");
 		ComboBox<String> age = new ComboBox<String>(FXCollections.observableArrayList(ageGroups));
 		ComboBox<String> context = new ComboBox<String>(FXCollections.observableArrayList(contextGroups));
 		ComboBox<String> gender = new ComboBox<String>(FXCollections.observableArrayList(genders));
+		ComboBox<String> income = new ComboBox<String>(FXCollections.observableArrayList(incomeGroups));
 		
 		age.setPromptText("Age Group");
 		context.setPromptText("Context");
 		gender.setPromptText("Gender");
+		income.setPromptText("Income");
 		
-		
-		filters.getChildren().addAll(entryDate, exitDate, age, context, gender);
+		filters.getChildren().addAll(entryDate, exitDate, context, gender, age, income);
 		
 		return filters;
 	}
 	
-	private void createHistogram(String filters) {
+	private void createHistogram(Filter filters) {
 		Histogram histogram = new Histogram(campaign, 5, 2, filters);
 		ArrayList<Bar> bars = histogram.getBars();
 		
@@ -546,7 +546,7 @@ public class GUI extends Application {
 			public void handle(ActionEvent event) {
 				if (serverFile != null && clicksFile != null && impressionFile != null) {
 					//campaign.setBounceDefinition(Integer.parseInt(bounceDefiner.getText()));
-					campaign.initialise(clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), serverFile.getAbsolutePath());
+					campaign.loadLogs(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath());
 				}
 				fileOption.setValue("File");
 				newWindow.close();

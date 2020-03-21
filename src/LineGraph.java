@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Contains all data and methods needed to display the line chart.
  */
-public class LineGraph implements Chart, Observable {
+public class LineGraph implements Chart {
 
     private Campaign campaign;
 
@@ -18,14 +18,11 @@ public class LineGraph implements Chart, Observable {
     private TimeInterval timeInterval;
     private ArrayList dataPoints;
 
-    private List<Observer> observers = new LinkedList<Observer>(); // this will contain the window that displays the chart
-
     private Filter filter;
 
-    public LineGraph(Metric metric, TimeInterval timeInterval, Observer observer, Campaign campaign, Filter filter){
+    public LineGraph(Metric metric, TimeInterval timeInterval, Campaign campaign, Filter filter){
         this.metric = metric;
         this.timeInterval = timeInterval;
-        observers.add(observer);
         this.campaign = campaign;
         this.filter = filter;
         calculateDataPoints();
@@ -87,7 +84,6 @@ public class LineGraph implements Chart, Observable {
                 break;
         }
 
-        triggerUpdate();
     }
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalImpressions(){
@@ -668,24 +664,6 @@ public class LineGraph implements Chart, Observable {
 
     public ArrayList<DataPoint> getDataPoints(){ return dataPoints; }
 
-    @Override
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    /**
-     * Observers should respond to this by calling getDataPoints()
-     */
-    private void triggerUpdate() {
-        for (Observer observer : observers) {
-            if(observer==null){
-
-            }
-            else{
-                observer.observableChanged(this);
-            }
-        }
-    }
 
     private Comparator<Click> getClickComparator(){
         Comparator<Click> dateComparator = new Comparator<Click>(){

@@ -10,10 +10,9 @@ import java.util.stream.Collectors;
 /**
  * Contains data needed to draw histogram
  */
-public class Histogram implements Chart, Observable {
+public class Histogram implements Chart {
 
     private Campaign campaign;
-    private List<Observer> observers = new LinkedList<Observer>();
 
     private int noBars;
     private int accuracy;
@@ -27,8 +26,7 @@ public class Histogram implements Chart, Observable {
      * @param accuracy - number of decimal places the boundaries of bars are rounded to
      * @param filter - a set of filters for this chart
      */
-    public Histogram(Observer observer, Campaign campaign, int noBars, int accuracy, Filter filter){
-        addObserver(observer);
+    public Histogram(Campaign campaign, int noBars, int accuracy, Filter filter){
         this.campaign = campaign;
         this.noBars = noBars;
         this.accuracy = accuracy;
@@ -43,7 +41,7 @@ public class Histogram implements Chart, Observable {
 //        incomes.add("Low");
         calculateBars();
     }
-
+    
     /**
      * Calculate bar ranges and their frequencies to draw them on the histogram
      * Trigger Update for Observers to fetch data
@@ -94,7 +92,6 @@ public class Histogram implements Chart, Observable {
 //        }
 
         this.bars = bars;
-        triggerUpdate();
     }
 
     /**
@@ -221,24 +218,15 @@ public class Histogram implements Chart, Observable {
         return false;
     }
 
-    /**
-     * Should be called whenever dataPoints have been recalculated
-     */
-    private void triggerUpdate() {
-        for (Observer observer : observers) {
-                if(observer != null) observer.observableChanged(this);
-                // TODO remove check after testing
-        }
+    public ArrayList<Bar> getBars(){
+    	return bars;
     }
 
     public void setFilter(Filter filter){
         this.filter = filter;
     }
 
-    @Override
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-    }
+ 
 
     public int getNoBars() {
         return noBars;

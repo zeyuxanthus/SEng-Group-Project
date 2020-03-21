@@ -36,8 +36,8 @@ public class Controller {
 	 * @param observer - window/object displaying the graph
 	 * @param campaign - reference for data
 	 */
-	public void createLineGraph(Metric metric, TimeInterval timeInterval, Observer observer, Campaign campaign, Filter filter){
-		new LineGraph(metric, timeInterval, observer, campaign, filter);
+	public void createLineGraph(Metric metric, TimeInterval timeInterval, Campaign campaign, Filter filter){
+		new LineGraph(metric, timeInterval, campaign, filter);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class Controller {
 	 * @param noBars - number of bars/classes in the histogram
 	 * @param accuracy - number of decimal places the boundaries of bars are rounded to
 	 */
-	public void createHistogram(Observer observer, Campaign campaign, int noBars, int accuracy, Filter filter){
-		new Histogram(observer, campaign, noBars, accuracy, filter);
+	public void createHistogram(Campaign campaign, int noBars, int accuracy, Filter filter){
+		new Histogram(campaign, noBars, accuracy, filter);
 	}
 }
