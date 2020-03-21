@@ -61,7 +61,7 @@ public class GUI extends Application {
 		this.controller = con;
 		this.campaign = controller.getCampaign();
 
-		System.out.print(campaign.testIsConnected());
+		//System.out.print(campaign.testIsConnected());
 		GUI.launch(GUI.class);
 	}
 

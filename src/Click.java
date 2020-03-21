@@ -9,8 +9,6 @@ public class Click implements Comparable<Click> {
     private String ID; // uniquely identifies a user
     private float clickCost; // in pence (float is up to 6 or 7 digits )
 
-
-
     private String gender;
     private String income;
     private String ageGroup;
@@ -79,5 +77,21 @@ public class Click implements Comparable<Click> {
             return 1;
         }
         return 0;
+    }
+
+    public String getIncome() {
+        return income;
+    }
+
+    public String getAgeGroup() {
+        return ageGroup;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public float getImpressionCost() {
+        return impressionCost;
     }
 }

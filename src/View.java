@@ -33,7 +33,7 @@ public class View extends Application implements Observer {
 		this.controller = con;
 		this.campaign = controller.getCampaign();
 
-		System.out.print(campaign.testIsConnected());
+		//System.out.print(campaign.testIsConnected());
 		View.launch(View.class);
 	}
 	
