@@ -53,6 +53,7 @@ public class GUI extends Application {
 	private final String[] ageGroups = {"<25", "25-34", "35-44", "45-54", ">54"};
 	private final String[] incomeGroups = {"Low", "Medium", "High"};
 	private final String[] contextGroups = {"News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel"};
+	private Observer observer;
 	
 	public GUI() {}
 	
@@ -328,23 +329,31 @@ public class GUI extends Application {
 					System.out.println("empty");
 					createHistogram("");
 				}
-				
-				else if (filters.get(0).contains(":")) {
-					filterString += (filters.get(0) + " + " + filters.get(1) + ",");
-					for (int i = 2; i < filters.size(); i++) {
-						filterString += filters.get(i) + ",";
+				else if (filters.get(0) != null) {
+					 if (filters.get(0).contains(":")) {
+						filterString += (filters.get(0) + " + " + filters.get(1) + ",");
+						for (int i = 2; i < filters.size(); i++) {
+							filterString += filters.get(i) + ",";
+						}
+						System.out.println(filterString);
+						createHistogram(filterString);
 					}
-					System.out.println(filterString);
-					createHistogram(filterString);
+					 else {
+							for (int i = 0; i < filters.size(); i++) {
+								filterString += filters.get(i) + ",";
+							}
+							System.out.println(filterString);
+							createHistogram(filterString);
+						}
 				}
-				
-				else {
-					for (int i = 0; i < filters.size(); i++) {
-						filterString += filters.get(i) + ",";
+				 else {
+						for (int i = 0; i < filters.size(); i++) {
+							filterString += filters.get(i) + ",";
+						}
+						System.out.println(filterString);
+						createHistogram(filterString);
 					}
-					System.out.println(filterString);
-					createHistogram(filterString);
-				}
+				
 				
 				
 			}
