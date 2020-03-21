@@ -1,13 +1,11 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Contains data needed to draw histogram
@@ -19,28 +17,31 @@ public class Histogram implements Chart, Observable {
 
     private int noBars;
     private int accuracy;
-    private ArrayList<Bar> bars = new ArrayList<Bar>();
-
-    // Filters (null/empty means all values are accepted)
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private ArrayList<String> contexts = new ArrayList<String>();
-    private String gender;
-    private ArrayList<String> ageGroups = new ArrayList<String>();
-    private ArrayList<String> incomes = new ArrayList<String>();
+    private ArrayList<Bar> bars;
+    private Filter filter;
 
     /**
      * @param observer the view that displays the chart
      * @param campaign reference for accessing campaign's data
      * @param noBars - number of bars/classes in the histogram
      * @param accuracy - number of decimal places the boundaries of bars are rounded to
+     * @param filter - a set of filters for this chart
      */
-    public Histogram(Campaign campaign, int noBars, int accuracy, String filters){
-        //addObserver(observer);
+    public Histogram(Observer observer, Campaign campaign, int noBars, int accuracy, Filter filter){
+        addObserver(observer);
         this.campaign = campaign;
         this.noBars = noBars;
         this.accuracy = accuracy;
-        calculateBars(filters);
+        this.filter = filter;
+
+        //Test filters to be removed
+//        contexts.add("Blog");
+//        contexts.add("News");
+//        ageGroups.add("25-34");
+//        ageGroups.add("<25");
+//        incomes.add("High");
+//        incomes.add("Low");
+        calculateBars();
     }
 
     /**
@@ -48,9 +49,9 @@ public class Histogram implements Chart, Observable {
      * Trigger Update for Observers to fetch data
      * //TODO Rounding values according to accuracy
      */
-    private void calculateBars(String filters){
+    private void calculateBars(){
         ArrayList<Bar> bars = new ArrayList<Bar>();
-        List<Click> clicks = filterClickLog(filters);
+        ArrayList<Click> clicks = filterClickLog();
         Collections.sort(clicks);
 
         // Find range of values
@@ -86,12 +87,14 @@ public class Histogram implements Chart, Observable {
             }
         }
         bars.add(new Bar(frequency, min, max));
-        for(Bar bar : bars){
-            System.out.println(bar.getLowerBound() + " - " + bar.getUpperBound() + " - " + bar.getFrequency());
-        }
+
+        // For testing
+//        for(Bar bar : bars){
+//            System.out.println(bar.getLowerBound() + " - " + bar.getUpperBound() + " - " + bar.getFrequency());
+//        }
 
         this.bars = bars;
-        //triggerUpdate();
+        triggerUpdate();
     }
 
     /**
@@ -100,119 +103,137 @@ public class Histogram implements Chart, Observable {
      * Apply all filters
      * @return filtered click log
      */
-    public ArrayList<Click> filterClickLog(String predicate){
+    private ArrayList<Click> filterClickLog(){
+        //for testing
+        //long startTime = System.nanoTime();
 
-        ArrayList<Click> clickList = new ArrayList<>();
-        String[] predicates = predicate.split(",");
-        long startTime = System.nanoTime();
-        
+        // Predicate for 0 costs
+        //TODO discuss if its needed
+        //Predicate<Click> clickCostPredicate = c -> c.getClickCost() > 0;
 
-        try {
-            Connection conn = campaign.connect();
-            String sqlString = "SELECT * FROM (SELECT  clickLog.entry_date, clickLog.id, clickLog.click_cost, impressionLog.age, impressionLog.context, impressionLog.gender, impressionLog.income, impressionLog.impression_cost  FROM clickLog INNER JOIN  impressionLog ON impressionLog.id = clickLog.id  GROUP BY  clickLog.id, clickLog.entry_date) WHERE 1 = 1 ";
-
-            for(int i = 1; i < predicates.length + 1; i++) {
-
-                if (predicates[i - 1].contains(":") && predicates[i - 1].contains("+")) {
-                    String[] dates = predicates[i - 1].split(" \\+ ");
-                    System.out.println(dates[0]);
-                    sqlString += " and entry_date > ";
-                    sqlString += "\'" + dates[0] + "\'";
-                    sqlString += " and entry_date < ";
-                    sqlString += "\'" + dates[1] + "\'";
-                }
-                switch (predicates[i - 1]) {
-                    case "Male":
-                        sqlString += " and gender='Male'";
-                        break;
-
-                    case "Female":
-                        sqlString += " and gender='Female'";
-                        break;
-
-                    case "Social Media":
-                        sqlString += " and context='Social Media'";
-                        break;
-
-                    case "News":
-                        sqlString += " and context='News'";
-                        break;
-
-                    case "Shopping":
-                        sqlString += " and context='Shopping'";
-                        break;
-
-                    case "Blog":
-                        sqlString += " and context='Blog'";
-                        break;
-
-                    case "Low":
-                        sqlString += " and income='Low'";
-                        break;
-
-                    case "Medium":
-                        sqlString += " and income='Medium'";
-                        break;
-
-                    case "High":
-                        sqlString += " and income='High'";
-                        break;
-
-                    case "<25":
-                        sqlString += " and age='<25'";
-                        break;
-
-                    case "25-34":
-                        sqlString += " and age='25-34'";
-                        break;
-
-                    case "35-44":
-                        sqlString += " and age='35-44'";
-                        break;
-
-                    case "44-54":
-                        sqlString += " and age='45-54'";
-                        break;
-
-                    case ">54":
-                        sqlString += " and age='>54'";
-                        break;
-
-
-                }
-
-            }
-
-                PreparedStatement staten = conn.prepareStatement(sqlString);
-                System.out.println(sqlString);
-                ResultSet rs = staten.executeQuery();
-
-
-                while (rs.next()) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");
-                    LocalDateTime dateTime = LocalDateTime.parse(rs.getString("entry_date"), formatter);
-                    Click click = new Click(dateTime, rs.getString("id"), rs.getFloat("click_cost"));
-                    clickList.add(click);
-                }
-
-
-        }catch(SQLException e){
-            System.out.println(e.getErrorCode());
+        // Predicate for startDate
+        Predicate<Click> startDatePredicate;
+        if(filter.getStartDate() != null){
+            startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
         }
-        long endTime = System.nanoTime();
-        System.out.println("Method took:" + (endTime - startTime) / 1000000);
-        return clickList;
+        else{
+            System.out.println("startDate is null");
+            startDatePredicate = c -> true;
+        }
+
+        // Predicate for endDate
+        Predicate<Click> endDatePredicate;
+        if(filter.getEndDate() != null){
+            endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate());
+        }
+        else{
+            System.out.println("endDate is null");
+            endDatePredicate = c -> true;
+        }
+
+        // Predicates for contexts
+        Predicate<Click> contextsPredicate;
+        if(!filter.getContexts().isEmpty()){
+            contextsPredicate = c -> matchContext(c.getContext());
+        }
+        else{
+            System.out.println("contexts are empty");
+            contextsPredicate = c -> true;
+        }
+
+        // Predicate for gender
+        Predicate<Click> genderPredicate;
+        if(filter.getGender() != null){
+            genderPredicate = c -> c.getGender().equals(filter.getGender());
+        }
+        else{
+            System.out.println("gender is null");
+            genderPredicate = c -> true;
+        }
+
+        // Predicates for ageGroups
+        Predicate<Click> ageGroupPredicate;
+        if(!filter.getAgeGroups().isEmpty()){
+            ageGroupPredicate = c -> matchAgeGroup(c.getAgeGroup());
+        }
+        else{
+            System.out.println("ageGroup is empty");
+            ageGroupPredicate = c -> true;
+        }
+
+        // Predicate for incomes
+        Predicate<Click> incomePredicate;
+        if(!filter.getIncomes().isEmpty()){
+            incomePredicate = c -> matchIncome(c.getIncome());
+        }
+        else{
+            System.out.println("income is empty");
+            incomePredicate = c -> true;
+        }
+
+        ArrayList<Click> clicks = campaign.getClicks();
+        ArrayList<Click> filteredClicks = (ArrayList<Click>) clicks.stream().filter
+                (startDatePredicate.and(endDatePredicate.and(contextsPredicate).and(genderPredicate).and(ageGroupPredicate).and(incomePredicate))).collect(Collectors.toList());
+
+        //for testing
+        //long endTime = System.nanoTime();
+        //System.out.println("Method took:" + (endTime - startTime) / 1000000);
+
+        return filteredClicks;
+    }
+
+    /**
+     * Checks if there exists a context in a list of contexts (filters) that matches given context
+     * @param context - given context
+     * @return - true if there is a match
+     */
+    private boolean matchContext(String context){
+        for(String c : filter.getContexts()){
+            if(c.equals(context))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if there exists an ageGroup in a list of ageGroups that matches given ageGroup
+     * @param ageGroup - given ageGroup
+     * @return - true if there is a match
+     */
+    private boolean matchAgeGroup(String ageGroup){
+        for(String a : filter.getAgeGroups()){
+            if(a.equals(ageGroup))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if there exists an income in a list of incomes that matches given income
+     * @param income - given income
+     * @return - true if there is a match
+     */
+    private boolean matchIncome(String income){
+        for(String i : filter.getIncomes()){
+            if(i.equals(income))
+                return true;
+        }
+        return false;
     }
 
     /**
      * Should be called whenever dataPoints have been recalculated
      */
-//    private void triggerUpdate() {
-//        for (Observer observer : observers) {
-//                if(observer != null) observer.observableChanged(this);
-//                // TODO remove check after testing
-//        }
-//    }
+    private void triggerUpdate() {
+        for (Observer observer : observers) {
+                if(observer != null) observer.observableChanged(this);
+                // TODO remove check after testing
+        }
+    }
+
+    public void setFilter(Filter filter){
+        this.filter = filter;
+    }
 
     @Override
     public void addObserver(Observer observer) {
@@ -221,9 +242,5 @@ public class Histogram implements Chart, Observable {
 
     public int getNoBars() {
         return noBars;
-    }
-    
-    public ArrayList<Bar> getBars(){
-    	return bars;
     }
 }
