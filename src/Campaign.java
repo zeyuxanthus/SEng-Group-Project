@@ -1,29 +1,12 @@
 
 
-//import com.sun.security.ntlm.Server;
 
-/*
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-*/
 import java.io.*;
-import java.sql.*;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 /**
  *  Domain of the application. (Basically backend)
@@ -54,7 +37,8 @@ public class Campaign {
 	private ArrayList<Impression> impressions; // Impression Log
 	private ArrayList<Click> clicks; // Click Log
 	private ArrayList<ServerEntry> serverEntries; // Server Log
-	
+	private HashMap<String, Impression> impressionSet;
+
 
 	/**
 	 * Should be called whenever anything in the model changes.
@@ -69,7 +53,7 @@ public class Campaign {
 //	public void addObserver(Observer observer) {
 //		observers.add(observer);
 //	}
-	
+
 
 
 
@@ -108,14 +92,8 @@ public class Campaign {
 				clicks.add(new Click(formatDateTime,id,clickCost));
 			}
 			inputStream.close();
-			if (c == null){
-				getC();
-			}
+		
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e){
-			e.printStackTrace();
-		} catch (SQLException e){
 			e.printStackTrace();
 		}
 
@@ -170,17 +148,10 @@ public class Campaign {
 
 				impressions.add(new Impression(dateTime,id,gender,ageGroup,income,context,impressionCost));
 			}
-			inputStream.close();
-			if (c == null){
-				getC();
-			}
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e){
-			e.printStackTrace();
-		} catch (SQLException e){
-			e.printStackTrace();
-		}
+		} 
 		this.impressions = impressions;
 		impressionSet = new HashMap<>();
 		for(Impression i: impressions){
@@ -229,15 +200,9 @@ public class Campaign {
 				}
 			}
 			inputStream.close();
-			if (c == null){
-				getC();
-			}
+	
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-
-		} catch (SQLException e){
-
 		}
 		for(ServerEntry s : serverEntries){
 			String ageGroup = impressionSet.get(s.getID()).getAgeGroup();
@@ -259,25 +224,25 @@ public class Campaign {
 	}
 
 
-	public void calculateMetrics() {
+	public void calculateMetrics(ArrayList<Click> clickList, ArrayList<Impression> impList, ArrayList<ServerEntry> serverEntries) {
 
-		calcClicks();
-		calcTotalImpCost();
-		calcImpressions();
-		calcBounces();
-		calcUniques();
-		calcConversions();
+		calcClicks(clickList);
+		calcTotalImpCost(impList);
+		calcImpressions(impList);
+		calcBounces(serverEntries);
+		calcUniques(clickList);
+		calcConversions(serverEntries);
 
-		calcTotalCost();
-		calcTotalClickCost();
+		calcTotalCost(impList, clickList);
+		calcTotalClickCost(clickList);
 
-		calcConvRate();
-		calcBounceRate();
+		calcConvRate(serverEntries, clickList);
+		calcBounceRate(serverEntries, clickList);
 
-		calcCPM();
-		calcCPC();
-		calcCPA();
-		calcCTR();
+		calcCPM(impList);
+		calcCPC(clickList);
+		calcCPA(impList, clickList, serverEntries);
+		calcCTR(clickList, impList);
 
 	}
 
