@@ -367,6 +367,15 @@ public class Campaign {
 
 	}
 	
+	public void loadLogs(String serverName, String clickName, String impressionName){
+
+		loadImpressionLog(impressionName);
+		loadSeverlog(serverName);
+		loadClickLog(clickName);
+
+	}
+
+
 	public void loadClickLog (String clickFileName){
 		ArrayList<Click> clicks = new ArrayList<Click>();
 		String clickLog = clickFileName;
@@ -392,12 +401,38 @@ public class Campaign {
 				clicks.add(new Click(formatDateTime,id,clickCost));
 			}
 			inputStream.close();
+			if (c == null){
+				getC();
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+
+		long startTime = System.nanoTime();
+		for(Click c : clicks){
+
+			String ageGroup = impressionSet.get(c.getID()).getAgeGroup();
+			String context = impressionSet.get(c.getID()).getContext();
+			String income = impressionSet.get(c.getID()).getIncome();
+			String gender = impressionSet.get(c.getID()).getGender();
+			float impCost = impressionSet.get(c.getID()).getImpressionCost();
+
+			c.setAgeGroup(ageGroup);
+			c.setContext(context);
+			c.setGender(gender);
+			c.setIncome(income);
+			c.setImpressionCost(impCost);
+
 		}
 		this.clicks = clicks;
+		long endTime = System.nanoTime();
+		System.out.println("Method took:" + (endTime - startTime) / 1000000);
 	}
-	
+
 	public void loadImpressionLog (String impressionFileName){
 		ArrayList<Impression> impressions = new ArrayList<Impression>();
 		String impressionLog = impressionFileName;
@@ -429,14 +464,25 @@ public class Campaign {
 				impressions.add(new Impression(dateTime,id,gender,ageGroup,income,context,impressionCost));
 			}
 			inputStream.close();
+			if (c == null){
+				getC();
+			}
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+		} catch (SQLException e){
 			e.printStackTrace();
 		}
 		this.impressions = impressions;
-		//System.out.println(this.impressions.size()); //printout entire log
+		impressionSet = new HashMap<>();
+		for(Impression i: impressions){
+			impressionSet.put(i.getID(), i);
+		}
+
 
 	}
-	
+
 	public void loadSeverlog (String serverFileName){
 		ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
 		File serverLogFile = new File(serverFileName);
@@ -476,12 +522,35 @@ public class Campaign {
 				}
 			}
 			inputStream.close();
+			if (c == null){
+				getC();
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+
+		} catch (SQLException e){
+
 		}
+		for(ServerEntry s : serverEntries){
+			String ageGroup = impressionSet.get(s.getID()).getAgeGroup();
+			String context = impressionSet.get(s.getID()).getContext();
+			String income = impressionSet.get(s.getID()).getIncome();
+			String gender = impressionSet.get(s.getID()).getGender();
+			float impCost = impressionSet.get(s.getID()).getImpressionCost();
+
+			s.setAgeGroup(ageGroup);
+			s.setContext(context);
+			s.setGender(gender);
+			s.setIncome(income);
+			s.setImpressionCost(impCost);
+		}
+
+
 		this.serverEntries = serverEntries;
-		//System.out.println(serverEntries); // entire log
+
 	}
+
 
 /**
 	 * These are the SQL calculations when the whole data set is being used 
