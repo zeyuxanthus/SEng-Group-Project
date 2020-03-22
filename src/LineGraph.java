@@ -1,8 +1,4 @@
-import com.sun.security.ntlm.Server;
-import javafx.util.Pair;
-
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -10,7 +6,7 @@ import java.util.stream.Collectors;
 /**
  * Contains all data and methods needed to display the line chart.
  */
-public class LineGraph implements Chart {
+public class LineGraph {
 
     private Campaign campaign;
 

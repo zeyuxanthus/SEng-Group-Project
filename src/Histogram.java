@@ -1,16 +1,12 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * Contains data needed to draw histogram
  */
-public class Histogram implements Chart {
+public class Histogram {
 
     private Campaign campaign;
 
