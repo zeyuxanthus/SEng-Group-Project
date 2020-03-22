@@ -1,12 +1,8 @@
-
-
-
 import java.io.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 
 /**
  *  Domain of the application. (Basically backend)
@@ -14,6 +10,11 @@ import java.util.*;
  *  Should be independent of the View (Observer) and the Controller.
  */
 public class Campaign {
+	// Log information
+	private ArrayList<Impression> impressions; // Impression Log
+	private ArrayList<Click> clicks; // Click Log
+	private ArrayList<ServerEntry> serverEntries; // Server Log
+	private HashMap<String, Impression> impressionSet;
 
 	// Campaign's metrics
 	private int totalImpressions;
@@ -31,41 +32,18 @@ public class Campaign {
 	private double CPC; // cost-per-click
 	private double CPM; // cost-per-thousand impressions
 
-	private List<Observer> observers = new LinkedList<Observer>();
-
-	// Log information
-	private ArrayList<Impression> impressions; // Impression Log
-	private ArrayList<Click> clicks; // Click Log
-	private ArrayList<ServerEntry> serverEntries; // Server Log
-	private HashMap<String, Impression> impressionSet;
-
-
 	/**
-	 * Should be called whenever anything in the model changes.
-	 * It updates the all the observers, e.g. View
+	 * Loads all the data from CSV files into arrayLists and calculates the metrics
+	 * @param serverName
+	 * @param clickName
+	 * @param impressionName
 	 */
-//	private void triggerUpdate() {
-//		for (Observer observer : observers) {
-//			observer.observableChanged(this);
-//		}
-//	}
-//
-//	public void addObserver(Observer observer) {
-//		observers.add(observer);
-//	}
-
-
-
-
-
 	public void loadLogs(String serverName, String clickName, String impressionName){
-
 		loadImpressionLog(impressionName);
 		loadSeverlog(serverName);
 		loadClickLog(clickName);
-
+		calculateMetrics(clicks, impressions, serverEntries);
 	}
-
 
 	public void loadClickLog (String clickFileName){
 		ArrayList<Click> clicks = new ArrayList<Click>();
@@ -157,8 +135,6 @@ public class Campaign {
 		for(Impression i: impressions){
 			impressionSet.put(i.getID(), i);
 		}
-
-
 	}
 
 	public void loadSeverlog (String serverFileName){
@@ -223,44 +199,36 @@ public class Campaign {
 
 	}
 
-
+	/**
+	 * Calculates and updates all metrics given lists of campaign's data
+	 */
 	public void calculateMetrics(ArrayList<Click> clickList, ArrayList<Impression> impList, ArrayList<ServerEntry> serverEntries) {
-
-		calcClicks(clickList);
-		calcTotalImpCost(impList);
-		calcImpressions(impList);
-		calcBounces(serverEntries);
-		calcUniques(clickList);
-		calcConversions(serverEntries);
-
-		calcTotalCost(impList, clickList);
-		calcTotalClickCost(clickList);
-
-		calcConvRate(serverEntries, clickList);
-		calcBounceRate(serverEntries, clickList);
-
-		calcCPM(impList);
-		calcCPC(clickList);
-		calcCPA(impList, clickList, serverEntries);
-		calcCTR(clickList, impList);
-
+		totalImpressions = calcImpressions(impList);
+		totalImpCost = calcTotalImpCost(impList);
+		totalClicks = calcClicks(clickList);
+		totalClickCost = calcTotalClickCost(clickList);
+		totalCost = calcTotalCost(impList, clickList);
+		totalConversions = calcConversions(serverEntries);
+		conversionRate = calcConvRate(serverEntries, clickList);
+		bounces = calcBounces(serverEntries);
+		bounceRate = calcBounceRate(serverEntries, clickList);
+		totalUniques = calcUniques(clickList);
+		CTR = calcCTR(clickList, impList);
+		CPA = calcCPA(impList, clickList, serverEntries);
+		CPC = calcCPC(clickList);
+		CPM = calcCPM(impList);
 	}
 
 
 	/**
 	 * These calculations are directly for the filter methods to use when they have made their own data sets and arraylists
-	 * @return
 	 */
-
-
 	public int calcImpressions(ArrayList<Impression> impressionArray){
-
 		int mytotalImpressions = impressionArray.size();
 		return  mytotalImpressions;
 	}
 
 	public double calcTotalImpCost(ArrayList<Impression> impressionArray){
-
 		double mytotalImpCost = 0;
 		for (Impression imp: impressionArray) {
 			mytotalImpCost += imp.getImpressionCost();
@@ -269,15 +237,12 @@ public class Campaign {
 	}
 
 	public int calcClicks(ArrayList<Click> clickArray){
-
 		int mytotalClicks = clickArray.size();
 		return mytotalClicks;
-
 	}
 
 
 	public double calcTotalClickCost(ArrayList<Click> clickArray){
-
 		double mytotalClickCost = 0;
 		for (Click click: clickArray) {
 			mytotalClickCost += click.getClickCost();
@@ -287,7 +252,6 @@ public class Campaign {
 
 
 	public double calcTotalCost(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray){
-
 		double totalClickCost = 0;
 		double totalImpCost = 0;
 		for (Impression imp: impressionArray) {
@@ -323,7 +287,7 @@ public class Campaign {
 			}
 		}
 		System.out.println(totalConversions);
-		double conversionRate =   totalConversions / totalClicks;
+		double conversionRate =   (double) totalConversions / totalClicks;
 		return  conversionRate;
 	}
 
@@ -339,7 +303,6 @@ public class Campaign {
 	}
 
 	public double calcBounceRate(ArrayList<ServerEntry> serverEntryArray, ArrayList<Click> clickArray){
-
 		int bounces = 0;
 
 		for (ServerEntry serverEntry: serverEntryArray) {
@@ -348,7 +311,7 @@ public class Campaign {
 			}
 		}
 		int totalClicks = clickArray.size();
-		double bounceRate =  bounces / totalClicks;// change to proper divide function
+		double bounceRate = (double) bounces / totalClicks;
 		return bounceRate;
 	}
 
@@ -363,7 +326,7 @@ public class Campaign {
 
 	public double calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
 		double CTR =  ((double) clickArray.size() / impressionArray.size());
-		return  clickArray.size() / impressionArray.size();
+		return  CTR;
 	}
 
 	public double calcCPA(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray, ArrayList<ServerEntry> serverEntryArray){
@@ -404,7 +367,7 @@ public class Campaign {
 		for (Impression imp: impressionArray) {
 			totalImpCost += imp.getImpressionCost();
 		}
-		double CPM =  (totalImpCost / impressionArray.size()) * 1000;
+		double CPM =   ((double) totalImpCost / impressionArray.size()) * 1000;
 		return CPM;
 	}
 
@@ -417,7 +380,7 @@ public class Campaign {
 		return totalImpCost;
 	}
 
-	public double getTotalClicks() {
+	public int getTotalClicks() {
 		return totalClicks;
 	}
 
@@ -425,11 +388,11 @@ public class Campaign {
 		return totalClickCost;
 	}
 
-	public double getTotalConversions() {
+	public int getTotalConversions() {
 		return totalConversions;
 	}
 
-	public double getTotalBounces() {
+	public int getTotalBounces() {
 		return bounces;
 	}
 
@@ -473,4 +436,7 @@ public class Campaign {
 		return clicks;
 	}
 
+	public double getTotalCost() {
+		return totalCost;
+	}
 }

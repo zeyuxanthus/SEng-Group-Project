@@ -20,7 +20,6 @@ public class Histogram implements Chart {
     private Filter filter;
 
     /**
-     * @param observer the view that displays the chart
      * @param campaign reference for accessing campaign's data
      * @param noBars - number of bars/classes in the histogram
      * @param accuracy - number of decimal places the boundaries of bars are rounded to

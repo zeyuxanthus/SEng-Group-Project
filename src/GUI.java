@@ -55,7 +55,6 @@ public class GUI extends Application {
 	private final String[] ageGroups = {"<25", "25-34", "35-44", "45-54", ">54"};
 	private final String[] incomeGroups = {"Low", "Medium", "High"};
 	private final String[] contextGroups = {"News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel"};
-	private Observer observer;
 	
 	public GUI() {}
 	
@@ -188,6 +187,7 @@ public class GUI extends Application {
 		Label cpcLabel = new Label("Cost per Conversion");
 		Label cpmLabel = new Label("CPM");
 		Label totalCostLabel = new Label("Total Cost");
+		Label conversionRateLabel = new Label("Conversion Rate");
 		
 		TextField bounceRateField = new TextField();
 		TextField noImpressionsField = new TextField();
@@ -200,10 +200,11 @@ public class GUI extends Application {
 		TextField cpcField = new TextField();
 		TextField cpmField = new TextField();
 		TextField totalCostField = new TextField();
+		TextField conversionRateField = new TextField();
 		
 		bounceRateField.setText("" + campaign.getBounceRate());
-		noImpressionsField.setText("" + campaign.getImpressions());
-		noClicksField.setText("" + campaign.getClicks());
+		noImpressionsField.setText("" + campaign.getTotalImpressions());
+		noClicksField.setText("" + campaign.getTotalClicks());
 		noUniquesField.setText("" +campaign.getTotalUnique());
 		noBouncesField.setText("" + campaign.getTotalBounces());
 		noConversionsField.setText("" + campaign.getTotalConversions());
@@ -211,7 +212,8 @@ public class GUI extends Application {
 		cpaField.setText("" + campaign.getCPA());
 		cpcField.setText("" + campaign.getCPC());
 		cpmField.setText("" + campaign.getCPM());
-		totalCostField.setText("" + campaign.getTotalImpressionCost());
+		totalCostField.setText("" + campaign.getTotalCost());
+		conversionRateField.setText("" + campaign.getConversionRate());
 		
 		
 		Label granularityLabel = new Label("Granularity");
@@ -222,8 +224,8 @@ public class GUI extends Application {
 		granularityLayout.getChildren().addAll(granularityLabel, granularityField);
 		metricLabels1.getChildren().addAll(bounceRateLabel, noImpressionsLabel, noClicksLabel, noUniquesLabel, noBouncesLabel, noConversionsLabel);
 		metricBoxes1.getChildren().addAll(bounceRateField, noImpressionsField, noClicksField, noUniquesField, noBouncesField, noConversionsField);
-		metricLabels2.getChildren().addAll(ctrLabel, cpaLabel, cpcLabel, cpmLabel, totalCostLabel);
-		metricBoxes2.getChildren().addAll(ctrField, cpaField, cpcField, cpmField, totalCostField);
+		metricLabels2.getChildren().addAll(ctrLabel, cpaLabel, cpcLabel, cpmLabel, totalCostLabel, conversionRateLabel);
+		metricBoxes2.getChildren().addAll(ctrField, cpaField, cpcField, cpmField, totalCostField, conversionRateField);
 		
 		metricLayout.getChildren().addAll(metricLabels1, metricBoxes1, metricLabels2, metricBoxes2);
 		windowLayout.getChildren().addAll(granularityLayout, metricLayout);
