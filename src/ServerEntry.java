@@ -47,7 +47,6 @@ public class ServerEntry implements Comparable<ServerEntry>{
         return impressionCost;
     }
 
-
     public LocalDateTime getEntryDate(){
         return entryDate;
     }
@@ -98,5 +97,4 @@ public class ServerEntry implements Comparable<ServerEntry>{
     public int compareTo(ServerEntry i) {
         return entryDate.compareTo(i.getEntryDate());
     }
-
 }
