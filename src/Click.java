@@ -9,6 +9,7 @@ public class Click implements Comparable<Click> {
     private String ID; // uniquely identifies a user
     private float clickCost; // in pence (float is up to 6 or 7 digits )
 
+    // Impression Log stuff
     private String gender;
     private String income;
     private String ageGroup;
@@ -24,7 +25,6 @@ public class Click implements Comparable<Click> {
         this.clickCost = clickCost;
 
     }
-
 
     public void setGender(String gender){
         this.gender = gender;

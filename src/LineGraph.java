@@ -1,8 +1,4 @@
-import com.sun.security.ntlm.Server;
-import javafx.util.Pair;
-
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -10,7 +6,7 @@ import java.util.stream.Collectors;
 /**
  * Contains all data and methods needed to display the line chart.
  */
-public class LineGraph implements Chart {
+public class LineGraph {
 
     private Campaign campaign;
 
@@ -88,7 +84,7 @@ public class LineGraph implements Chart {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalImpressions(){
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<Impression> impressionLog = filterImpressionLog();
+        ArrayList<Impression> impressionLog = campaign.filterImpressionLog(filter);
         Collections.sort(impressionLog);
         LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
 
@@ -115,7 +111,7 @@ public class LineGraph implements Chart {
 
     private ArrayList<DataPoint<Double, LocalDateTime>> calculateImpressionCosts() {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<Impression> impressionLog = filterImpressionLog();
+        ArrayList<Impression> impressionLog = campaign.filterImpressionLog(filter);
         Collections.sort(impressionLog);
         LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
 
@@ -142,7 +138,7 @@ public class LineGraph implements Chart {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalClicks() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<Click> clickLog = filterClickLog();
+        ArrayList<Click> clickLog = campaign.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -168,7 +164,7 @@ public class LineGraph implements Chart {
 
     private ArrayList<DataPoint<Double, LocalDateTime>> calculateClickCosts() {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<Click> clickLog = filterClickLog();
+        ArrayList<Click> clickLog = campaign.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -206,7 +202,7 @@ public class LineGraph implements Chart {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalConversions() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<ServerEntry> serverEntriesLog = filterServerLog();
+        ArrayList<ServerEntry> serverEntriesLog = campaign.filterServerLog(filter);
         Collections.sort(serverEntriesLog);
         LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
 
@@ -245,7 +241,7 @@ public class LineGraph implements Chart {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateBounces() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<ServerEntry> serverEntriesLog = filterServerLog();
+        ArrayList<ServerEntry> serverEntriesLog = campaign.filterServerLog(filter);
         Collections.sort(serverEntriesLog);
         LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
 
@@ -284,7 +280,7 @@ public class LineGraph implements Chart {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalUniques() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<Click> clickLog = filterClickLog();
+        ArrayList<Click> clickLog = campaign.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -333,7 +329,7 @@ public class LineGraph implements Chart {
 
     private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPCs() {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<Click> clickLog = filterClickLog();
+        ArrayList<Click> clickLog = campaign.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -382,284 +378,6 @@ public class LineGraph implements Chart {
                  break;
         }
         return endDateTime;
-    }
-
-    //--FILTERS---------------------------------------------------------------------------------------------------------
-
-    private ArrayList<Impression> filterImpressionLog(){
-        //for testing
-        //long startTime = System.nanoTime();
-
-        // Predicate for 0 costs
-        //TODO discuss if its needed
-        //Predicate<Click> clickCostPredicate = c -> c.getClickCost() > 0;
-
-        // Predicate for startDate
-        Predicate<Impression> startDatePredicate;
-        if(filter.getStartDate() != null){
-            startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
-        }
-        else{
-            System.out.println("startDate is null");
-            startDatePredicate = c -> true;
-        }
-
-        // Predicate for endDate
-        Predicate<Impression> endDatePredicate;
-        if(filter.getEndDate() != null){
-            endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate());
-        }
-        else{
-            System.out.println("endDate is null");
-            endDatePredicate = c -> true;
-        }
-
-        // Predicates for contexts
-        Predicate<Impression> contextsPredicate;
-        if(!filter.getContexts().isEmpty()){
-            contextsPredicate = c -> matchContext(c.getContext());
-        }
-        else{
-            System.out.println("contexts are empty");
-            contextsPredicate = c -> true;
-        }
-
-        // Predicate for gender
-        Predicate<Impression> genderPredicate;
-        if(filter.getGender() != null){
-            genderPredicate = c -> c.getGender().equals(filter.getGender());
-        }
-        else{
-            System.out.println("gender is null");
-            genderPredicate = c -> true;
-        }
-
-        // Predicates for ageGroups
-        Predicate<Impression> ageGroupPredicate;
-        if(!filter.getAgeGroups().isEmpty()){
-            ageGroupPredicate = c -> matchAgeGroup(c.getAgeGroup());
-        }
-        else{
-            System.out.println("ageGroup is empty");
-            ageGroupPredicate = c -> true;
-        }
-
-        // Predicate for incomes
-        Predicate<Impression> incomePredicate;
-        if(!filter.getIncomes().isEmpty()){
-            incomePredicate = c -> matchIncome(c.getIncome());
-        }
-        else{
-            System.out.println("income is empty");
-            incomePredicate = c -> true;
-        }
-
-        ArrayList<Impression> clicks = campaign.getImpressions();
-        ArrayList<Impression> filteredClicks = (ArrayList<Impression>) clicks.stream().filter
-                (startDatePredicate.and(endDatePredicate.and(contextsPredicate).and(genderPredicate).and(ageGroupPredicate).and(incomePredicate))).collect(Collectors.toList());
-
-        //for testing
-        //long endTime = System.nanoTime();
-        //System.out.println("Method took:" + (endTime - startTime) / 1000000);
-
-        return filteredClicks;
-    }
-
-    private ArrayList<ServerEntry> filterServerLog(){
-        //for testing
-        //long startTime = System.nanoTime();
-
-        // Predicate for 0 costs
-        //TODO discuss if its needed
-        //Predicate<Click> clickCostPredicate = c -> c.getClickCost() > 0;
-
-        // Predicate for startDate
-        Predicate<ServerEntry> startDatePredicate;
-        if(filter.getStartDate() != null){
-            startDatePredicate = c -> c.getEntryDate().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
-        }
-        else{
-            System.out.println("startDate is null");
-            startDatePredicate = c -> true;
-        }
-
-        // Predicate for endDate
-        Predicate<ServerEntry> endDatePredicate;
-        if(filter.getEndDate() != null){
-            endDatePredicate = c -> c.getEntryDate().isBefore(filter.getEndDate());
-        }
-        else{
-            System.out.println("endDate is null");
-            endDatePredicate = c -> true;
-        }
-
-        // Predicates for contexts
-        Predicate<ServerEntry> contextsPredicate;
-        if(!filter.getContexts().isEmpty()){
-            contextsPredicate = c -> matchContext(c.getContext());
-        }
-        else{
-            System.out.println("contexts are empty");
-            contextsPredicate = c -> true;
-        }
-
-        // Predicate for gender
-        Predicate<ServerEntry> genderPredicate;
-        if(filter.getGender() != null){
-            genderPredicate = c -> c.getGender().equals(filter.getGender());
-        }
-        else{
-            System.out.println("gender is null");
-            genderPredicate = c -> true;
-        }
-
-        // Predicates for ageGroups
-        Predicate<ServerEntry> ageGroupPredicate;
-        if(!filter.getAgeGroups().isEmpty()){
-            ageGroupPredicate = c -> matchAgeGroup(c.getAgeGroup());
-        }
-        else{
-            System.out.println("ageGroup is empty");
-            ageGroupPredicate = c -> true;
-        }
-
-        // Predicate for incomes
-        Predicate<ServerEntry> incomePredicate;
-        if(!filter.getIncomes().isEmpty()){
-            incomePredicate = c -> matchIncome(c.getIncome());
-        }
-        else{
-            System.out.println("income is empty");
-            incomePredicate = c -> true;
-        }
-
-        ArrayList<ServerEntry> serverEntries = campaign.getServerEntries();
-        ArrayList<ServerEntry> filteredServerEntries = (ArrayList<ServerEntry>) serverEntries.stream().filter
-                (startDatePredicate.and(endDatePredicate.and(contextsPredicate).and(genderPredicate).and(ageGroupPredicate).and(incomePredicate))).collect(Collectors.toList());
-
-        //for testing
-        //long endTime = System.nanoTime();
-        //System.out.println("Method took:" + (endTime - startTime) / 1000000);
-
-        return filteredServerEntries;
-    }
-
-    private ArrayList<Click> filterClickLog(){
-        //for testing
-        //long startTime = System.nanoTime();
-
-        // Predicate for 0 costs
-        //TODO discuss if its needed
-        //Predicate<Click> clickCostPredicate = c -> c.getClickCost() > 0;
-
-        // Predicate for startDate
-        Predicate<Click> startDatePredicate;
-        if(filter.getStartDate() != null){
-            startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
-        }
-        else{
-            System.out.println("startDate is null");
-            startDatePredicate = c -> true;
-        }
-
-        // Predicate for endDate
-        Predicate<Click> endDatePredicate;
-        if(filter.getEndDate() != null){
-            endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate());
-        }
-        else{
-            System.out.println("endDate is null");
-            endDatePredicate = c -> true;
-        }
-
-        // Predicates for contexts
-        Predicate<Click> contextsPredicate;
-        if(!filter.getContexts().isEmpty()){
-            contextsPredicate = c -> matchContext(c.getContext());
-        }
-        else{
-            System.out.println("contexts are empty");
-            contextsPredicate = c -> true;
-        }
-
-        // Predicate for gender
-        Predicate<Click> genderPredicate;
-        if(filter.getGender() != null){
-            genderPredicate = c -> c.getGender().equals(filter.getGender());
-        }
-        else{
-            System.out.println("gender is null");
-            genderPredicate = c -> true;
-        }
-
-        // Predicates for ageGroups
-        Predicate<Click> ageGroupPredicate;
-        if(!filter.getAgeGroups().isEmpty()){
-            ageGroupPredicate = c -> matchAgeGroup(c.getAgeGroup());
-        }
-        else{
-            System.out.println("ageGroup is empty");
-            ageGroupPredicate = c -> true;
-        }
-
-        // Predicate for incomes
-        Predicate<Click> incomePredicate;
-        if(!filter.getIncomes().isEmpty()){
-            incomePredicate = c -> matchIncome(c.getIncome());
-        }
-        else{
-            System.out.println("income is empty");
-            incomePredicate = c -> true;
-        }
-
-        ArrayList<Click> clicks = campaign.getClicks();
-        ArrayList<Click> filteredClicks = (ArrayList<Click>) clicks.stream().filter
-                (startDatePredicate.and(endDatePredicate.and(contextsPredicate).and(genderPredicate).and(ageGroupPredicate).and(incomePredicate))).collect(Collectors.toList());
-
-        //for testing
-        //long endTime = System.nanoTime();
-        //System.out.println("Method took:" + (endTime - startTime) / 1000000);
-
-        return filteredClicks;
-    }
-
-    /**
-     * Checks if there exists a context in a list of contexts (filters) that matches given context
-     * @param context - given context
-     * @return - true if there is a match
-     */
-    private boolean matchContext(String context){
-        for(String c : filter.getContexts()){
-            if(c.equals(context))
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * Checks if there exists an ageGroup in a list of ageGroups that matches given ageGroup
-     * @param ageGroup - given ageGroup
-     * @return - true if there is a match
-     */
-    private boolean matchAgeGroup(String ageGroup){
-        for(String a : filter.getAgeGroups()){
-            if(a.equals(ageGroup))
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * Checks if there exists an income in a list of incomes that matches given income
-     * @param income - given income
-     * @return - true if there is a match
-     */
-    private boolean matchIncome(String income){
-        for(String i : filter.getIncomes()){
-            if(i.equals(income))
-                return true;
-        }
-        return false;
     }
 
     public ArrayList<DataPoint> getDataPoints(){ return dataPoints; }
