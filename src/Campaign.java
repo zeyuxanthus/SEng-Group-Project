@@ -1,68 +1,54 @@
+import java.io.*;
 
-
-import com.sun.security.ntlm.Server;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
- *  Domain of the application. (Basically backend)
- *  Model of MVC
- *  Should be independent of the View (Observer) and the Controller.
+ *  Contains data about single campaign
+ *  Handles all data manipulation
  */
-public class Campaign implements Observable {
-
-	private int totalImpressions;
-	private float totalImpCost;
-	private int totalClicks;
-	private float totalClickCost;
-	private float totalCost;
-	private int totalConversions;
-	private float conversionRate;
-	private int bounces;
-	private float bounceRate;
-	private int totalUniques;
-	private float CTR; // click-through-rate
-	private float CPA; // cost-per-acquisition
-	private float CPC; // cost-per-click
-	private float CPM; // cost-per-thousand impressions
-
-	private List<Observer> observers = new LinkedList<Observer>();
-
+public class Campaign {
 	// Log information
 	private ArrayList<Impression> impressions; // Impression Log
 	private ArrayList<Click> clicks; // Click Log
 	private ArrayList<ServerEntry> serverEntries; // Server Log
+	private HashMap<String, Impression> impressionSet;
 
+	// Campaign's metrics
+	private int totalImpressions;
+	private double totalImpCost;
+	private int totalClicks;
+	private double totalClickCost;
+	private double totalCost;
+	private int totalConversions;
+	private double conversionRate;
+	private int bounces;
+	private double bounceRate;
+	private int totalUniques;
+	private double CTR; // click-through-rate
+	private double CPA; // cost-per-acquisition
+	private double CPC; // cost-per-click
+	private double CPM; // cost-per-thousand impressions
+
+
+	//--LOADING---------------------------------------------------------------------------------------------------------
 	/**
-	 * Should be called whenever anything in the model changes.
-	 * It updates the all the observers, e.g. View
+	 * Loads all the data from CSV files into arrayLists and calculates the metrics
+	 * @param serverName
+	 * @param clickName
+	 * @param impressionName
 	 */
-	private void triggerUpdate() {
-		for (Observer observer : observers) {
-			observer.observableChanged(this);
-		}
+
+	public void loadLogs(String serverName, String clickName, String impressionName){
+		loadImpressionLog(impressionName);
+		loadSeverlog(serverName);
+		loadClickLog(clickName);
+		calculateMetrics(clicks, impressions, serverEntries);
 	}
 
-	public void addObserver(Observer observer) {
-		observers.add(observer);
-	}
-
-	/**
-	 * @TODO for other loaders:
-	 * 	1. create local ArrayList to override previous document
-	 * 	2. remove replaceAll()
-	 * 	3. change the pattern of the formatter (to account for space)
-	 * 	4. Campaign's ArrayLists don't need to be initialised
-	 * @param clickFileName - path to the file + its name
-	 */
 	public void loadClickLog (String clickFileName){
 		ArrayList<Click> clicks = new ArrayList<Click>();
 		String clickLog = clickFileName;
@@ -88,12 +74,32 @@ public class Campaign implements Observable {
 				clicks.add(new Click(formatDateTime,id,clickCost));
 			}
 			inputStream.close();
+		
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+
+		long startTime = System.nanoTime();
+		for(Click c : clicks){
+
+			String ageGroup = impressionSet.get(c.getID()).getAgeGroup();
+			String context = impressionSet.get(c.getID()).getContext();
+			String income = impressionSet.get(c.getID()).getIncome();
+			String gender = impressionSet.get(c.getID()).getGender();
+			float impCost = impressionSet.get(c.getID()).getImpressionCost();
+
+			c.setAgeGroup(ageGroup);
+			c.setContext(context);
+			c.setGender(gender);
+			c.setIncome(income);
+			c.setImpressionCost(impCost);
+
+		}
 		this.clicks = clicks;
+		long endTime = System.nanoTime();
+		System.out.println("Method took:" + (endTime - startTime) / 1000000);
 	}
-	
+
 	public void loadImpressionLog (String impressionFileName){
 		ArrayList<Impression> impressions = new ArrayList<Impression>();
 		String impressionLog = impressionFileName;
@@ -124,15 +130,17 @@ public class Campaign implements Observable {
 
 				impressions.add(new Impression(dateTime,id,gender,ageGroup,income,context,impressionCost));
 			}
-			inputStream.close();
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
+		} 
 		this.impressions = impressions;
-		System.out.println(impressions); //printout entire log
-
+		impressionSet = new HashMap<>();
+		for(Impression i: impressions){
+			impressionSet.put(i.getID(), i);
+		}
 	}
-	
+
 	public void loadSeverlog (String serverFileName){
 		ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
 		File serverLogFile = new File(serverFileName);
@@ -172,109 +180,165 @@ public class Campaign implements Observable {
 				}
 			}
 			inputStream.close();
+	
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		for(ServerEntry s : serverEntries){
+			String ageGroup = impressionSet.get(s.getID()).getAgeGroup();
+			String context = impressionSet.get(s.getID()).getContext();
+			String income = impressionSet.get(s.getID()).getIncome();
+			String gender = impressionSet.get(s.getID()).getGender();
+			float impCost = impressionSet.get(s.getID()).getImpressionCost();
+
+			s.setAgeGroup(ageGroup);
+			s.setContext(context);
+			s.setGender(gender);
+			s.setIncome(income);
+			s.setImpressionCost(impCost);
+		}
+
+
 		this.serverEntries = serverEntries;
-		System.out.println(serverEntries); // entire log
+
 	}
 
-	private void calcImpressions(ArrayList<Impression> impressionArray){
-		totalImpressions = impressionArray.size();
+	//--CALCULATIONS----------------------------------------------------------------------------------------------------
+	/**
+	 * Calculates and updates all metrics given lists of campaign's data
+	 */
+	public void calculateMetrics(ArrayList<Click> clickList, ArrayList<Impression> impList, ArrayList<ServerEntry> serverEntries) {
+		totalImpressions = calcImpressions(impList);
+		totalImpCost = calcTotalImpCost(impList);
+		totalClicks = calcClicks(clickList);
+		totalClickCost = calcTotalClickCost(clickList);
+		totalCost = calcTotalCost(impList, clickList);
+		totalConversions = calcConversions(serverEntries);
+		conversionRate = calcConvRate(serverEntries, clickList);
+		bounces = calcBounces(serverEntries);
+		bounceRate = calcBounceRate(serverEntries, clickList);
+		totalUniques = calcUniques(clickList);
+		CTR = calcCTR(clickList, impList);
+		CPA = calcCPA(impList, clickList, serverEntries);
+		CPC = calcCPC(clickList);
+		CPM = calcCPM(impList);
 	}
 
-	private void calcTotalImpCost(ArrayList<Impression> impressionArray){
-		totalImpCost = 0;
+
+	/**
+	 * These calculations are directly for the filter methods to use when they have made their own data sets and arraylists
+	 */
+	public int calcImpressions(ArrayList<Impression> impressionArray){
+		int mytotalImpressions = impressionArray.size();
+		return  mytotalImpressions;
+	}
+
+	public double calcTotalImpCost(ArrayList<Impression> impressionArray){
+		double mytotalImpCost = 0;
+		for (Impression imp: impressionArray) {
+			mytotalImpCost += imp.getImpressionCost();
+		}
+		return (double) mytotalImpCost;
+	}
+
+	public int calcClicks(ArrayList<Click> clickArray){
+		int mytotalClicks = clickArray.size();
+		return mytotalClicks;
+	}
+
+
+	public double calcTotalClickCost(ArrayList<Click> clickArray){
+		double mytotalClickCost = 0;
+		for (Click click: clickArray) {
+			mytotalClickCost += click.getClickCost();
+		}
+		return  mytotalClickCost;
+	}
+
+
+	public double calcTotalCost(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray){
+		double totalClickCost = 0;
+		double totalImpCost = 0;
 		for (Impression imp: impressionArray) {
 			totalImpCost += imp.getImpressionCost();
 		}
-	}
-
-	private void calcClicks(ArrayList<Click> clickArray){
-		totalClicks = clickArray.size();
-	}
-
-	private void calcTotalClickCost(ArrayList<Click> clickArray){
-		totalClickCost = 0;
-		for (Click click: clickArray) {
-			totalClickCost += click.getClickCost();
-		}
-	}
-
-	private void calcTotalCost(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray){
-		totalClickCost = 0;
-		totalImpCost = 0;
-		totalCost = 0;
-		for (Impression imp: impressionArray) {
-			totalImpCost += imp.getImpressionCost();
-		}
-
 		for (Click click: clickArray) {
 			totalClickCost += click.getClickCost();
 		}
 
-		totalCost = totalClickCost + totalImpCost;
+
+		return totalClickCost + totalImpCost;
 	}
 
-	private void calcConversions(ArrayList<ServerEntry> serverEntryArray){
-		totalConversions = 0;
+	public int calcConversions(ArrayList<ServerEntry> serverEntryArray){
+
+		int mytotalConversions = 0;
 		for (ServerEntry serverEntry: serverEntryArray) {
 			if (serverEntry.getConversion().equals("Yes")){
-				totalConversions += 1;
+				mytotalConversions += 1;
 			}
 		}
+		return mytotalConversions;
 	}
 
-	private void calcConvRate(ArrayList<ServerEntry> serverEntryArray, ArrayList<Click> clickArray){
-		totalConversions = 0;
-		totalClicks = 0;
+	public double calcConvRate(ArrayList<ServerEntry> serverEntryArray, ArrayList<Click> clickArray){
+
+		int totalConversions = 0;
+		int totalClicks = 0;
 		totalClicks = clickArray.size();
 		for (ServerEntry serverEntry: serverEntryArray) {
 			if (serverEntry.getConversion().equals("Yes")) {
 				totalConversions += 1;
 			}
 		}
-		conversionRate = (float) totalConversions / totalClicks;
+		System.out.println(totalConversions);
+		double conversionRate =   (double) totalConversions / totalClicks;
+		return  conversionRate;
 	}
 
-	private void calcBounces(ArrayList<ServerEntry> serverEntryArray){
-		bounces = 0;
+	public int calcBounces(ArrayList<ServerEntry> serverEntryArray){
+
+		int myBounces = 0;
+		for (ServerEntry serverEntry: serverEntryArray) {
+			if (serverEntry.getPagesViewed() <= 1){
+				myBounces += 1;
+			}
+		}
+		return myBounces;
+	}
+
+	public double calcBounceRate(ArrayList<ServerEntry> serverEntryArray, ArrayList<Click> clickArray){
+		int bounces = 0;
+
 		for (ServerEntry serverEntry: serverEntryArray) {
 			if (serverEntry.getPagesViewed() <= 1){
 				bounces += 1;
 			}
 		}
+		int totalClicks = clickArray.size();
+		double bounceRate = (double) bounces / totalClicks;
+		return bounceRate;
 	}
 
-	private void calcBounceRate(ArrayList<ServerEntry> serverEntryArray, ArrayList<Click> clickArray){
-		bounces = 0;
-		bounceRate = 0;
-		for (ServerEntry serverEntry: serverEntryArray) {
-			if (serverEntry.getPagesViewed() <= 1){
-				bounces += 1;
-			}
-		}
-		totalClicks = clickArray.size();
-		bounceRate = (float) bounces / totalClicks;// change to proper divide function
-	}
-
-	private void calcUniques(ArrayList<Click> clickArray){
+	public int calcUniques(ArrayList<Click> clickArray){
 		HashSet<String> uniquesHashset = new HashSet<String>();
 		for (Click click: clickArray) {
 			uniquesHashset.add(click.getID());
 		}
-		totalUniques = uniquesHashset.size();
+		int totalUniques = uniquesHashset.size();
+		return totalUniques;
 	}
 
-	private void calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
-		CTR = (float) clickArray.size() / impressionArray.size();
+	public double calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
+		double CTR =  ((double) clickArray.size() / impressionArray.size());
+		return  CTR;
 	}
 
-	private void calcCPA(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray, ArrayList<ServerEntry> serverEntryArray){
-		totalImpCost = 0;
-		totalClickCost = 0;
-		totalConversions = 0;
-		totalCost = 0;
+	public double calcCPA(ArrayList<Impression> impressionArray, ArrayList<Click> clickArray, ArrayList<ServerEntry> serverEntryArray){
+		double totalImpCost = 0;
+		double totalClickCost = 0;
+		int totalConversions = 0;
+		double totalCost = 0;
 		for (Impression imp: impressionArray) {
 			totalImpCost += imp.getImpressionCost();
 		}
@@ -290,86 +354,370 @@ public class Campaign implements Observable {
 				totalConversions += 1;
 			}
 		}
-		CPA = totalCost / totalConversions;
+		double CPA = totalCost / totalConversions;
+		return CPA;
 	}
 
-	private void calcCPC(ArrayList<Click> clickArray){
-		totalClickCost = 0;
+	public double calcCPC(ArrayList<Click> clickArray){
+		double totalClickCost = 0;
 		for (Click click: clickArray) {
 			totalClickCost += click.getClickCost();
 		}
-		CPC = (float) totalClickCost / clickArray.size();
+		double CPC = (totalClickCost / clickArray.size());
+		return CPC;
 	}
 
-	private void calcCPM(ArrayList<Impression> impressionArray){
-		totalImpCost = 0;
+	public double calcCPM(ArrayList<Impression> impressionArray){
+		double totalImpCost = 0;
 		for (Impression imp: impressionArray) {
 			totalImpCost += imp.getImpressionCost();
 		}
-		CPM = (float) totalImpCost / impressionArray.size() / 1000;
-	}
-	
-	public int getTotalImpressions() {
-		return totalImpressions;
-	}
-	
-	public float getTotalImpressionCost() {
-		return totalImpCost;
-	}
-	
-	public float getTotalClicks() {
-		return totalClicks;
-	}
-
-	public float getTotalClickCost() {
-		return totalClickCost;
-	}
-	
-	public float getTotalConversions() {
-		return totalConversions;
-	}
-	
-	public float getTotalBounces() {
-		return bounces;
-	}
-	
-	public float getBounceRate() {
-		return bounceRate;
-	}
-	
-	public float getTotalUnique() {
-		return totalUniques;
-	}
-	
-	public float getCTR() {
-		return CTR;
-	}
-	
-	public float getCPA() {
-		return CPA;
-	}
-	
-	public float getCPC() {
-		return CPC;
-	}
-	
-	public float getCPM() {
+		double CPM =   ((double) totalImpCost / impressionArray.size()) * 1000;
 		return CPM;
 	}
 
-	public float getConversionRate() {
+	//--FILTERS---------------------------------------------------------------------------------------------------------
+
+	public ArrayList<Impression> filterImpressionLog(Filter filter){
+		//for testing
+		//long startTime = System.nanoTime();
+
+		// Predicate for 0 costs
+		//TODO discuss if its needed
+		//Predicate<Click> clickCostPredicate = c -> c.getClickCost() > 0;
+
+		// Predicate for startDate
+		Predicate<Impression> startDatePredicate;
+		if(filter.getStartDate() != null){
+			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
+		}
+		else{
+			System.out.println("startDate is null");
+			startDatePredicate = c -> true;
+		}
+
+		// Predicate for endDate
+		Predicate<Impression> endDatePredicate;
+		if(filter.getEndDate() != null){
+			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate());
+		}
+		else{
+			System.out.println("endDate is null");
+			endDatePredicate = c -> true;
+		}
+
+		// Predicates for contexts
+		Predicate<Impression> contextsPredicate;
+		if(!filter.getContexts().isEmpty()){
+			contextsPredicate = c -> matchContext(c.getContext(), filter);
+		}
+		else{
+			System.out.println("contexts are empty");
+			contextsPredicate = c -> true;
+		}
+
+		// Predicate for gender
+		Predicate<Impression> genderPredicate;
+		if(filter.getGender() != null){
+			genderPredicate = c -> c.getGender().equals(filter.getGender());
+		}
+		else{
+			System.out.println("gender is null");
+			genderPredicate = c -> true;
+		}
+
+		// Predicates for ageGroups
+		Predicate<Impression> ageGroupPredicate;
+		if(!filter.getAgeGroups().isEmpty()){
+			ageGroupPredicate = c -> matchAgeGroup(c.getAgeGroup(), filter);
+		}
+		else{
+			System.out.println("ageGroup is empty");
+			ageGroupPredicate = c -> true;
+		}
+
+		// Predicate for incomes
+		Predicate<Impression> incomePredicate;
+		if(!filter.getIncomes().isEmpty()){
+			incomePredicate = c -> matchIncome(c.getIncome(), filter);
+		}
+		else{
+			System.out.println("income is empty");
+			incomePredicate = c -> true;
+		}
+
+		ArrayList<Impression> filteredImpressions = (ArrayList<Impression>) impressions.stream().filter
+				(startDatePredicate.and(endDatePredicate.and(contextsPredicate).and(genderPredicate).and(ageGroupPredicate).and(incomePredicate))).collect(Collectors.toList());
+
+		//for testing
+		//long endTime = System.nanoTime();
+		//System.out.println("Method took:" + (endTime - startTime) / 1000000);
+
+		return filteredImpressions;
+	}
+
+	public ArrayList<ServerEntry> filterServerLog(Filter filter){
+		//for testing
+		//long startTime = System.nanoTime();
+
+		// Predicate for 0 costs
+		//TODO discuss if its needed
+		//Predicate<Click> clickCostPredicate = c -> c.getClickCost() > 0;
+
+		// Predicate for startDate
+		Predicate<ServerEntry> startDatePredicate;
+		if(filter.getStartDate() != null){
+			startDatePredicate = c -> c.getEntryDate().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
+		}
+		else{
+			System.out.println("startDate is null");
+			startDatePredicate = c -> true;
+		}
+
+		// Predicate for endDate
+		Predicate<ServerEntry> endDatePredicate;
+		if(filter.getEndDate() != null){
+			endDatePredicate = c -> c.getEntryDate().isBefore(filter.getEndDate());
+		}
+		else{
+			System.out.println("endDate is null");
+			endDatePredicate = c -> true;
+		}
+
+		// Predicates for contexts
+		Predicate<ServerEntry> contextsPredicate;
+		if(!filter.getContexts().isEmpty()){
+			contextsPredicate = c -> matchContext(c.getContext(), filter);
+		}
+		else{
+			System.out.println("contexts are empty");
+			contextsPredicate = c -> true;
+		}
+
+		// Predicate for gender
+		Predicate<ServerEntry> genderPredicate;
+		if(filter.getGender() != null){
+			genderPredicate = c -> c.getGender().equals(filter.getGender());
+		}
+		else{
+			System.out.println("gender is null");
+			genderPredicate = c -> true;
+		}
+
+		// Predicates for ageGroups
+		Predicate<ServerEntry> ageGroupPredicate;
+		if(!filter.getAgeGroups().isEmpty()){
+			ageGroupPredicate = c -> matchAgeGroup(c.getAgeGroup(), filter);
+		}
+		else{
+			System.out.println("ageGroup is empty");
+			ageGroupPredicate = c -> true;
+		}
+
+		// Predicate for incomes
+		Predicate<ServerEntry> incomePredicate;
+		if(!filter.getIncomes().isEmpty()){
+			incomePredicate = c -> matchIncome(c.getIncome(), filter);
+		}
+		else{
+			System.out.println("income is empty");
+			incomePredicate = c -> true;
+		}
+
+		ArrayList<ServerEntry> filteredServerEntries = (ArrayList<ServerEntry>) serverEntries.stream().filter
+				(startDatePredicate.and(endDatePredicate.and(contextsPredicate).and(genderPredicate).and(ageGroupPredicate).and(incomePredicate))).collect(Collectors.toList());
+
+		//for testing
+		//long endTime = System.nanoTime();
+		//System.out.println("Method took:" + (endTime - startTime) / 1000000);
+
+		return filteredServerEntries;
+	}
+
+	public ArrayList<Click> filterClickLog(Filter filter){
+		//for testing
+		//long startTime = System.nanoTime();
+
+		// Predicate for 0 costs
+		//TODO discuss if its needed
+		//Predicate<Click> clickCostPredicate = c -> c.getClickCost() > 0;
+
+		// Predicate for startDate
+		Predicate<Click> startDatePredicate;
+		if(filter.getStartDate() != null){
+			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
+		}
+		else{
+			System.out.println("startDate is null");
+			startDatePredicate = c -> true;
+		}
+
+		// Predicate for endDate
+		Predicate<Click> endDatePredicate;
+		if(filter.getEndDate() != null){
+			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate());
+		}
+		else{
+			System.out.println("endDate is null");
+			endDatePredicate = c -> true;
+		}
+
+		// Predicates for contexts
+		Predicate<Click> contextsPredicate;
+		if(!filter.getContexts().isEmpty()){
+			contextsPredicate = c -> matchContext(c.getContext(), filter);
+		}
+		else{
+			System.out.println("contexts are empty");
+			contextsPredicate = c -> true;
+		}
+
+		// Predicate for gender
+		Predicate<Click> genderPredicate;
+		if(filter.getGender() != null){
+			genderPredicate = c -> c.getGender().equals(filter.getGender());
+		}
+		else{
+			System.out.println("gender is null");
+			genderPredicate = c -> true;
+		}
+
+		// Predicates for ageGroups
+		Predicate<Click> ageGroupPredicate;
+		if(!filter.getAgeGroups().isEmpty()){
+			ageGroupPredicate = c -> matchAgeGroup(c.getAgeGroup(), filter);
+		}
+		else{
+			System.out.println("ageGroup is empty");
+			ageGroupPredicate = c -> true;
+		}
+
+		// Predicate for incomes
+		Predicate<Click> incomePredicate;
+		if(!filter.getIncomes().isEmpty()){
+			incomePredicate = c -> matchIncome(c.getIncome(), filter);
+		}
+		else{
+			System.out.println("income is empty");
+			incomePredicate = c -> true;
+		}
+
+		ArrayList<Click> filteredClicks = (ArrayList<Click>) clicks.stream().filter
+				(startDatePredicate.and(endDatePredicate.and(contextsPredicate).and(genderPredicate).and(ageGroupPredicate).and(incomePredicate))).collect(Collectors.toList());
+
+		//for testing
+		//long endTime = System.nanoTime();
+		//System.out.println("Method took:" + (endTime - startTime) / 1000000);
+
+		return filteredClicks;
+	}
+
+	/**
+	 * Checks if there exists a context in a list of contexts (filters) that matches given context
+	 * @param context - given context
+	 * @return - true if there is a match
+	 */
+	private boolean matchContext(String context, Filter filter){
+		for(String c : filter.getContexts()){
+			if(c.equals(context))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if there exists an ageGroup in a list of ageGroups that matches given ageGroup
+	 * @param ageGroup - given ageGroup
+	 * @return - true if there is a match
+	 */
+	private boolean matchAgeGroup(String ageGroup, Filter filter){
+		for(String a : filter.getAgeGroups()){
+			if(a.equals(ageGroup))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if there exists an income in a list of incomes that matches given income
+	 * @param income - given income
+	 * @return - true if there is a match
+	 */
+	private boolean matchIncome(String income, Filter filter){
+		for(String i : filter.getIncomes()){
+			if(i.equals(income))
+				return true;
+		}
+		return false;
+	}
+
+	//--GETTERS---------------------------------------------------------------------------------------------------------
+
+	public int getTotalImpressions() {
+		return totalImpressions;
+	}
+
+	public double getTotalImpressionCost() {
+		return totalImpCost;
+	}
+
+	public int getTotalClicks() {
+		return totalClicks;
+	}
+
+	public double getTotalClickCost() {
+		return totalClickCost;
+	}
+
+	public int getTotalConversions() {
+		return totalConversions;
+	}
+
+	public int getTotalBounces() {
+		return bounces;
+	}
+
+	public double getBounceRate() {
+		return bounceRate;
+	}
+
+	public int getTotalUnique() {
+		return totalUniques;
+	}
+
+	public double getCTR() {
+		return CTR;
+	}
+
+	public double getCPA() {
+		return CPA;
+	}
+
+	public double getCPC() {
+		return CPC;
+	}
+
+	public double getCPM() {
+		return CPM;
+	}
+
+	public double getConversionRate() {
 		return conversionRate;
 	}
-	
+
 	public ArrayList<Impression> getImpressions() {
 		return impressions;
 	}
-	
+
 	public ArrayList<ServerEntry> getServerEntries() {
 		return serverEntries;
 	}
-	
+
 	public ArrayList<Click> getClicks(){
 		return clicks;
+	}
+
+	public double getTotalCost() {
+		return totalCost;
 	}
 }
