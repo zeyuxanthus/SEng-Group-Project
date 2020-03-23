@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 /**
  * Contains all data and methods needed to display the line chart.
  */
-
 public class LineGraph {
 
     private Campaign campaign;

@@ -41,7 +41,6 @@ public class Campaign {
 	 * @param clickName
 	 * @param impressionName
 	 */
-
 	public void loadLogs(String serverName, String clickName, String impressionName){
 		loadImpressionLog(impressionName);
 		loadSeverlog(serverName);
