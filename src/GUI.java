@@ -332,7 +332,7 @@ public class GUI extends Application {
 				ArrayList<String> contexts = new ArrayList<String>();
 				ArrayList<String> ageGroups = new ArrayList<String>();
 				ArrayList<String> incomes = new ArrayList<String>();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				if(filters.get(1).equals("") == false) {
 					startDate = LocalDateTime.parse(filters.get(0), formatter);
 				}

@@ -52,14 +52,14 @@ public class MyTests {
         Campaign campaign = new Campaign();
         campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime entryDate = LocalDateTime.parse("22015-01-01 12:01:21", formatter);
+        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:01:21", formatter);
         LocalDateTime exitDate = LocalDateTime.parse("2015-01-01 12:04:29", formatter);
         ArrayList<String> context = new ArrayList<>();
         ArrayList<String> income = new ArrayList<>();
-        String gender = "";
+        String gender = null;
         ArrayList<String> ageGroup = new ArrayList<>();
         Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
-        assertEquals(10, campaign.filterServerLog(filter).size());
+        assertEquals(7, campaign.filterServerLog(filter).size());
     }
 
     @Test
