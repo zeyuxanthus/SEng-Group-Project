@@ -1,131 +1,78 @@
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 
-import javax.sound.sampled.Line;
-import java.io.File;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MyTests {
 
 
 
-//
-//    @Test
-//    public void checkConnection(){
-//
-//        try {
-//            assertEquals(false, Campaign.connect().isClosed());
-//        }catch (SQLException e){
-//            e.printStackTrace();
-//        }
-//    }
 
+
+
+
+    /**
+     *     checking whether after merging the array that the clicks have impression features filled out
+     */
 
     @Test
     public void mergeArrays(){
         Campaign campaign = new Campaign();
         campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv");
+        ArrayList<Click> myclicks = campaign.getClicks();
+        assertNotNull(myclicks.get(0).getContext());
     }
-
-
-    @Test
-    public void getters(){
-        Campaign campaign = new Campaign();
-        ArrayList list1 = campaign.getClicks();
-        ArrayList list2 = campaign.getClicks();
-        ArrayList list3 = campaign.getClicks();
-        ArrayList list4 = campaign.getImpressions();
-        ArrayList list5 = campaign.getServerEntries();
-
-        assertEquals(list1, list2);
-    }
-
-    @Test
-    public void fileDeletion(){
-        File tmpDir =new File("/Users/danielraad/IdeaProjects/TestCode/test.db");
-        if(tmpDir.exists()) {
-            FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-            assertEquals(false, tmpDir.exists());
-        }
-    }
-//
-//    @Test
-//    public void loadMainDatabase(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//        String serverString = "/Users/danielraad/Desktop/UniCourses/SEG/Code/SEng-Group-Project/server_log.csv";
-//        String clickString = "/Users/danielraad/Desktop/UniCourses/SEG/Code/SEng-Group-Project/click_log.csv";
-//        String impressionString = "/Users/danielraad/Desktop/UniCourses/SEG/Code/SEng-Group-Project/impression_log.csv";
-//
-//        Campaign campaign = new Campaign();
-//        campaign.initialise(clickString,impressionString, serverString);
-//
-//        try{
-//
-//            String sql = "SELECT count() FROM sqlite_master WHERE type='table';";
-//
-//            Connection conn = Campaign.connect();
-//            Statement stmt = conn.createStatement();
-//
-//            ResultSet rs = stmt.executeQuery(sql);
-//            rs.next();
-//
-//            assertEquals(3, rs.getInt(1));
-//
-//        }catch(SQLException e){
-//            e.printStackTrace();
-//        }
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-
-//
-//    /**
-//     * Test for the loading of a saved campaign
-//     */
-//    @Test
-//    public void loadSavedDatabase(){
-//
-//
-//        String campaignName = "test2";
-//
-//        Controller controller = new Controller();
-//        controller.loadCampaign(campaignName);
-//
-//        try{
-//
-//            String sql = "SELECT count() FROM sqlite_master WHERE type='table';";
-//
-//            Connection conn = Campaign.connect(campaignName);
-//            Statement stmt = conn.createStatement();
-//
-//            ResultSet rs = stmt.executeQuery(sql);
-//            rs.next();
-//
-//            assertEquals(3, rs.getInt(1));
-//
-//        }catch(SQLException e){
-//            e.printStackTrace();
-//        }
-//
-//    }
-
 
     /**
-     * Testing that the file exists without the campaign
+     *      checking whether the arraylists are not empty following loading the data
      */
+
     @Test
-    public void persistence(){
-        File nikeFile = new File("Nike.db");
-        assertEquals(true, nikeFile.exists());
+    public void loadDatasets(){
+        Campaign campaign = new Campaign();
+        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv");
+        assertNotNull(campaign.getClicks());
+        assertNotNull(campaign.getImpressions());
+        assertNotNull(campaign.getServerEntries());
     }
+
+    @Test
+    public void datasets(){
+        Campaign campaign = new Campaign();
+        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv");
+        ArrayList<Click> clicks = campaign.getClicks();
+        assertEquals(clicks.get(0).getID(), "8895519749317550080");
+    }
+
+    @Test
+    public void filterServerLog(){
+        Campaign campaign = new Campaign();
+        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:19:09", formatter);
+        LocalDateTime exitDate = LocalDateTime.parse("2015-01-12 09:12:03", formatter);
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = "";
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(10, campaign.filterServerLog(filter).size());
+    }
+
+    @Test
+    public void filterClickLog(){
+
+    }
+
+    @Test
+    public void filterImpressionLog(){
+
+    }
+
+
 
 
     /**
@@ -133,17 +80,19 @@ public class MyTests {
      * potentially change the route of the file so that Controller saves the file
      */
 
-    @Test
-    public void saveChart(){
+//    @Test
+//    public void saveChart(){
+//
+//        Campaign campaign = new Campaign();
+//        LineGraph line = new LineGraph(campaign);
+//        String chart = "graph1";
+//        File chartImage = new File(chart);
+//        line.saveGraph(chart);
+//        assertEquals(true, chartImage.exists());
+//
+//    }
 
-        Campaign campaign = new Campaign();
-        LineGraph line = new LineGraph(campaign);
-        String chart = "graph1";
-        File chartImage = new File(chart);
-        line.saveGraph(chart);
-        assertEquals(true, chartImage.exists());
 
-    }
 
     /**
      * checking whether or not the two arraylists produce the same results
@@ -168,400 +117,6 @@ public class MyTests {
     public void millionImpressions(){
 
     }
-
-
-    /**
-     * filter integration tests
-     */
-//
-//    @Test
-//    public void filterImpressionTest(){
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//        Campaign campaign = new Campaign();
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//
-//        LineGraph line = new LineGraph(campaign);
-//
-//        ArrayList list = line.filterImpressionLog("Male,Low");
-//        assertEquals(1, list.size());
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//
-//    }
-//
-//    @Test
-//    public void filterClickTest(){
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//
-//        Campaign campaign = new Campaign();
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//
-//        LineGraph line = new LineGraph(campaign);
-//
-//        ArrayList<Click> list = line.filterClickLog("Male,Low");
-//
-//        assertEquals(1, list.size());
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//
-//    }
-
-//    @Test
-//    public void filterServerTest(){
-//
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//        Campaign campaign = new Campaign();
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//
-//        LineGraph line = new LineGraph(campaign);
-//
-//        ArrayList list = line.filterServerLog("Female,Medium");
-//        assertEquals(6, list.size());
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//
-//    }
-//
-//    @Test
-//    public void filterByDate(){
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//        Campaign campaign = new Campaign();
-//
-//
-//        LineGraph line = new LineGraph(campaign);
-//
-//        ArrayList list = line.filterImpressionLog("2015-01-01 12:00:04 + 2015-01-01 12:00:13");
-//        assertEquals(5, list.size());
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//    }
-//
-//
-//
-//
-//    @Test
-//    public void filterByContext(){
-//
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//        Campaign campaign = new Campaign();
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//
-//
-//        LineGraph line = new LineGraph(campaign);
-//
-//        ArrayList list = line.filterImpressionLog("Social Media");
-//        assertEquals(3, list.size());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//    }
-//
-//    @Test
-//    public void filterByGender(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//        Campaign campaign = new Campaign();
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//
-//
-//        LineGraph line = new LineGraph(campaign);
-//
-//        ArrayList list = line.filterImpressionLog("Female");
-//        assertEquals(8, list.size());
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//    }
-//
-//    @Test
-//    public void filterByAge(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//        Campaign campaign = new Campaign();
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//
-//
-//        LineGraph line = new LineGraph(campaign);
-//
-//        ArrayList list = line.filterImpressionLog(">54");
-//        assertEquals(3, list.size());
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void filterByIncome(){
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//        Campaign campaign = new Campaign();
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//
-//
-//        LineGraph line = new LineGraph(campaign);
-//
-//        ArrayList list = line.filterImpressionLog("Medium");
-//        assertEquals(6, list.size());
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//
-//
-//
-//
-//    /**
-//     * Integration tests for the metric tests, whether they are producing the correct original data results
-//     * this is the sql database which is being queried
-//     */
-//    @Test
-//    public void metricTest(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calculateMetrics();
-//
-//        assertEquals(118097.92122826772, campaign.getTotalCost());
-//        assertEquals(486104, campaign.getTotalImpressions());
-//        assertEquals(23923, campaign.getTotalClicks());
-//        assertEquals(487.0554979820736, campaign.getTotalImpressionCost());
-//        assertEquals(117610.0, campaign.getTotalClickCost());
-//        assertEquals(23806, campaign.getTotalUnique());
-//        assertEquals(0, campaign.getTotalBounces());
-//        assertEquals(2026, campaign.getTotalConversions());
-//
-//        assertEquals(58.2911753347817, campaign.getCPA());
-//        assertEquals(4.916189441123605, campaign.getCPC());
-//        assertEquals(1.0019573959113144, campaign.getCPM());
-//        assertEquals(0.049213748498263744, campaign.getCTR());
-//        assertEquals(0.0846883752037788, campaign.getConversionRate());
-//        assertEquals(0, campaign.getBounceRate());
-//
-//
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//
-//
-//    }
-//
-//    @Test
-//    public void sqlTotalCost(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcTotalCost();
-//
-//        assertEquals(0.008638 + 157.888888 , campaign.getTotalCost());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlTotalImpressions() {
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcImpressions();
-//
-//        assertEquals(10, campaign.getTotalImpressions());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlTotalClicks(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcClicks();
-//
-//        assertEquals(10, campaign.getTotalClicks());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlTotalImpressionCost(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcTotalImpCost();
-//
-//        assertEquals(0.008638, campaign.getTotalImpressionCost());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlTotalClickCost(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcTotalClickCost();
-//
-//        assertEquals(157.888888, campaign.getTotalClickCost());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlTotalUnique(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcUniques();
-//
-//        assertEquals(10, campaign.getTotalUnique());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlTotalBounce(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcBounces();
-//
-//        assertEquals(2, campaign.getTotalBounces());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlTotalConversions(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcConversions();
-//
-//        assertEquals(2, campaign.getTotalConversions());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlCPA(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcCPA();
-//
-//        assertEquals(78.948763, campaign.getCPA());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlCPM(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcCPM();
-//
-//        assertEquals(0.8638, campaign.getCPM());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
-//
-//    @Test
-//    public void sqlCPC(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcCPC();
-//
-//        assertEquals(15.7888888, campaign.getCPC());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//
-//    }
-//
-//    @Test
-//    public void sqlCTR(){
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//        Campaign campaign = new Campaign();
-//
-//        String serverString = "myServer.csv";
-//        String clickString = "myClickLog.csv";
-//        String impressionString = "myImpression.csv";
-//        campaign.initialise(clickString, impressionString, serverString);
-//        campaign.calcCTR();
-//
-//        assertEquals(1, campaign.getCTR());
-//        FileDelete.fileDelete("/Users/danielraad/IdeaProjects/TestCode/test.db");
-//    }
 
     /**
      * Tests for the calculations when an array is being passed through
@@ -668,7 +223,7 @@ public class MyTests {
     }
 
 
-        ArrayList<ServerEntry> serverEntryArrayList9 = new ArrayList<>() {{
+        ArrayList<ServerEntry> serverEntryArrayList9 = new ArrayList() {{
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime formatDateTime = LocalDateTime.parse("2019-12-12 12:30:30",formatter);
@@ -697,7 +252,7 @@ public class MyTests {
 
     }};
 
-    ArrayList<ServerEntry> serverEntryArrayList2 = new ArrayList<>() {{
+    ArrayList<ServerEntry> serverEntryArrayList2 = new ArrayList() {{
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime formatDateTime = LocalDateTime.parse("2019-12-12 12:30:30",formatter);
@@ -726,7 +281,7 @@ public class MyTests {
 
     }};
 
-    ArrayList<Click> clicks = new ArrayList<>() {{
+    ArrayList<Click> clicks = new ArrayList() {{
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime formatDateTime = LocalDateTime.parse("2019-12-12 12:30:30",formatter);
@@ -753,7 +308,7 @@ public class MyTests {
     }};
 
 
-    ArrayList<Impression> impressions = new ArrayList<>(){{
+    ArrayList<Impression> impressions = new ArrayList(){{
         //load them with different data
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime formatDateTime = LocalDateTime.parse("2019-12-12 12:30:30",formatter);
@@ -779,7 +334,7 @@ public class MyTests {
         add(imp10);
     }};
 
-    ArrayList<Impression> incorrectImpressionsCosts = new ArrayList<>(){{
+    ArrayList<Impression> incorrectImpressionsCosts = new ArrayList(){{
         //load them with different data
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime formatDateTime = LocalDateTime.parse("2019-12-12 12:30:30",formatter);
