@@ -32,4 +32,6 @@ public class Controller {
 	public void createHistogram(Campaign campaign, int noBars, int accuracy, Filter filter){
 		new Histogram(campaign, noBars, accuracy, filter);
 	}
+
+
 }

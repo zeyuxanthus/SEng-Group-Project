@@ -548,7 +548,8 @@ public class GUI extends Application {
 			public void handle(ActionEvent event) {
 				if (serverFile != null && clicksFile != null && impressionFile != null) {
 					//campaign.setBounceDefinition(Integer.parseInt(bounceDefiner.getText()));
-					campaign.loadLogs(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath());
+					campaign.loadLogs(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), 1);
+					// TODO change 1 to use a bounceDefinition specified by the user
 				}
 				fileOption.setValue("File");
 				newWindow.close();

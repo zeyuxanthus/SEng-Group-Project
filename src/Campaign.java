@@ -33,6 +33,8 @@ public class Campaign {
 	private double CPC; // cost-per-click
 	private double CPM; // cost-per-thousand impressions
 
+	private int bounceDefinition = 1;
+
 
 	//--LOADING---------------------------------------------------------------------------------------------------------
 	/**
@@ -41,7 +43,8 @@ public class Campaign {
 	 * @param clickName
 	 * @param impressionName
 	 */
-	public void loadLogs(String serverName, String clickName, String impressionName){
+	public void loadLogs(String serverName, String clickName, String impressionName, int bounceDefinition){
+		this.bounceDefinition = bounceDefinition;
 		loadImpressionLog(impressionName);
 		loadSeverlog(serverName);
 		loadClickLog(clickName);
@@ -299,7 +302,7 @@ public class Campaign {
 
 		int myBounces = 0;
 		for (ServerEntry serverEntry: serverEntryArray) {
-			if (serverEntry.getPagesViewed() <= 1){
+			if (serverEntry.getPagesViewed() <= bounceDefinition){
 				myBounces += 1;
 			}
 		}
@@ -310,7 +313,7 @@ public class Campaign {
 		int bounces = 0;
 
 		for (ServerEntry serverEntry: serverEntryArray) {
-			if (serverEntry.getPagesViewed() <= 1){
+			if (serverEntry.getPagesViewed() <= bounceDefinition){
 				bounces += 1;
 			}
 		}
@@ -718,5 +721,11 @@ public class Campaign {
 
 	public double getTotalCost() {
 		return totalCost;
+	}
+
+	//--SETTERS---------------------------------------------------------------------------------------------------------
+
+	public void setBounceDefinition(int bounceDefinition){
+		this.bounceDefinition = bounceDefinition;
 	}
 }
