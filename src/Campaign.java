@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
  *  Contains data about single campaign
  *  Handles all data manipulation
  */
-public class Campaign {
+public class Campaign implements Serializable {
+	private static final long serialVersionUID = 4518483514452733851L;
+
 	// Log information
 	private ArrayList<Impression> impressions; // Impression Log
 	private ArrayList<Click> clicks; // Click Log
@@ -34,7 +36,6 @@ public class Campaign {
 	private double CPM; // cost-per-thousand impressions
 
 	private int bounceDefinition = 1;
-
 
 	public Campaign(){
 

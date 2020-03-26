@@ -1,3 +1,5 @@
+import java.io.*;
+
 /**
  * Translates user actions into operations on the campaign.
  */
@@ -7,6 +9,7 @@ public class Controller {
 	private GUI gui;
 
 	public void setGUI(GUI gui){
+
 		this.gui = gui;
 	}
 
@@ -16,6 +19,51 @@ public class Controller {
 	 */
 	public void loadNewCampaign(String serverFilePath, String clickFilePath, String impressionFilePath, int bounceDefinition){
 		campaign = new Campaign(serverFilePath, clickFilePath, impressionFilePath, bounceDefinition);
+	}
+
+	/**
+	 * @param fileName of the serialised Campaign file
+	 */
+	public void deserializeCampaign(String fileName){
+		System.out.println("Deserializing campaign ...");
+		long startTime = System.nanoTime();
+		try {
+			FileInputStream file = new FileInputStream(fileName);
+			ObjectInputStream in = new ObjectInputStream(file);
+			this.campaign = (Campaign)in.readObject();
+			in.close();
+			file.close();
+		}
+
+		catch (IOException ex) {
+			System.out.println("IOException is caught");
+		}
+
+		catch (ClassNotFoundException ex) {
+			System.out.println("ClassNotFoundException" + " is caught");
+		}
+		long endTime = System.nanoTime();
+		System.out.println("Method took:" + (endTime - startTime) / 1000000);
+	}
+
+
+	/**
+	 * @param fileName of the file to be serialised
+	 */
+	public void serializeCampaign(String fileName){
+		System.out.println("Serializing campaign ...");
+		long startTime = System.nanoTime();
+		try {
+			FileOutputStream file = new FileOutputStream(fileName);
+			ObjectOutputStream out = new ObjectOutputStream(file);
+			out.writeObject(campaign);
+			out.close();
+			file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		long endTime = System.nanoTime();
+		System.out.println("Method took:" + (endTime - startTime) / 1000000);
 	}
 
 	public double getBounceRate(){

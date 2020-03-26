@@ -1,10 +1,13 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * A single entry from a Server Log
  * Contains information about user's interaction with website after clicking an add
  */
-public class ServerEntry implements Comparable<ServerEntry>{
+public class ServerEntry implements Comparable<ServerEntry>, Serializable {
+    private static final long serialVersionUID = 5156354520869016772L;
+
     private LocalDateTime entryDate;
     private String ID;
     private LocalDateTime exitDate;
