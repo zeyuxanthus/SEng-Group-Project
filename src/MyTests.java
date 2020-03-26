@@ -17,8 +17,7 @@ public class MyTests {
 
     @Test
     public void mergeArrays(){
-        Campaign campaign = new Campaign();
-        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
         ArrayList<Click> myclicks = campaign.getClicks();
         assertNotNull(myclicks.get(0).getContext());
     }
@@ -29,8 +28,7 @@ public class MyTests {
 
     @Test
     public void loadDatasets(){
-        Campaign campaign = new Campaign();
-        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
         assertNotNull(campaign.getClicks());
         assertNotNull(campaign.getImpressions());
         assertNotNull(campaign.getServerEntries());
@@ -38,16 +36,14 @@ public class MyTests {
 
     @Test
     public void datasets(){
-        Campaign campaign = new Campaign();
-        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
         ArrayList<Click> clicks = campaign.getClicks();
         assertEquals(clicks.get(0).getID(), "8895519749317550080");
     }
 
     @Test
     public void filterServerLog(){
-        Campaign campaign = new Campaign();
-        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:01:21", formatter);
         LocalDateTime exitDate = LocalDateTime.parse("2015-01-01 12:04:29", formatter);

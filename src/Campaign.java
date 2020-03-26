@@ -36,20 +36,22 @@ public class Campaign {
 	private int bounceDefinition = 1;
 
 
+	public Campaign(){
+
+	}
 	//--LOADING---------------------------------------------------------------------------------------------------------
 	/**
 	 * Loads all the data from CSV files into arrayLists and calculates the metrics
-	 * @param serverName
-	 * @param clickName
-	 * @param impressionName
+	 * @param bounceDefinition - how bounces are registered
 	 */
-	public void loadLogs(String serverName, String clickName, String impressionName, int bounceDefinition){
+	public Campaign(String serverFilePath, String clickFilePath, String impressionFilePath, int bounceDefinition){
 		this.bounceDefinition = bounceDefinition;
-		loadImpressionLog(impressionName);
-		loadSeverlog(serverName);
-		loadClickLog(clickName);
+		loadImpressionLog(impressionFilePath);
+		loadSeverlog(serverFilePath);
+		loadClickLog(clickFilePath);
 		calculateMetrics(clicks, impressions, serverEntries);
 	}
+
 
 	public void loadClickLog (String clickFileName){
 		ArrayList<Click> clicks = new ArrayList<Click>();

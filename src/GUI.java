@@ -44,7 +44,7 @@ import javafx.stage.WindowEvent;
 
 public class GUI extends Application {
 	private static Controller controller;
-	private static Campaign campaign;
+
 	private static File impressionFile;
 	private static File clicksFile;
 	private static File serverFile;
@@ -60,8 +60,7 @@ public class GUI extends Application {
 	
 	public GUI(Controller con) {
 		this.controller = con;
-		this.campaign = controller.getCampaign();
-		GUI.launch(GUI.class);
+		launch();
 	}
 
 
@@ -202,18 +201,18 @@ public class GUI extends Application {
 		TextField totalCostField = new TextField();
 		TextField conversionRateField = new TextField();
 		
-		bounceRateField.setText("" + campaign.getBounceRate());
-		noImpressionsField.setText("" + campaign.getTotalImpressions());
-		noClicksField.setText("" + campaign.getTotalClicks());
-		noUniquesField.setText("" +campaign.getTotalUnique());
-		noBouncesField.setText("" + campaign.getTotalBounces());
-		noConversionsField.setText("" + campaign.getTotalConversions());
-		ctrField.setText("" + campaign.getCTR());
-		cpaField.setText("" + campaign.getCPA());
-		cpcField.setText("" + campaign.getCPC());
-		cpmField.setText("" + campaign.getCPM());
-		totalCostField.setText("" + campaign.getTotalCost());
-		conversionRateField.setText("" + campaign.getConversionRate());
+		bounceRateField.setText("" + controller.getBounceRate());
+		noImpressionsField.setText("" + controller.getTotalImpressions());
+		noClicksField.setText("" + controller.getTotalClicks());
+		noUniquesField.setText("" + controller.getTotalUnique());
+		noBouncesField.setText("" + controller.getTotalBounces());
+		noConversionsField.setText("" + controller.getTotalConversions());
+		ctrField.setText("" + controller.getCTR());
+		cpaField.setText("" + controller.getCPA());
+		cpcField.setText("" + controller.getCPC());
+		cpmField.setText("" + controller.getCPM());
+		totalCostField.setText("" + controller.getTotalCost());
+		conversionRateField.setText("" + controller.getConversionRate());
 		
 		
 		Label granularityLabel = new Label("Granularity");
@@ -442,7 +441,7 @@ public class GUI extends Application {
 	}
 	
 	private void createHistogram(Filter filters) {
-		Histogram histogram = new Histogram(campaign, 5, 2, filters);
+		Histogram histogram = controller.createHistogram(5, 2, filters);
 		ArrayList<Bar> bars = histogram.getBars();
 		
 		final CategoryAxis xAxis = new CategoryAxis();
@@ -547,8 +546,11 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				if (serverFile != null && clicksFile != null && impressionFile != null) {
+					System.out.println(serverFile.getAbsolutePath());
+					System.out.println(clicksFile.getAbsolutePath());
+					System.out.println(impressionFile.getAbsolutePath());
 					//campaign.setBounceDefinition(Integer.parseInt(bounceDefiner.getText()));
-					campaign.loadLogs(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), 1);
+					controller.loadNewCampaign(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), 1);
 					// TODO change 1 to use a bounceDefinition specified by the user
 				}
 				fileOption.setValue("File");
