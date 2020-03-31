@@ -119,8 +119,8 @@ public class Controller {
 	 * @param timeInterval - interval over which each data point is computed
 	 * @param filter - list of filters
 	 */
-	public void createLineGraph(Metric metric, TimeInterval timeInterval,  Filter filter){
-		new LineGraph(metric, timeInterval, campaign, filter);
+	public LineGraph createLineGraph(Metric metric, TimeInterval timeInterval,  Filter filter){
+		return new LineGraph(metric, timeInterval, campaign, filter);
 	}
 
 	/**

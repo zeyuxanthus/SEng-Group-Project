@@ -1,7 +1,7 @@
 /**
- * Contains information about a single Bar in the histogram
+ * Contains information about a single HistogramBar in the histogram
  */
-public class Bar {
+public class HistogramBar {
 
     private int frequency;
     private double lowerBound;
@@ -12,7 +12,7 @@ public class Bar {
      * @param lowerBound - minimum cost
      * @param upperBound - maximum cost
      */
-    public Bar(int frequency, double lowerBound, double upperBound){
+    public HistogramBar(int frequency, double lowerBound, double upperBound){
         this.frequency = frequency;
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;

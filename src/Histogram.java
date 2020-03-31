@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Contains data needed to draw histogram
@@ -12,13 +10,13 @@ public class Histogram {
 
     private int noBars;
     private int accuracy;
-    private ArrayList<Bar> bars;
+    private ArrayList<HistogramBar> histogramBars;
     private Filter filter;
 
     /**
      * @param campaign reference for accessing campaign's data
-     * @param noBars - number of bars/classes in the histogram
-     * @param accuracy - number of decimal places the boundaries of bars are rounded to
+     * @param noBars - number of histogramBars/classes in the histogram
+     * @param accuracy - number of decimal places the boundaries of histogramBars are rounded to
      * @param filter - a set of filters for this chart
      */
     public Histogram(Campaign campaign, int noBars, int accuracy, Filter filter){
@@ -43,7 +41,7 @@ public class Histogram {
      * //TODO Rounding values according to accuracy
      */
     private void calculateBars(){
-        ArrayList<Bar> bars = new ArrayList<Bar>();
+        ArrayList<HistogramBar> histogramBars = new ArrayList<HistogramBar>();
         ArrayList<Click> clicks = campaign.filterClickLog(filter);
         Collections.sort(clicks);
 
@@ -60,7 +58,7 @@ public class Histogram {
         }
         double barWidth = Math.round(((upperBound + lowerBound) / 2) * round) / round;
 
-        // Calculate frequency for each Bar
+        // Calculate frequency for each HistogramBar
         double min = lowestCost;
         double max = min + barWidth;
         int frequency = 0;
@@ -71,7 +69,7 @@ public class Histogram {
             }
             else{
                 do{
-                    bars.add(new Bar(frequency, min, max));
+                    histogramBars.add(new HistogramBar(frequency, min, max));
                     min = max;
                     max = min + barWidth;
                     frequency = 0;
@@ -79,18 +77,18 @@ public class Histogram {
                 frequency = 1;
             }
         }
-        bars.add(new Bar(frequency, min, max));
+        histogramBars.add(new HistogramBar(frequency, min, max));
 
         // For testing
-//        for(Bar bar : bars){
+//        for(HistogramBar bar : histogramBars){
 //            System.out.println(bar.getLowerBound() + " - " + bar.getUpperBound() + " - " + bar.getFrequency());
 //        }
 
-        this.bars = bars;
+        this.histogramBars = histogramBars;
     }
 
-    public ArrayList<Bar> getBars(){
-    	return bars;
+    public ArrayList<HistogramBar> getHistogramBars(){
+    	return histogramBars;
     }
 
     public void setFilter(Filter filter){

@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import javax.swing.plaf.basic.BasicScrollPaneUI.ViewportChangeHandler;
-
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,7 +21,6 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -34,7 +31,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -442,7 +438,7 @@ public class GUI extends Application {
 	
 	private void createHistogram(Filter filters) {
 		Histogram histogram = controller.createHistogram(5, 2, filters);
-		ArrayList<Bar> bars = histogram.getBars();
+		ArrayList<HistogramBar> histogramBars = histogram.getHistogramBars();
 		
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
@@ -455,7 +451,7 @@ public class GUI extends Application {
 		chart.setBarGap(0);
 		chart.setCategoryGap(0);
 		
-		for (Bar b : bars) {
+		for (HistogramBar b : histogramBars) {
 			series1.getData().add(new XYChart.Data(b.getLowerBound() + " - " + b.getUpperBound(), b.getFrequency()));
 		}
 		
