@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  */
 public class LineGraph {
 
-    private Campaign campaign;
+    private Controller controller;
 
     private Metric metric;
     private TimeInterval timeInterval;
@@ -16,10 +16,10 @@ public class LineGraph {
 
     private Filter filter;
 
-    public LineGraph(Metric metric, TimeInterval timeInterval, Campaign campaign, Filter filter){
+    public LineGraph(Metric metric, TimeInterval timeInterval, Controller controller, Filter filter){
         this.metric = metric;
         this.timeInterval = timeInterval;
-        this.campaign = campaign;
+        this.controller = controller;
         this.filter = filter;
         calculateDataPoints();
     }
@@ -84,7 +84,7 @@ public class LineGraph {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalImpressions(){
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<Impression> impressionLog = campaign.filterImpressionLog(filter);
+        ArrayList<Impression> impressionLog = controller.filterImpressionLog(filter);
         Collections.sort(impressionLog);
         LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
 
@@ -97,7 +97,7 @@ public class LineGraph {
                 impressions.add(impression);
             }
             else{
-                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcImpressions(impressions), startDateTime));
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcImpressions(impressions), startDateTime));
 
                 startDateTime = endDateTime;
                 endDateTime = getEndDateTime(startDateTime);
@@ -111,7 +111,7 @@ public class LineGraph {
 
     private ArrayList<DataPoint<Double, LocalDateTime>> calculateImpressionCosts() {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<Impression> impressionLog = campaign.filterImpressionLog(filter);
+        ArrayList<Impression> impressionLog = controller.filterImpressionLog(filter);
         Collections.sort(impressionLog);
         LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
 
@@ -124,7 +124,7 @@ public class LineGraph {
                 impressions.add(impression);
             }
             else{
-                dataPoints.add(new DataPoint<Double, LocalDateTime>(campaign.calcTotalImpCost(impressions), startDateTime));
+                dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcTotalImpCost(impressions), startDateTime));
 
                 startDateTime = endDateTime;
                 endDateTime = getEndDateTime(startDateTime);
@@ -138,7 +138,7 @@ public class LineGraph {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalClicks() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<Click> clickLog = campaign.filterClickLog(filter);
+        ArrayList<Click> clickLog = controller.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -151,7 +151,7 @@ public class LineGraph {
                 clicks.add(click);
             }
             else{
-                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcClicks(clicks), startDateTime));
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcClicks(clicks), startDateTime));
                 startDateTime = endDateTime;
                 endDateTime = getEndDateTime(startDateTime);
                 clicks = new ArrayList<Click>();
@@ -164,7 +164,7 @@ public class LineGraph {
 
     private ArrayList<DataPoint<Double, LocalDateTime>> calculateClickCosts() {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<Click> clickLog = campaign.filterClickLog(filter);
+        ArrayList<Click> clickLog = controller.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -177,7 +177,7 @@ public class LineGraph {
                 clicks.add(click);
             }
             else{
-                dataPoints.add(new DataPoint<Double, LocalDateTime>(campaign.calcTotalClickCost(clicks), startDateTime));
+                dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcTotalClickCost(clicks), startDateTime));
                 startDateTime = endDateTime;
                 endDateTime = getEndDateTime(startDateTime);
                 clicks = new ArrayList<Click>();
@@ -202,7 +202,7 @@ public class LineGraph {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalConversions() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<ServerEntry> serverEntriesLog = campaign.filterServerLog(filter);
+        ArrayList<ServerEntry> serverEntriesLog = controller.filterServerLog(filter);
         Collections.sort(serverEntriesLog);
         LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
 
@@ -215,7 +215,7 @@ public class LineGraph {
                 serverEntries.add(serverEntry);
             }
             else{
-                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcConversions(serverEntries), startDateTime));
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcConversions(serverEntries), startDateTime));
 
                 startDateTime = endDateTime;
                 endDateTime = getEndDateTime(startDateTime);
@@ -241,7 +241,7 @@ public class LineGraph {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateBounces() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<ServerEntry> serverEntriesLog = campaign.filterServerLog(filter);
+        ArrayList<ServerEntry> serverEntriesLog = controller.filterServerLog(filter);
         Collections.sort(serverEntriesLog);
         LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
 
@@ -254,7 +254,7 @@ public class LineGraph {
                 serverEntries.add(serverEntry);
             }
             else{
-                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcBounces(serverEntries), startDateTime));
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcBounces(serverEntries), startDateTime));
 
                 startDateTime = endDateTime;
                 endDateTime = getEndDateTime(startDateTime);
@@ -280,7 +280,7 @@ public class LineGraph {
 
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateTotalUniques() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
-        ArrayList<Click> clickLog = campaign.filterClickLog(filter);
+        ArrayList<Click> clickLog = controller.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -293,7 +293,7 @@ public class LineGraph {
                 clicks.add(click);
             }
             else{
-                dataPoints.add(new DataPoint<Integer, LocalDateTime>(campaign.calcUniques(clicks), startDateTime));
+                dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcUniques(clicks), startDateTime));
                 startDateTime = endDateTime;
                 endDateTime = getEndDateTime(startDateTime);
                 clicks = new ArrayList<Click>();
@@ -329,7 +329,7 @@ public class LineGraph {
 
     private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPCs() {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
-        ArrayList<Click> clickLog = campaign.filterClickLog(filter);
+        ArrayList<Click> clickLog = controller.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
@@ -342,7 +342,7 @@ public class LineGraph {
                 clicks.add(click);
             }
             else{
-                dataPoints.add(new DataPoint<Double, LocalDateTime>(campaign.calcCPC(clicks), startDateTime));
+                dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcCPC(clicks), startDateTime));
                 startDateTime = endDateTime;
                 endDateTime = getEndDateTime(startDateTime);
                 clicks = new ArrayList<Click>();

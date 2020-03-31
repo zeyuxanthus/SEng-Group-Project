@@ -6,7 +6,7 @@ import java.util.Collections;
  */
 public class Histogram {
 
-    private Campaign campaign;
+    private Controller controller;
 
     private int noBars;
     private int accuracy;
@@ -14,13 +14,13 @@ public class Histogram {
     private Filter filter;
 
     /**
-     * @param campaign reference for accessing campaign's data
+     * @param controller reference for accessing campaign's data
      * @param noBars - number of histogramBars/classes in the histogram
      * @param accuracy - number of decimal places the boundaries of histogramBars are rounded to
      * @param filter - a set of filters for this chart
      */
-    public Histogram(Campaign campaign, int noBars, int accuracy, Filter filter){
-        this.campaign = campaign;
+    public Histogram(Controller controller, int noBars, int accuracy, Filter filter){
+        this.controller = controller;
         this.noBars = noBars;
         this.accuracy = accuracy;
         this.filter = filter;
@@ -42,7 +42,7 @@ public class Histogram {
      */
     private void calculateBars(){
         ArrayList<HistogramBar> histogramBars = new ArrayList<HistogramBar>();
-        ArrayList<Click> clicks = campaign.filterClickLog(filter);
+        ArrayList<Click> clicks = controller.filterClickLog(filter);
         Collections.sort(clicks);
 
         // Find range of values
