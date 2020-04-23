@@ -5,12 +5,21 @@
 .root{
 
 }
-
-.combo-box-base {
-	-fx-background-color: -fx-outer-border, -fx-inner-border, white;
-	-fx-shadow-highlight-color: lightgray;
-  	-fx-background-radius: 1px, 1px, 1px, 1px;
+.combo-box-popup .list-view .list-cell{
+	-fx-background-color: #f5c9ac; -fx-border-color: #000000;
 	
+}
+
+.combo-box-popup .list-view .list-cell :hover{
+    -fx-background-color: #ffbbaf;
+}
+.combo-box-base {
+	-fx-background-color: #f5c9ac; -fx-border-color: #000000;
+	
+}
+
+.combo-box-base:hover{
+    -fx-background-color: #ffbbaf;
 }
 
 .region {
@@ -21,4 +30,11 @@
     -fx-background-color: transparent;
 }
 
+.button {
+    -fx-background-color: #f5c9ac; -fx-border-color: #000000;
+}
+
+.button:hover{
+    -fx-background-color: #ffbbaf;
+}
 
