@@ -156,8 +156,6 @@ public class GUI extends Application {
 		Label chart2 = new Label("Create Histogram");
 		Label chart3 = new Label("Create Pie Chart");
 		chartOptions.getChildren().addAll(lineGraphButton, chart1, histogramButton, chart2, pieChartButton, chart3);
-		//chartOptions.setStyle("-fx-background-color: #accaf5;");
-		//metrics.setStyle("-fx-background-color: #accaf5;");
 		BorderPane.setMargin(metrics, new Insets(150, 100, 10, 50));
 		BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
 		
@@ -165,9 +163,7 @@ public class GUI extends Application {
 		mainWindow.setTop(toolBar);
 		mainWindow.setCenter(chartOptions);
 		mainWindow.setRight(metrics);
-		mainWindow.setStyle("-fx-background-color: #accaf5;");
-		toolBar.setStyle("-fx-background-color: #accaf5;");
-		
+		mainWindow.setStyle("-fx-background-color: #c8e3f0;");
 		layering.getChildren().addAll(canvas, mainWindow);
 		canvas.widthProperty().bind(primaryStage.widthProperty());
 		canvas.heightProperty().bind(primaryStage.heightProperty());
@@ -380,8 +376,7 @@ public class GUI extends Application {
 		
 		
 		windowLayout.getChildren().addAll(fileChecks, filterPane, metricsGranularity, createChart);
-		windowLayout.setStyle("-fx-background-color: #accaf5;");
-		
+		windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 		Scene scene = new Scene(windowLayout, 400, 400);
 		newWindow.setScene(scene);
 		newWindow.setTitle("Create Histogram");
@@ -607,7 +602,7 @@ public class GUI extends Application {
 		fileChecks.getChildren().addAll(clicksR,impressionR,serverR);
 		metricsGranularity.getChildren().addAll(granularity);
 		windowLayout.getChildren().addAll(fileChecks,filterPane,metricsGranularity,createLineGraph);
-		windowLayout.setStyle("-fx-background-color: #accaf5;");
+		windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 		
 		Scene scene = new Scene(windowLayout,400,400);
 		window.setScene(scene);
@@ -794,11 +789,11 @@ public class GUI extends Application {
 		fileChooserButtons.setMargin(continueButton, new Insets(10, 30, 10, 200));
 		
 		fileChooserLayout.getChildren().addAll(fileChooserButtons, loadedFileText);
-		fileChooserLayout.setStyle("-fx-background-color: #accaf5;");
+		fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
 		
 		
 		Scene scene = new Scene(fileChooserLayout, 350, 300);
-		scene.getStylesheets().add("/GUI.css");
+		fileChooserLayout.getStylesheets().add("/GUI.css");
 		newWindow.setScene(scene);
 		newWindow.show();
 	}
