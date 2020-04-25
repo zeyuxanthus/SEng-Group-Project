@@ -233,7 +233,7 @@ public class LineGraph {
         ArrayList<DataPoint<Integer, LocalDateTime>> totalClicks = calculateTotalClicks();
 
         for(int i = 0; i < totalConversions.size(); i++){
-            dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(totalConversions.get(i).getMetric() / totalClicks.get(i).getMetric()), totalConversions.get(i).getStartTime()));
+            dataPoints.add(new DataPoint<Double, LocalDateTime>(((double)totalConversions.get(i).getMetric() / totalClicks.get(i).getMetric()), totalConversions.get(i).getStartTime()));
         }
 
         return dataPoints;
@@ -272,9 +272,8 @@ public class LineGraph {
         ArrayList<DataPoint<Integer, LocalDateTime>> impressionCosts = calculateTotalImpressions();
 
         for(int i = 0; i < bounces.size(); i++){
-            dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(bounces.get(i).getMetric() / impressionCosts.get(i).getMetric()), bounces.get(i).getStartTime()));
+            dataPoints.add(new DataPoint<Double, LocalDateTime>(((double)bounces.get(i).getMetric() / impressionCosts.get(i).getMetric()), bounces.get(i).getStartTime()));
         }
-
         return dataPoints;
     }
 
@@ -310,7 +309,7 @@ public class LineGraph {
         ArrayList<DataPoint<Integer, LocalDateTime>> impressions = calculateTotalImpressions();
 
         for(int i = 0; i < clicks.size(); i++){ //TODO add protection when arraylists have different sizes
-            dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(clicks.get(i).getMetric() / impressions.get(i).getMetric()), clicks.get(i).getStartTime()));
+            dataPoints.add(new DataPoint<Double, LocalDateTime>(((double)clicks.get(i).getMetric() / impressions.get(i).getMetric()), clicks.get(i).getStartTime()));
         }
         return dataPoints;
     }
@@ -321,7 +320,7 @@ public class LineGraph {
         ArrayList<DataPoint<Integer, LocalDateTime>> totalConversions = calculateTotalConversions();
 
         for(int i = 0; i < totalCosts.size(); i++){
-            dataPoints.add(new DataPoint<Double, LocalDateTime>((double)(totalCosts.get(i).getMetric() / totalConversions.get(i).getMetric()), totalCosts.get(i).getStartTime()));
+            dataPoints.add(new DataPoint<Double, LocalDateTime>(((double)totalCosts.get(i).getMetric() / totalConversions.get(i).getMetric()), totalCosts.get(i).getStartTime()));
         }
 
         return dataPoints;
