@@ -12,15 +12,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -29,11 +33,17 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -46,12 +56,17 @@ public class GUI extends Application {
 	private static File serverFile;
 	private final String[] metrics = {"Number of Impressions", "Number of Clicks", "Number of Uniques", "Number of Bounces", "Number of Conversions", "Total Cost", "Click Through Rate", "Cost per Acquisition", "Cost per Click", "Cost per thousand Impressions", "Bounce Rate"};
 	private ComboBox<String> fileOption;
-	private final String[] granularityOptions = {"Day", "Week", "Month", "Year"};
+	private final TimeInterval[] granularityOptions = {TimeInterval.HOUR, TimeInterval.DAY, TimeInterval.WEEK, TimeInterval.MONTH};
 	private final String[] genders = {"Male", "Female"};
 	private final String[] ageGroups = {"<25", "25-34", "35-44", "45-54", ">54"};
 	private final String[] incomeGroups = {"Low", "Medium", "High"};
 	private final String[] contextGroups = {"News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel"};
-	
+	final String cssDefault = "-fx-border-color: black;\n"
+			+ "-fx-border-insets: 50.0 10.0 0.0 10.0;\n"
+			+ "-fx-border-width: 3;\n"
+			+ "-fx-padding: 10;\n"
+			+ "-fx-border-style: segments(10,15,15,15) solid;\n";
+
 	public GUI() {}
 	
 	public GUI(Controller con) {
@@ -66,8 +81,7 @@ public class GUI extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
-		mainWindow();
+
 		fileChooserWindow();
 		
 	}
@@ -85,7 +99,11 @@ public class GUI extends Application {
 		BorderPane mainWindow = new BorderPane();
 		HBox toolBar = new HBox();
 		VBox chartOptions = new VBox(10);
-		VBox loadedFiles = new VBox();
+		HBox mainArea = new HBox(10);
+
+		HBox metrics = getMetricsWindow();
+
+
 		
 		String[] fileOptionText = {"Load...", "Save", "Save as..."};
 		
@@ -98,11 +116,12 @@ public class GUI extends Application {
 			}
 		});
 		
+		fileOption.setStyle("-fx-background-color: #accaf5; -fx-border-color: #000000;");
+
 		toolBar.getChildren().add(fileOption);
 		Button lineGraphButton = new Button();
 		Button histogramButton = new Button();
 		Button pieChartButton = new Button();
-		Button dataButton = new Button();
 		
 		histogramButton.setOnAction(new EventHandler<ActionEvent>() {
 			
@@ -113,55 +132,51 @@ public class GUI extends Application {
 			}
 		});
 		
-		dataButton.setOnAction(new EventHandler<ActionEvent>() {
-			
+		lineGraphButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent arg0) {
-				viewMetricsWindow();
-				
+			public void handle(ActionEvent actionEvent) {
+				lineWindow();
 			}
 		});
-		
+
+
 		Image lineGraphimage = new Image(new FileInputStream("lineGraphIcon.png"), 100, 100, true, true);
 		Image histogramimage = new Image(new FileInputStream("barChartIcon.png"), 100, 100, true, true);
 		Image pieChartImage = new Image(new FileInputStream("pieChartIcon.png"), 100, 100, true, true);
-		Image dataimage = new Image(new FileInputStream("dataIcon.png"), 100, 100, true, true);
 		
 		histogramButton.setGraphic(new ImageView(histogramimage));
 		pieChartButton.setGraphic(new ImageView(pieChartImage));
-		dataButton.setGraphic(new ImageView(dataimage));
 		lineGraphButton.setGraphic(new ImageView(lineGraphimage));
 		
 
 		Label chart1 = new Label("Create Line Graph");
 		Label chart2 = new Label("Create Histogram");
 		Label chart3 = new Label("Create Pie Chart");
-		Label chart4 = new Label("View Metrics");
-		chartOptions.getChildren().addAll(lineGraphButton, chart1, histogramButton, chart2, pieChartButton, chart3, dataButton, chart4);
+		chartOptions.getChildren().addAll(lineGraphButton, chart1, histogramButton, chart2, pieChartButton, chart3);
 		
-		BorderPane.setMargin(loadedFiles, new Insets(10, 100, 10, 100));
+		BorderPane.setMargin(metrics, new Insets(150, 100, 10, 50));
 		BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
 		
+
 		mainWindow.setTop(toolBar);
 		mainWindow.setCenter(chartOptions);
-		mainWindow.setRight(loadedFiles);
+		mainWindow.setRight(metrics);
 		
-		mainWindow.setStyle("-fx-background-color: azure;");
+		toolBar.setStyle("-fx-background-color: #accaf5;");
+
 		layering.getChildren().addAll(canvas, mainWindow);
 		canvas.widthProperty().bind(primaryStage.widthProperty());
 		canvas.heightProperty().bind(primaryStage.heightProperty());
 		
 		root.getChildren().add(layering);
-		Scene scene = new Scene(root, 500, 700);
+		Scene scene = new Scene(root, 900, 550);
 		scene.getStylesheets().add("/GUI.css");
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Ad Auction Dashboard");
 		primaryStage.show();
 	}
 	
-	private void viewMetricsWindow() {
-		
-		Stage newWindow = new Stage();
+	private HBox getMetricsWindow() {
 		
 		HBox metricLayout = new HBox(10);
 		VBox metricLabels1 = new VBox(18);
@@ -182,7 +197,9 @@ public class GUI extends Application {
 		Label cpcLabel = new Label("Cost per Conversion");
 		Label cpmLabel = new Label("CPM");
 		Label totalCostLabel = new Label("Total Cost");
-		Label conversionRateLabel = new Label("Conversion Rate");
+        Label conversionRateLabel = new Label("Conversion Rate");
+
+
 		
 		TextField bounceRateField = new TextField();
 		TextField noImpressionsField = new TextField();
@@ -195,7 +212,7 @@ public class GUI extends Application {
 		TextField cpcField = new TextField();
 		TextField cpmField = new TextField();
 		TextField totalCostField = new TextField();
-		TextField conversionRateField = new TextField();
+        TextField conversionRateField = new TextField();
 		
 		bounceRateField.setText("" + controller.getBounceRate());
 		noImpressionsField.setText("" + controller.getTotalImpressions());
@@ -212,15 +229,16 @@ public class GUI extends Application {
 		
 		
 		Label granularityLabel = new Label("Granularity");
-		ComboBox<String> granularityField = new ComboBox<String>(FXCollections.observableArrayList(granularityOptions));
-		granularityField.setValue("Week");
+		ComboBox<TimeInterval> granularityField = new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
+		granularityField.setValue(TimeInterval.WEEK);
 		
 		
 		granularityLayout.getChildren().addAll(granularityLabel, granularityField);
 		metricLabels1.getChildren().addAll(bounceRateLabel, noImpressionsLabel, noClicksLabel, noUniquesLabel, noBouncesLabel, noConversionsLabel);
 		metricBoxes1.getChildren().addAll(bounceRateField, noImpressionsField, noClicksField, noUniquesField, noBouncesField, noConversionsField);
-		metricLabels2.getChildren().addAll(ctrLabel, cpaLabel, cpcLabel, cpmLabel, totalCostLabel, conversionRateLabel);
-		metricBoxes2.getChildren().addAll(ctrField, cpaField, cpcField, cpmField, totalCostField, conversionRateField);
+		metricLabels2.getChildren().addAll(ctrLabel, cpaLabel, cpcLabel, cpmLabel, totalCostLabel);
+		metricBoxes2.getChildren().addAll(ctrField, cpaField, cpcField, cpmField, totalCostField);
+
 		
 		metricLayout.getChildren().addAll(metricLabels1, metricBoxes1, metricLabels2, metricBoxes2);
 		windowLayout.getChildren().addAll(granularityLayout, metricLayout);
@@ -230,12 +248,10 @@ public class GUI extends Application {
 		metricLayout.setMargin(metricLabels2, new Insets(5, 0, 0, 30));
 		metricLayout.setMargin(metricLabels1, new Insets(5, 0, 0, 10));
 		
-		windowLayout.setStyle("-fx-background-color: azure;");
+
+		return metricLayout;
 			
-		Scene scene = new Scene(windowLayout, 600, 500);
-		newWindow.setScene(scene);
-		newWindow.setTitle("Metrics");
-		newWindow.show();
+
 	}
 	
 	private void histogramWindow() {
@@ -259,10 +275,10 @@ public class GUI extends Application {
 		
 		filterPane.getChildren().add(serverFilterOptions);
 		
-		ComboBox<String> granularity = new ComboBox<String>(FXCollections.observableArrayList(granularityOptions));
+		ComboBox<TimeInterval> granularity = new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
 		
 		
-		granularity.setValue("Choose Granularity");
+		granularity.setPromptText("Choose Granularity");
 		
 		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 
@@ -327,8 +343,8 @@ public class GUI extends Application {
 				ArrayList<String> contexts = new ArrayList<String>();
 				ArrayList<String> ageGroups = new ArrayList<String>();
 				ArrayList<String> incomes = new ArrayList<String>();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-				if(filters.get(1).equals("") == false) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				if(filters.get(0).equals("") == false) {
 					startDate = LocalDateTime.parse(filters.get(0), formatter);
 				}
 				if(filters.get(1).equals("") == false) {
@@ -363,7 +379,7 @@ public class GUI extends Application {
 		
 		
 		windowLayout.getChildren().addAll(fileChecks, filterPane, metricsGranularity, createChart);
-		windowLayout.setStyle("-fx-background-color: azure;");
+
 		
 		Scene scene = new Scene(windowLayout, 400, 400);
 		newWindow.setScene(scene);
@@ -467,7 +483,220 @@ public class GUI extends Application {
 		window.show();
 		
 	}
-	
+	private void lineWindow(){
+		Stage window = new Stage();
+
+		RadioButton serverR = new RadioButton("Server file");
+		RadioButton clicksR = new RadioButton("Click file");
+		RadioButton impressionR = new RadioButton("Impression file");
+
+		final ToggleGroup radioGroup = new ToggleGroup();
+		serverR.setToggleGroup(radioGroup);
+		clicksR.setToggleGroup(radioGroup);
+		impressionR.setToggleGroup(radioGroup);
+		serverR.setSelected(true);
+
+		TilePane serverFilterOptions = serverFilters();
+		TilePane clickFilterOptions = clickFilters();
+		TilePane impressionFilterOptions = impressionFilters();
+
+		HBox serverMetricsOptions = addServerHbox();
+		HBox clickMetricsOptions = addClickHbox();
+		HBox impressionMetricsOptions = addImpHbox();
+
+		VBox filterPane = new VBox();
+
+		filterPane.getChildren().addAll(serverFilterOptions,serverMetricsOptions);
+
+		ComboBox<TimeInterval> granularity = new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
+		granularity.setPromptText("Choose Granularity");
+
+		radioGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			@Override
+			public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+
+				RadioButton button =(RadioButton)radioGroup.getSelectedToggle();
+
+				if(button.getText().equals("Server file")){
+					filterPane.getChildren().clear();
+					filterPane.getChildren().addAll(serverFilterOptions,serverMetricsOptions);
+				} else if(button.getText().equals("Click file")){
+					filterPane.getChildren().clear();
+					filterPane.getChildren().addAll(clickFilterOptions,clickMetricsOptions);
+				} else if(button.getText().equals("Impression file")){
+					filterPane.getChildren().clear();
+					filterPane.getChildren().addAll(impressionFilterOptions,impressionMetricsOptions);
+				}
+			}
+		});
+
+		HBox fileChecks = new HBox(10);
+		VBox windowLayout = new VBox(10);
+		HBox metricsGranularity = new HBox(30);
+
+		Button createLineGraph = new Button("Create");
+
+		createLineGraph.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				ArrayList<String> filters = new ArrayList<String>();
+				ArrayList<Metric> metrics = new ArrayList<Metric>();
+				ObservableList<Node> filterNodes = null;
+				ObservableList<Node> metricsNodes = null;
+
+				if(impressionR.isSelected()){
+					filterNodes = impressionFilterOptions.getChildren();
+					metricsNodes = impressionMetricsOptions.getChildren();
+
+				} else if(serverR.isSelected()){
+					filterNodes = serverFilterOptions.getChildren();
+					metricsNodes = serverMetricsOptions.getChildren();
+				} else if(clicksR.isSelected()){
+					filterNodes = clickFilterOptions.getChildren();
+					metricsNodes = clickMetricsOptions.getChildren();
+				}
+
+
+				for (Node n : metricsNodes) {
+					if (n instanceof ChoiceBox) {
+						metrics.add((Metric) ((ChoiceBox)n).getValue());
+					}
+				}
+
+
+				for (Node n : filterNodes) {
+					if (n instanceof TextField) {
+						filters.add(((TextField)n).getText());
+					} else if (n instanceof ComboBox){
+						filters.add((String)((ComboBox)n).getValue());
+					}
+				}
+
+				LocalDateTime startDate = null;
+				LocalDateTime endDate = null;
+				ArrayList<String> context = new ArrayList<String>();
+				ArrayList<String> ageGroups = new ArrayList<String>();
+				ArrayList<String> incomes = new ArrayList<String>();
+				//Same situation as above, this time looking for each filter
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				if(filters.get(0).equals("") == false) {
+					startDate = LocalDateTime.parse(filters.get(0),formatter);
+				}
+				if (filters.get(1).equals("") == false){
+					endDate = LocalDateTime.parse(filters.get(1), formatter);
+				}
+
+				if(impressionR.isSelected()){
+					if (filters.get(2) != null)
+						context.add(filters.get(2));
+					if(filters.get(4) != null)
+						ageGroups.add(filters.get(4));
+					if (filters.get(5) != null)
+						incomes.add(filters.get(5));
+
+					Filter filter = new Filter(startDate,endDate,context,filters.get(3),ageGroups,incomes);
+					createLineChart(metrics.get(0),filter);
+				} else {
+					Filter filter = new Filter(startDate,endDate,context,null,ageGroups,incomes);
+					createLineChart(metrics.get(0),filter);
+				}
+			}
+		});
+
+		fileChecks.getChildren().addAll(clicksR,impressionR,serverR);
+		metricsGranularity.getChildren().addAll(granularity);
+		windowLayout.getChildren().addAll(fileChecks,filterPane,metricsGranularity,createLineGraph);
+
+		Scene scene = new Scene(windowLayout,400,400);
+		window.setScene(scene);
+		window.setTitle("Create LineGraph");
+		window.show();
+
+
+	}
+
+
+	//Metric
+	public HBox addImpHbox(){
+		ChoiceBox<Metric> impressionMetricChoices = new ChoiceBox<Metric>();
+		impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSIONS);
+		impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSION_COST);
+		impressionMetricChoices.getItems().add(Metric.CPA);
+		impressionMetricChoices.getItems().add(Metric.CPM);
+		impressionMetricChoices.getItems().add(Metric.TOTAL_UNIQUES);
+		impressionMetricChoices.setValue(Metric.TOTAL_IMPRESSIONS);
+		Label impressionMetricLabel = new Label("Metric: ");
+		HBox impMetricBox = new HBox(impressionMetricLabel,impressionMetricChoices);
+
+		final String cssDefault = "-fx-border-insets: 10.0 10.0 0.0 10.0;\n"
+				+ "-fx-border-width: 3;\n"
+				+ "-fx-padding: 10;\n";
+
+
+
+		return impMetricBox;
+	}
+
+
+
+
+	public HBox addClickHbox(){
+		ChoiceBox<Metric> clickMetricChoices = new ChoiceBox<Metric>();
+		clickMetricChoices.getItems().add(Metric.TOTAL_CLICKS);
+		clickMetricChoices.getItems().add(Metric.TOTAL_CLICK_COST);
+		clickMetricChoices.getItems().add(Metric.CTR);
+		clickMetricChoices.getItems().add(Metric.CPC);
+		clickMetricChoices.setValue(Metric.TOTAL_CLICKS);
+		Label label = new Label("Metric: ");
+		HBox hBox = new HBox(label,clickMetricChoices);
+	return hBox;
+	}
+
+
+	public HBox addServerHbox(){
+		ChoiceBox<Metric> serverChoices = new ChoiceBox<Metric>();
+		serverChoices.getItems().add(Metric.BOUNCES);
+		serverChoices.getItems().add(Metric.BOUNCE_RATE);
+		serverChoices.getItems().add(Metric.TOTAL_CONVERSIONS);
+		serverChoices.getItems().add(Metric.CONVERSION_RATE);
+		serverChoices.setValue(Metric.BOUNCES);
+		Label label = new Label("Metric: ");
+		HBox labelBox = new HBox(label,serverChoices);
+
+	return labelBox;
+	}
+
+	private void createLineChart(Metric metric, Filter filters){
+		Stage stage = new Stage();
+		stage.setTitle("Line Chart");
+		final CategoryAxis xAxis = new CategoryAxis();
+		final NumberAxis yAxis = new NumberAxis();
+		xAxis.setLabel("Date");
+
+
+		final LineChart<String,Number> lineChart =
+				new LineChart<String,Number>(xAxis,yAxis);
+
+		lineChart.setTitle("impression line chart");
+
+		XYChart.Series series = new XYChart.Series();
+		series.setName("");
+
+		LineGraph lineGraph = new LineGraph(metric, TimeInterval.DAY, controller,filters); //this is where the filters, metric and granularity will be passed
+		ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use it in the graph
+		System.out.println("This is data points" + dataPoints);
+
+		for (DataPoint dp : dataPoints) {
+			series.getData().add(new XYChart.Data(dp.getStartTime().toString(), dp.getMetric()));
+		}
+
+		Scene scene  = new Scene(lineChart,800,600);
+		lineChart.getData().add(series);
+
+		stage.setScene(scene);
+		stage.show();
+
+	}
 	private void fileChooserWindow() {
 		
 		
@@ -482,16 +711,7 @@ public class GUI extends Application {
 		Button loadClicks = new Button("Load Clicks file");
 		Button loadServer = new Button("Load Server file");
 		Button continueButton = new Button("Continue");
-		
-		newWindow.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
-			@Override
-			public void handle(WindowEvent event) {
-				fileOption.setValue("File");
-				
-			}
-		});
-		
 		Label serverFileLabel = new Label();
 		Label clickFileLabel = new Label();
 		Label impressionFileLabel = new Label();
@@ -549,14 +769,19 @@ public class GUI extends Application {
 					controller.loadNewCampaign(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), 1);
 					// TODO change 1 to use a bounceDefinition specified by the user
 				}
-				fileOption.setValue("File");
+				try {
+					mainWindow();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				newWindow.close();
 				
 			}
 		});
 		
 		
-		
+		loadClicks.setStyle("-fx-background-color: #f5c9ac; -fx-border-color: #000000;");
+
 		loadedFileText.getChildren().addAll(clickFileLabel, impressionFileLabel, serverFileLabel);
 		loadedFileText.setMargin(clickFileLabel, new Insets(25, 10, 10, 20));
 		loadedFileText.setMargin(impressionFileLabel, new Insets(16, 10, 10, 20));
@@ -569,8 +794,11 @@ public class GUI extends Application {
 		fileChooserButtons.setMargin(continueButton, new Insets(50, 50, 10, 50));
 		
 		fileChooserLayout.getChildren().addAll(fileChooserButtons, loadedFileText);
-		
+
+
+
 		Scene scene = new Scene(fileChooserLayout, 350, 300);
+		scene.getStylesheets().add("/GUI.css");
 		newWindow.setScene(scene);
 		newWindow.show();
 	}
