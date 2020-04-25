@@ -35,8 +35,6 @@ public class Campaign implements Serializable {
 	private double CPC; // cost-per-click
 	private double CPM; // cost-per-thousand impressions
 
-	private int bounceDefinition = 1;
-
 	private Controller controller;
 
 	public Campaign(){
@@ -45,10 +43,8 @@ public class Campaign implements Serializable {
 	//--LOADING---------------------------------------------------------------------------------------------------------
 	/**
 	 * Loads all the data from CSV files into arrayLists and calculates the metrics
-	 * @param bounceDefinition - how bounces are registered
 	 */
-	public Campaign(String serverFilePath, String clickFilePath, String impressionFilePath, int bounceDefinition, Controller controller){
-		this.bounceDefinition = bounceDefinition;
+	public Campaign(String serverFilePath, String clickFilePath, String impressionFilePath, Controller controller){
 		this.controller = controller;
 		loadImpressionLog(impressionFilePath);
 		loadSeverlog(serverFilePath);
@@ -307,12 +303,4 @@ public class Campaign implements Serializable {
 	}
 
 	//--SETTERS---------------------------------------------------------------------------------------------------------
-
-	public void setBounceDefinition(int bounceDefinition){
-		this.bounceDefinition = bounceDefinition;
-	}
-
-	public int getBounceDefinition() {
-		return bounceDefinition;
-	}
 }

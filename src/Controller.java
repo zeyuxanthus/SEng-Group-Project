@@ -12,6 +12,8 @@ public class Controller {
 	private Campaign campaign;
 	private GUI gui;
 
+	private int bounceDefinition = 1;
+
 	public void setGUI(GUI gui){
 
 		this.gui = gui;
@@ -22,7 +24,8 @@ public class Controller {
 	 * @param bounceDefinition - how bounces are registered for this campaign
 	 */
 	public void loadNewCampaign(String serverFilePath, String clickFilePath, String impressionFilePath, int bounceDefinition){
-		campaign = new Campaign(serverFilePath, clickFilePath, impressionFilePath, bounceDefinition, this);
+		this.bounceDefinition = bounceDefinition;
+		campaign = new Campaign(serverFilePath, clickFilePath, impressionFilePath, this);
 	}
 
 	/**
@@ -484,7 +487,7 @@ public class Controller {
 
 		int myBounces = 0;
 		for (ServerEntry serverEntry: serverEntryArray) {
-			if (serverEntry.getPagesViewed() <= campaign.getBounceDefinition()){
+			if (serverEntry.getPagesViewed() <= bounceDefinition){
 				myBounces += 1;
 			}
 		}
@@ -495,7 +498,7 @@ public class Controller {
 		int bounces = 0;
 
 		for (ServerEntry serverEntry: serverEntryArray) {
-			if (serverEntry.getPagesViewed() <= campaign.getBounceDefinition()){
+			if (serverEntry.getPagesViewed() <= bounceDefinition){
 				bounces += 1;
 			}
 		}

@@ -18,7 +18,7 @@ public class MyTests {
     @Test
     public void mergeArrays(){
         Controller controller = new Controller();
-        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1, controller);
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
         ArrayList<Click> myclicks = campaign.getClicks();
         assertNotNull(myclicks.get(0).getContext());
     }
@@ -30,7 +30,7 @@ public class MyTests {
     @Test
     public void loadDatasets(){
         Controller controller = new Controller();
-        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1, controller);
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
         assertNotNull(campaign.getClicks());
         assertNotNull(campaign.getImpressions());
         assertNotNull(campaign.getServerEntries());
@@ -39,7 +39,7 @@ public class MyTests {
     @Test
     public void datasets(){
         Controller controller = new Controller();
-        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1, controller);
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
         ArrayList<Click> clicks = campaign.getClicks();
         assertEquals(clicks.get(0).getID(), "8895519749317550080");
     }
