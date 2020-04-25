@@ -1,9 +1,11 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Information about a single Click
  */
-public class Click implements Comparable<Click> {
+public class Click implements Comparable<Click>, Serializable {
+    private static final long serialVersionUID = 8795186897781278288L;
 
     private LocalDateTime dateTime; // date and time
     private String ID; // uniquely identifies a user

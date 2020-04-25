@@ -1,18 +1,15 @@
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+//import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 
 public class MyTests {
-
-
-
-
-
-
 
     /**
      *     checking whether after merging the array that the clicks have impression features filled out
@@ -20,8 +17,8 @@ public class MyTests {
 
     @Test
     public void mergeArrays(){
-        Campaign campaign = new Campaign();
-        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv");
+        Controller controller = new Controller();
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
         ArrayList<Click> myclicks = campaign.getClicks();
         assertNotNull(myclicks.get(0).getContext());
     }
@@ -32,8 +29,8 @@ public class MyTests {
 
     @Test
     public void loadDatasets(){
-        Campaign campaign = new Campaign();
-        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv");
+        Controller controller = new Controller();
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
         assertNotNull(campaign.getClicks());
         assertNotNull(campaign.getImpressions());
         assertNotNull(campaign.getServerEntries());
@@ -41,16 +38,16 @@ public class MyTests {
 
     @Test
     public void datasets(){
-        Campaign campaign = new Campaign();
-        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv");
+        Controller controller = new Controller();
+        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
         ArrayList<Click> clicks = campaign.getClicks();
         assertEquals(clicks.get(0).getID(), "8895519749317550080");
     }
 
     @Test
     public void filterServerLog(){
-        Campaign campaign = new Campaign();
-        campaign.loadLogs("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv");
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:01:21", formatter);
         LocalDateTime exitDate = LocalDateTime.parse("2015-01-01 12:04:29", formatter);
@@ -59,7 +56,7 @@ public class MyTests {
         String gender = null;
         ArrayList<String> ageGroup = new ArrayList<>();
         Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
-        assertEquals(7, campaign.filterServerLog(filter).size());
+        assertEquals(7, controller.filterServerLog(filter).size());
     }
 
     @Test
@@ -124,22 +121,22 @@ public class MyTests {
 
     @Test
     public void totalCost(){
-        Campaign myCampaign = new Campaign();
-        assertEquals(110, myCampaign.calcTotalCost(impressions, clicks) );
+        Controller myController = new Controller();
+        assertEquals(110, myController.calcTotalCost(impressions, clicks) );
 
     }
 
     @Test
     public void numImpressions(){
-        Campaign myCampaign = new Campaign();
-        assertEquals(10, myCampaign.calcImpressions(impressions));
+        Controller myController = new Controller();
+        assertEquals(10, myController.calcImpressions(impressions));
 
     }
 
     @Test
     public void impCost(){
-        Campaign myCampaign = new Campaign();
-        assertEquals(55, myCampaign.calcTotalImpCost(impressions));
+        Controller myController = new Controller();
+        assertEquals(55, myController.calcTotalImpCost(impressions));
 
     }
 
@@ -147,79 +144,79 @@ public class MyTests {
 
     @Test
     public void numClicks(){
-        Campaign myCampaign = new Campaign();
-        assertEquals(10, myCampaign.calcClicks(clicks));
+        Controller myController = new Controller();
+        assertEquals(10, myController.calcClicks(clicks));
     }
 
     @Test
     public void clickCost(){
-        Campaign myCampaign = new Campaign();
-        assertEquals(55, myCampaign.calcTotalClickCost(clicks));
+        Controller myController = new Controller();
+        assertEquals(55, myController.calcTotalClickCost(clicks));
 
     }
 
     @Test
     public void calcConversions(){
-        Campaign myCampaign = new Campaign();
-        assertEquals(9, myCampaign.calcConversions(serverEntryArrayList9));
-        assertEquals(2, myCampaign.calcConversions(serverEntryArrayList2));
+        Controller myController = new Controller();
+        assertEquals(9, myController.calcConversions(serverEntryArrayList9));
+        assertEquals(2, myController.calcConversions(serverEntryArrayList2));
     }
 
 
     @Test
     public void calcConvRate(){
-        Campaign campaign = new Campaign();
-        assertEquals(0.9, campaign.calcConvRate(serverEntryArrayList9, clicks));
-        assertEquals(0.2, campaign.calcConvRate(serverEntryArrayList2, clicks));
+        Controller myController = new Controller();
+        assertEquals(0.9, myController.calcConvRate(serverEntryArrayList9, clicks));
+        assertEquals(0.2, myController.calcConvRate(serverEntryArrayList2, clicks));
     }
 
 
     @Test
     public void calcBounces(){
-        Campaign campaign = new Campaign();
-        assertEquals(2, campaign.calcBounces(serverEntryArrayList2));
-        assertEquals(1, campaign.calcBounces(serverEntryArrayList9));
+        Controller myController = new Controller();
+        assertEquals(2, myController.calcBounces(serverEntryArrayList2));
+        assertEquals(1, myController.calcBounces(serverEntryArrayList9));
     }
 
     @Test
     public void calcBounceRate(){
-        Campaign campaign = new Campaign();
-        assertEquals(0.2, campaign.calcBounceRate(serverEntryArrayList2, clicks));
-        assertEquals(0.1, campaign.calcBounceRate(serverEntryArrayList9, clicks));
+        Controller myController = new Controller();
+        assertEquals(0.2, myController.calcBounceRate(serverEntryArrayList2, clicks));
+        assertEquals(0.1, myController.calcBounceRate(serverEntryArrayList9, clicks));
     }
 
 
     @Test
     public void calcUniques(){
-        Campaign campaign = new Campaign();
-        assertEquals(9, campaign.calcUniques(clicks));
+        Controller myController = new Controller();
+        assertEquals(9, myController.calcUniques(clicks));
     }
 
 
     @Test
     public void calcCTR(){
-        Campaign campaign = new Campaign();
-        assertEquals(1, campaign.calcCTR(clicks, impressions));
+        Controller myController = new Controller();
+        assertEquals(1, myController.calcCTR(clicks, impressions));
     }
 
 
     @Test
     public void calcCPA(){
-        Campaign campaign = new Campaign();
-        assertEquals(55, campaign.calcCPA(impressions, clicks, serverEntryArrayList2));
-        assertEquals(12.222222222222221, campaign.calcCPA(impressions, clicks, serverEntryArrayList9));
+        Controller myController = new Controller();
+        assertEquals(55, myController.calcCPA(impressions, clicks, serverEntryArrayList2));
+        assertEquals(12.222222222222221, myController.calcCPA(impressions, clicks, serverEntryArrayList9));
     }
 
     @Test
     public void calcCPC(){
-        Campaign campaign = new Campaign();
-        assertEquals(5.5, campaign.calcCPC(clicks));
+        Controller myController = new Controller();
+        assertEquals(5.5, myController.calcCPC(clicks));
     }
 
     @Test
     public void calcCPM(){
-        Campaign campaign = new Campaign();
-        assertEquals(5500, campaign.calcCPM(impressions));
+        Controller myController = new Controller();
+        assertEquals(5500, myController.calcCPM(impressions));
     }
 
 

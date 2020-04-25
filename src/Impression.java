@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -5,7 +6,8 @@ import java.time.LocalDateTime;
  * An impression occurs	whenever an ad is shown to a user, regardless of whether
  * they	click onit.
  */
-public class Impression implements Comparable<Impression> {
+public class Impression implements Comparable<Impression>, Serializable {
+    private static final long serialVersionUID = 8193411376130623823L;
 
     private LocalDateTime dateTime; // date and time
     private String ID; // Uniquely identifies a user
