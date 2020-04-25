@@ -1,32 +1,20 @@
 /**
- * Contains information about a single Bar in the histogram
+ * Element of Bar Chart to display categorical data
  */
-public class Bar {
+public class Bar<M, String> {
+    private M metric;// e.g.: 100 or 12.124 - to be displayed on y axis
+    private String category;// e.g.: Monday or 2pm - to be displayed on x axis
 
-    private int frequency;
-    private double lowerBound;
-    private double upperBound;
-
-    /**
-     * @param frequency - number of costs that fit in the bounds
-     * @param lowerBound - minimum cost
-     * @param upperBound - maximum cost
-     */
-    public Bar(int frequency, double lowerBound, double upperBound){
-        this.frequency = frequency;
-        this.lowerBound = lowerBound;
-        this.upperBound = upperBound;
+    public Bar(M metric, String category){
+        this.metric = metric;
+        this.category = category;
     }
 
-    public int getFrequency() {
-        return frequency;
+    public String getCategory() {
+        return category;
     }
 
-    public double getLowerBound() {
-        return lowerBound;
-    }
-
-    public double getUpperBound() {
-        return upperBound;
+    public M getMetric() {
+        return metric;
     }
 }
