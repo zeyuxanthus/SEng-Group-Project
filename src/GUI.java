@@ -236,8 +236,8 @@ public class GUI extends Application {
 		granularityLayout.getChildren().addAll(granularityLabel, granularityField);
 		metricLabels1.getChildren().addAll(bounceRateLabel, noImpressionsLabel, noClicksLabel, noUniquesLabel, noBouncesLabel, noConversionsLabel);
 		metricBoxes1.getChildren().addAll(bounceRateField, noImpressionsField, noClicksField, noUniquesField, noBouncesField, noConversionsField);
-		metricLabels2.getChildren().addAll(ctrLabel, cpaLabel, cpcLabel, cpmLabel, totalCostLabel);
-		metricBoxes2.getChildren().addAll(ctrField, cpaField, cpcField, cpmField, totalCostField);
+		metricLabels2.getChildren().addAll(ctrLabel, cpaLabel, cpcLabel, cpmLabel, totalCostLabel, conversionRateLabel);
+		metricBoxes2.getChildren().addAll(ctrField, cpaField, cpcField, cpmField, totalCostField, conversionRateField);
 
 		
 		metricLayout.getChildren().addAll(metricLabels1, metricBoxes1, metricLabels2, metricBoxes2);
