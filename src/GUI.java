@@ -116,7 +116,6 @@ public class GUI extends Application {
 			}
 		});
 		
-		fileOption.setStyle("-fx-background-color: #accaf5; -fx-border-color: #000000;");
 
 		toolBar.getChildren().add(fileOption);
 		Button lineGraphButton = new Button();
@@ -153,7 +152,6 @@ public class GUI extends Application {
 		Label chart2 = new Label("Create Histogram");
 		Label chart3 = new Label("Create Pie Chart");
 		chartOptions.getChildren().addAll(lineGraphButton, chart1, histogramButton, chart2, pieChartButton, chart3);
-		
 		BorderPane.setMargin(metrics, new Insets(150, 100, 10, 50));
 		BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
 		
@@ -161,9 +159,7 @@ public class GUI extends Application {
 		mainWindow.setTop(toolBar);
 		mainWindow.setCenter(chartOptions);
 		mainWindow.setRight(metrics);
-		
-		toolBar.setStyle("-fx-background-color: #accaf5;");
-
+		mainWindow.setStyle("-fx-background-color: #c8e3f0;");
 		layering.getChildren().addAll(canvas, mainWindow);
 		canvas.widthProperty().bind(primaryStage.widthProperty());
 		canvas.heightProperty().bind(primaryStage.heightProperty());
@@ -213,7 +209,7 @@ public class GUI extends Application {
 		TextField cpmField = new TextField();
 		TextField totalCostField = new TextField();
         TextField conversionRateField = new TextField();
-		
+
 		bounceRateField.setText("" + controller.getBounceRate());
 		noImpressionsField.setText("" + controller.getTotalImpressions());
 		noClicksField.setText("" + controller.getTotalClicks());
@@ -379,8 +375,7 @@ public class GUI extends Application {
 		
 		
 		windowLayout.getChildren().addAll(fileChecks, filterPane, metricsGranularity, createChart);
-
-		
+		windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 		Scene scene = new Scene(windowLayout, 400, 400);
 		newWindow.setScene(scene);
 		newWindow.setTitle("Create Histogram");
@@ -606,6 +601,7 @@ public class GUI extends Application {
 		fileChecks.getChildren().addAll(clicksR,impressionR,serverR);
 		metricsGranularity.getChildren().addAll(granularity);
 		windowLayout.getChildren().addAll(fileChecks,filterPane,metricsGranularity,createLineGraph);
+		windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 
 		Scene scene = new Scene(windowLayout,400,400);
 		window.setScene(scene);
@@ -780,25 +776,27 @@ public class GUI extends Application {
 		});
 		
 		
-		loadClicks.setStyle("-fx-background-color: #f5c9ac; -fx-border-color: #000000;");
-
+		loadServer.setMinWidth(125);
+		loadClicks.setMinWidth(125);
+		continueButton.setMinWidth(125);
+		
 		loadedFileText.getChildren().addAll(clickFileLabel, impressionFileLabel, serverFileLabel);
 		loadedFileText.setMargin(clickFileLabel, new Insets(25, 10, 10, 20));
 		loadedFileText.setMargin(impressionFileLabel, new Insets(16, 10, 10, 20));
 		loadedFileText.setMargin(serverFileLabel, new Insets(19, 10, 10, 20));
 		
 		fileChooserButtons.getChildren().addAll(loadClicks, loadImpressions, loadServer, continueButton);
-		fileChooserButtons.setMargin(loadClicks, new Insets(20, 10, 10, 20));
+		fileChooserButtons.setMargin(loadClicks, new Insets(50, 10, 10, 20));
 		fileChooserButtons.setMargin(loadImpressions, new Insets(10, 10, 10, 20));
 		fileChooserButtons.setMargin(loadServer, new Insets(10, 10, 10, 20));
-		fileChooserButtons.setMargin(continueButton, new Insets(50, 50, 10, 50));
+		fileChooserButtons.setMargin(continueButton, new Insets(10, 30, 10, 200));
 		
 		fileChooserLayout.getChildren().addAll(fileChooserButtons, loadedFileText);
-
-
-
+		fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
+		
+		
 		Scene scene = new Scene(fileChooserLayout, 350, 300);
-		scene.getStylesheets().add("/GUI.css");
+		fileChooserLayout.getStylesheets().add("/GUI.css");
 		newWindow.setScene(scene);
 		newWindow.show();
 	}
