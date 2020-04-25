@@ -1,0 +1,9 @@
+<application>
+  <component name="FileTypeManager" version="17">
+    <extensionMap>
+      <mapping pattern="SerializedCampaign" type="JSON" />
+      <mapping pattern="fileName" type="PLAIN_TEXT" />
+      <mapping pattern="SerialisedCampaign" type="PLAIN_TEXT" />
+    </extensionMap>
+  </component>
+</application>
