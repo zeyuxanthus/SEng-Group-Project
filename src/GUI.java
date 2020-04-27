@@ -104,7 +104,7 @@ public class GUI extends Application {
         VBox chartOptions = new VBox(10);
         HBox mainArea = new HBox(10);
 
-        HBox metrics = getMetricsWindow();
+        VBox metrics = getMetricsWindow();
 
 
         String[] fileOptionText = {"Load...", "Save", "Save as..."};
@@ -174,8 +174,10 @@ public class GUI extends Application {
         primaryStage.show();
     }
 
-    private HBox getMetricsWindow() {
+    private VBox getMetricsWindow() {
 
+    	
+    	
         HBox metricLayout = new HBox(10);
         VBox metricLabels1 = new VBox(18);
         VBox metricLabels2 = new VBox(18);
@@ -183,7 +185,15 @@ public class GUI extends Application {
         VBox metricBoxes2 = new VBox(10);
         VBox windowLayout = new VBox(10);
         HBox granularityLayout = new HBox(10);
+        HBox files = new HBox(10);
+        
+        Label serverLabel = new Label(serverFile.getName());
+        Label impressionLabel = new Label(impressionFile.getName());
+        Label clickLabel = new Label(clicksFile.getName());
 
+        
+        
+        
         Label bounceRateLabel = new Label("Bounce Rate");
         Label noImpressionsLabel = new Label("No. of Impressions");
         Label noClicksLabel = new Label("No. of Clicks");
@@ -239,9 +249,10 @@ public class GUI extends Application {
         metricLabels2.getChildren().addAll(ctrLabel, cpaLabel, cpcLabel, cpmLabel, totalCostLabel, conversionRateLabel);
         metricBoxes2.getChildren().addAll(ctrField, cpaField, cpcField, cpmField, totalCostField, conversionRateField);
 
+        files.getChildren().addAll(clickLabel, impressionLabel, serverLabel);
 
         metricLayout.getChildren().addAll(metricLabels1, metricBoxes1, metricLabels2, metricBoxes2);
-        windowLayout.getChildren().addAll(granularityLayout, metricLayout);
+        windowLayout.getChildren().addAll(files, granularityLayout, metricLayout);
         granularityLayout.setMargin(granularityLabel, new Insets(3, 0, 0, 0));
         windowLayout.setMargin(granularityLayout, new Insets(10, 10, 5, 10));
 
@@ -249,63 +260,27 @@ public class GUI extends Application {
         metricLayout.setMargin(metricLabels1, new Insets(5, 0, 0, 10));
 
 
-        return metricLayout;
+        return windowLayout;
 
 
     }
 
     private void histogramWindow() {
         Stage newWindow = new Stage();
-        final ToggleGroup group = new ToggleGroup();
+        VBox filterPane = new VBox(10);
 
-        RadioButton impressionsCheck = new RadioButton("Impression file");
-        RadioButton clicksCheck = new RadioButton("Click file");
-        RadioButton serverCheck = new RadioButton("Server file");
-
-        VBox filterPane = new VBox();
-
-        impressionsCheck.setToggleGroup(group);
-        clicksCheck.setToggleGroup(group);
-        serverCheck.setToggleGroup(group);
-        serverCheck.setSelected(true);
-
-        TilePane serverFilterOptions = serverFilters();
-        TilePane clickFilterOptions = clickFilters();
         TilePane impressionFilterOptions = impressionFilters();
 
-        filterPane.getChildren().add(serverFilterOptions);
+        filterPane.getChildren().add(impressionFilterOptions);
 
         ComboBox<TimeInterval> granularity =
 				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
 
-
-        granularity.setPromptText("Choose Granularity");
-
-        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-
-
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-
-                RadioButton rb = (RadioButton) group.getSelectedToggle();
-
-                if (rb.getText().equals("Impression file")) {
-                    filterPane.getChildren().clear();
-                    filterPane.getChildren().add(impressionFilterOptions);
-                } else if (rb.getText().equals("Click file")) {
-                    filterPane.getChildren().clear();
-                    filterPane.getChildren().add(clickFilterOptions);
-                } else if (rb.getText().equals("Server file")) {
-                    filterPane.getChildren().clear();
-                    filterPane.getChildren().add(serverFilterOptions);
-                }
-
-            }
-
-        });
-
-        HBox fileChecks = new HBox(10);
+        granularity.setValue(TimeInterval.DAY);
+        Label granLabel = new Label("Granularity: ");
+        
         VBox windowLayout = new VBox(10);
-        HBox metricsGranularity = new HBox(30);
+        HBox metricsGranularity = new HBox(10);
 
         Button createChart = new Button("Create");
 
@@ -316,14 +291,7 @@ public class GUI extends Application {
 
                 ArrayList<String> filters = new ArrayList<String>();
                 ObservableList<Node> filterNodes = null;
-
-                if (impressionsCheck.isSelected()) {
-                    filterNodes = impressionFilterOptions.getChildren();
-                } else if (serverCheck.isSelected()) {
-                    filterNodes = serverFilterOptions.getChildren();
-                } else if (clicksCheck.isSelected()) {
-                    filterNodes = clickFilterOptions.getChildren();
-                }
+               filterNodes = impressionFilterOptions.getChildren();
 
 
                 for (Node n : filterNodes) {
@@ -348,31 +316,26 @@ public class GUI extends Application {
                 }
 
 
-                if (impressionsCheck.isSelected()) {
-                    if (filters.get(2) != null)
-                        contexts.add(filters.get(2));
-                    if (filters.get(4) != null)
-                        ageGroups.add(filters.get(4));
-                    if (filters.get(5) != null)
-                        incomes.add(filters.get(5));
-                    Filter filter = new Filter(startDate, endDate, contexts, filters.get(3), ageGroups, incomes);
-                    createHistogram(filter);
-                } else {
-                    Filter filter = new Filter(startDate, endDate, contexts, null, ageGroups, incomes);
-                    createHistogram(filter);
-                }
+                if (filters.get(2) != null)
+                    contexts.add(filters.get(2));
+                if (filters.get(4) != null)
+                    ageGroups.add(filters.get(4));
+                if (filters.get(5) != null)
+                    incomes.add(filters.get(5));
+                Filter filter = new Filter(startDate, endDate, contexts, filters.get(3), ageGroups, incomes);
+                createHistogram(filter);
+
 
 
             }
 
         });
 
-        fileChecks.getChildren().addAll(clicksCheck, impressionsCheck, serverCheck);
 
-        metricsGranularity.getChildren().addAll(granularity);
+        metricsGranularity.getChildren().addAll(granLabel, granularity);
 
 
-        windowLayout.getChildren().addAll(fileChecks, filterPane, metricsGranularity, createChart);
+        windowLayout.getChildren().addAll(filterPane, metricsGranularity, createChart);
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(windowLayout, 400, 400);
         newWindow.setScene(scene);
@@ -384,41 +347,10 @@ public class GUI extends Application {
         newWindow.show();
     }
 
-    private TilePane serverFilters() {
-        TilePane filters = new TilePane();
 
-        filters.setPrefColumns(3);
-        filters.setPrefRows(2);
-
-        TextField entryDate = new TextField();
-        TextField exitDate = new TextField();
-
-        entryDate.setPromptText("Date From");
-        exitDate.setPromptText("Date Until");
-
-        filters.getChildren().addAll(entryDate, exitDate);
-
-        return filters;
-    }
-
-    private TilePane clickFilters() {
-        TilePane filters = new TilePane();
-
-        filters.setPrefColumns(3);
-        filters.setPrefRows(2);
-
-        TextField entryDate = new TextField();
-        TextField exitDate = new TextField();
-        entryDate.setPromptText("Date From");
-        exitDate.setPromptText("Date Until");
-        filters.getChildren().addAll(entryDate, exitDate);
-
-
-        return filters;
-    }
 
     private TilePane impressionFilters() {
-        TilePane filters = new TilePane();
+        TilePane filters = new TilePane(10, 5);
 
         filters.setPrefColumns(3);
         filters.setPrefRows(2);
@@ -432,6 +364,11 @@ public class GUI extends Application {
         ComboBox<String> gender = new ComboBox<String>(FXCollections.observableArrayList(genders));
         ComboBox<String> income = new ComboBox<String>(FXCollections.observableArrayList(incomeGroups));
 
+        age.setPrefWidth(100);
+        context.setPrefWidth(100);
+        gender.setPrefWidth(100);
+        income.setPrefWidth(100);
+        
         age.setPromptText("Age Group");
         context.setPromptText("Context");
         gender.setPromptText("Gender");
@@ -477,54 +414,19 @@ public class GUI extends Application {
     private void lineWindow() {
         Stage window = new Stage();
 
-        RadioButton serverR = new RadioButton("Server file");
-        RadioButton clicksR = new RadioButton("Click file");
-        RadioButton impressionR = new RadioButton("Impression file");
-
-        final ToggleGroup radioGroup = new ToggleGroup();
-        serverR.setToggleGroup(radioGroup);
-        clicksR.setToggleGroup(radioGroup);
-        impressionR.setToggleGroup(radioGroup);
-        serverR.setSelected(true);
-
-        TilePane serverFilterOptions = serverFilters();
-        TilePane clickFilterOptions = clickFilters();
         TilePane impressionFilterOptions = impressionFilters();
 
-        HBox serverMetricsOptions = addServerHbox();
-        HBox clickMetricsOptions = addClickHbox();
         HBox impressionMetricsOptions = addImpHbox();
-
-        VBox filterPane = new VBox();
-
-        filterPane.getChildren().addAll(serverFilterOptions, serverMetricsOptions);
+        VBox filterPane = new VBox(10);
+        Label granLabel = new Label("Granularity: ");
+        filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
 
         ComboBox<TimeInterval> granularity =
 				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
-        granularity.setPromptText("Choose Granularity");
+        granularity.setValue(TimeInterval.DAY);
 
-        radioGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
-
-                RadioButton button = (RadioButton) radioGroup.getSelectedToggle();
-
-                if (button.getText().equals("Server file")) {
-                    filterPane.getChildren().clear();
-                    filterPane.getChildren().addAll(serverFilterOptions, serverMetricsOptions);
-                } else if (button.getText().equals("Click file")) {
-                    filterPane.getChildren().clear();
-                    filterPane.getChildren().addAll(clickFilterOptions, clickMetricsOptions);
-                } else if (button.getText().equals("Impression file")) {
-                    filterPane.getChildren().clear();
-                    filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
-                }
-            }
-        });
-
-        HBox fileChecks = new HBox(10);
         VBox windowLayout = new VBox(10);
-        HBox metricsGranularity = new HBox(30);
+        HBox metricsGranularity = new HBox(10);
 
         Button createLineGraph = new Button("Create");
 
@@ -535,19 +437,8 @@ public class GUI extends Application {
                 ArrayList<Metric> metrics = new ArrayList<Metric>();
                 ObservableList<Node> filterNodes = null;
                 ObservableList<Node> metricsNodes = null;
-
-                if (impressionR.isSelected()) {
-                    filterNodes = impressionFilterOptions.getChildren();
-                    metricsNodes = impressionMetricsOptions.getChildren();
-
-                } else if (serverR.isSelected()) {
-                    filterNodes = serverFilterOptions.getChildren();
-                    metricsNodes = serverMetricsOptions.getChildren();
-                } else if (clicksR.isSelected()) {
-                    filterNodes = clickFilterOptions.getChildren();
-                    metricsNodes = clickMetricsOptions.getChildren();
-                }
-
+                metricsNodes = impressionMetricsOptions.getChildren();
+                filterNodes = impressionFilterOptions.getChildren();
 
                 for (Node n : metricsNodes) {
                     if (n instanceof ChoiceBox) {
@@ -577,27 +468,21 @@ public class GUI extends Application {
                 if (filters.get(1).equals("") == false) {
                     endDate = LocalDateTime.parse(filters.get(1), formatter);
                 }
+                if (filters.get(2) != null)
+                    context.add(filters.get(2));
+                if (filters.get(4) != null)
+                    ageGroups.add(filters.get(4));
+                if (filters.get(5) != null)
+                    incomes.add(filters.get(5));
 
-                if (impressionR.isSelected()) {
-                    if (filters.get(2) != null)
-                        context.add(filters.get(2));
-                    if (filters.get(4) != null)
-                        ageGroups.add(filters.get(4));
-                    if (filters.get(5) != null)
-                        incomes.add(filters.get(5));
+                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                createLineChart(metrics.get(0), filter, granularity.getValue());
 
-                    Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
-                    createLineChart(metrics.get(0), filter);
-                } else {
-                    Filter filter = new Filter(startDate, endDate, context, null, ageGroups, incomes);
-                    createLineChart(metrics.get(0), filter);
-                }
             }
         });
 
-        fileChecks.getChildren().addAll(clicksR, impressionR, serverR);
-        metricsGranularity.getChildren().addAll(granularity);
-        windowLayout.getChildren().addAll(fileChecks, filterPane, metricsGranularity, createLineGraph);
+        metricsGranularity.getChildren().addAll(granLabel, granularity);
+        windowLayout.getChildren().addAll(filterPane, metricsGranularity, createLineGraph);
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 
         Scene scene = new Scene(windowLayout, 400, 400);
@@ -618,6 +503,16 @@ public class GUI extends Application {
         impressionMetricChoices.getItems().add(Metric.CPM);
         impressionMetricChoices.getItems().add(Metric.TOTAL_UNIQUES);
         impressionMetricChoices.setValue(Metric.TOTAL_IMPRESSIONS);
+        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICKS);
+        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICK_COST);
+        impressionMetricChoices.getItems().add(Metric.CTR);
+        impressionMetricChoices.getItems().add(Metric.CPC);
+        impressionMetricChoices.setValue(Metric.TOTAL_CLICKS);
+        impressionMetricChoices.getItems().add(Metric.BOUNCES);
+        impressionMetricChoices.getItems().add(Metric.BOUNCE_RATE);
+        impressionMetricChoices.getItems().add(Metric.TOTAL_CONVERSIONS);
+        impressionMetricChoices.getItems().add(Metric.CONVERSION_RATE);
+        impressionMetricChoices.setValue(Metric.BOUNCES);
         Label impressionMetricLabel = new Label("Metric: ");
         HBox impMetricBox = new HBox(impressionMetricLabel, impressionMetricChoices);
 
@@ -629,34 +524,7 @@ public class GUI extends Application {
         return impMetricBox;
     }
 
-
-    public HBox addClickHbox() {
-        ChoiceBox<Metric> clickMetricChoices = new ChoiceBox<Metric>();
-        clickMetricChoices.getItems().add(Metric.TOTAL_CLICKS);
-        clickMetricChoices.getItems().add(Metric.TOTAL_CLICK_COST);
-        clickMetricChoices.getItems().add(Metric.CTR);
-        clickMetricChoices.getItems().add(Metric.CPC);
-        clickMetricChoices.setValue(Metric.TOTAL_CLICKS);
-        Label label = new Label("Metric: ");
-        HBox hBox = new HBox(label, clickMetricChoices);
-        return hBox;
-    }
-
-
-    public HBox addServerHbox() {
-        ChoiceBox<Metric> serverChoices = new ChoiceBox<Metric>();
-        serverChoices.getItems().add(Metric.BOUNCES);
-        serverChoices.getItems().add(Metric.BOUNCE_RATE);
-        serverChoices.getItems().add(Metric.TOTAL_CONVERSIONS);
-        serverChoices.getItems().add(Metric.CONVERSION_RATE);
-        serverChoices.setValue(Metric.BOUNCES);
-        Label label = new Label("Metric: ");
-        HBox labelBox = new HBox(label, serverChoices);
-
-        return labelBox;
-    }
-
-    private void createLineChart(Metric metric, Filter filters) {
+    private void createLineChart(Metric metric, Filter filters, TimeInterval interval) {
         Stage stage = new Stage();
         stage.setTitle("Line Chart");
         final CategoryAxis xAxis = new CategoryAxis();
@@ -672,7 +540,7 @@ public class GUI extends Application {
         XYChart.Series series = new XYChart.Series();
         series.setName("");
 
-        LineGraph lineGraph = new LineGraph(metric, TimeInterval.DAY, controller, filters); //this is where the
+        LineGraph lineGraph = new LineGraph(metric, interval, controller, filters); //this is where the
 		// filters, metric and granularity will be passed
         ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use
 		// it in the graph
