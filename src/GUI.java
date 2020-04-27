@@ -1,8 +1,10 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -201,9 +203,9 @@ public class GUI extends Application {
         Label noBouncesLabel = new Label("No. of Bounces");
         Label noConversionsLabel = new Label("No. of Conversions");
         Label ctrLabel = new Label("Click Through Rate");
-        Label cpaLabel = new Label("CPA");
+        Label cpaLabel = new Label("Cost Per Aquisition");
         Label cpcLabel = new Label("Cost per Conversion");
-        Label cpmLabel = new Label("CPM");
+        Label cpmLabel = new Label("Cost per 1000 impressions");
         Label totalCostLabel = new Label("Total Cost");
         Label conversionRateLabel = new Label("Conversion Rate");
 
@@ -252,9 +254,9 @@ public class GUI extends Application {
         files.getChildren().addAll(clickLabel, impressionLabel, serverLabel);
 
         metricLayout.getChildren().addAll(metricLabels1, metricBoxes1, metricLabels2, metricBoxes2);
-        windowLayout.getChildren().addAll(files, granularityLayout, metricLayout);
+        windowLayout.getChildren().addAll(granularityLayout, metricLayout);
         granularityLayout.setMargin(granularityLabel, new Insets(3, 0, 0, 0));
-        windowLayout.setMargin(granularityLayout, new Insets(10, 10, 5, 10));
+        //windowLayout.setMargin(granularityLayout, new Insets(10, 10, 5, 10));
 
         metricLayout.setMargin(metricLabels2, new Insets(5, 0, 0, 30));
         metricLayout.setMargin(metricLabels1, new Insets(5, 0, 0, 10));
@@ -499,14 +501,14 @@ public class GUI extends Application {
         ChoiceBox<Metric> impressionMetricChoices = new ChoiceBox<Metric>();
         impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSIONS);
         impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSION_COST);
-        impressionMetricChoices.getItems().add(Metric.CPA);
-        impressionMetricChoices.getItems().add(Metric.CPM);
+        impressionMetricChoices.getItems().add(Metric.COST_PER_AQUISITION);
+        impressionMetricChoices.getItems().add(Metric.COST_PER_CLICK);
         impressionMetricChoices.getItems().add(Metric.TOTAL_UNIQUES);
         impressionMetricChoices.setValue(Metric.TOTAL_IMPRESSIONS);
         impressionMetricChoices.getItems().add(Metric.TOTAL_CLICKS);
         impressionMetricChoices.getItems().add(Metric.TOTAL_CLICK_COST);
-        impressionMetricChoices.getItems().add(Metric.CTR);
-        impressionMetricChoices.getItems().add(Metric.CPC);
+        impressionMetricChoices.getItems().add(Metric.CLICK_THROUGH_RATE);
+        impressionMetricChoices.getItems().add(Metric.COST_PER_1000_IMPRESSIONS);
         impressionMetricChoices.setValue(Metric.TOTAL_CLICKS);
         impressionMetricChoices.getItems().add(Metric.BOUNCES);
         impressionMetricChoices.getItems().add(Metric.BOUNCE_RATE);
@@ -586,9 +588,24 @@ public class GUI extends Application {
             public void handle(ActionEvent event) {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Choose Impressions File");
-                impressionFile = fileChooser.showOpenDialog(newWindow);
-                if (impressionFile != null)
-                    impressionFileLabel.setText(impressionFile.getName());
+                File tempFile = fileChooser.showOpenDialog(newWindow);
+                if (tempFile != null) {
+	                try {
+						Scanner input = new Scanner(tempFile);
+						if(input.nextLine().split(",").length == 7) {
+							impressionFile = tempFile;
+							impressionFileLabel.setText(impressionFile.getName());
+						}
+						else {
+							displayError("File contains the wrong number of columns, check it's the right one?");
+						}
+						input.close();
+						
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
             }
         });
 
@@ -596,12 +613,26 @@ public class GUI extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                FileChooser fileChooser = new FileChooser();
+            	FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Choose Clicks File");
-                clicksFile = fileChooser.showOpenDialog(newWindow);
-                if (clicksFile != null)
-                    clickFileLabel.setText(clicksFile.getName());
-
+                File tempFile = fileChooser.showOpenDialog(newWindow);
+                if (tempFile != null) {
+	                try {
+						Scanner input = new Scanner(tempFile);
+						if(input.nextLine().split(",").length == 3) {
+							clicksFile = tempFile;
+							clickFileLabel.setText(clicksFile.getName());
+						}
+						else {
+							displayError("File contains the wrong number of columns, check it's the right one?");
+						}
+						input.close();
+						
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
             }
         });
 
@@ -609,11 +640,26 @@ public class GUI extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Choose Server File");
-                serverFile = fileChooser.showOpenDialog(newWindow);
-                if (serverFile != null)
-                    serverFileLabel.setText(serverFile.getName());
+            	FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Choose Clicks File");
+                File tempFile = fileChooser.showOpenDialog(newWindow);
+                if (tempFile != null) {
+	                try {
+						Scanner input = new Scanner(tempFile);
+						if(input.nextLine().split(",").length == 5) {
+							serverFile = tempFile;
+							serverFileLabel.setText(serverFile.getName());
+						}
+						else {
+							displayError("File contains the wrong number of columns");
+						}
+						input.close();
+						
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
             }
 
         });
@@ -629,14 +675,16 @@ public class GUI extends Application {
                     //campaign.setBounceDefinition(Integer.parseInt(bounceDefiner.getText()));
                     controller.loadNewCampaign(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), 1);
                     // TODO change 1 to use a bounceDefinition specified by the user
+                    try {
+                        mainWindow();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    newWindow.close();
                 }
-                try {
-                    mainWindow();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                else {
+                	displayError("Not enough files selected");
                 }
-                newWindow.close();
-
             }
         });
 
@@ -646,7 +694,7 @@ public class GUI extends Application {
         continueButton.setMinWidth(125);
 
         loadedFileText.getChildren().addAll(clickFileLabel, impressionFileLabel, serverFileLabel);
-        loadedFileText.setMargin(clickFileLabel, new Insets(25, 10, 10, 20));
+        loadedFileText.setMargin(clickFileLabel, new Insets(55, 10, 10, 20));
         loadedFileText.setMargin(impressionFileLabel, new Insets(16, 10, 10, 20));
         loadedFileText.setMargin(serverFileLabel, new Insets(19, 10, 10, 20));
 
@@ -654,7 +702,7 @@ public class GUI extends Application {
         fileChooserButtons.setMargin(loadClicks, new Insets(50, 10, 10, 20));
         fileChooserButtons.setMargin(loadImpressions, new Insets(10, 10, 10, 20));
         fileChooserButtons.setMargin(loadServer, new Insets(10, 10, 10, 20));
-        fileChooserButtons.setMargin(continueButton, new Insets(10, 30, 10, 200));
+        fileChooserButtons.setMargin(continueButton, new Insets(10, 30, 10, 50));
 
         fileChooserLayout.getChildren().addAll(fileChooserButtons, loadedFileText);
         fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
@@ -665,4 +713,15 @@ public class GUI extends Application {
         newWindow.setScene(scene);
         newWindow.show();
     }
+    
+    public void displayError(String error) {
+    	Stage window = new Stage();
+    	window.setTitle("Error");
+    	Label errorLabel = new Label(error);
+    	Scene scene = new Scene(errorLabel, 400, 100);
+    	window.setScene(scene);
+    	window.show();
+    	
+    }
+    
 }
