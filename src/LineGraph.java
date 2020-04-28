@@ -356,6 +356,32 @@ public class LineGraph {
         return dataPoints;
     }
 
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPMs(){
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<Impression> impressionLog = controller.filterImpressionLog(filter);
+        Collections.sort(impressionLog);
+
+        LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<Impression> impressions = new ArrayList<>();
+        while(impressionLog.size() > i){
+            Impression impression = impressionLog.get(i);
+            if (impression.getDateTime().isBefore(endDateTime)){
+                impressions.add(impression);
+            }
+            else {
+                dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcCPM(impressions), startDateTime));
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                impressions = new ArrayList<Impression>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
+    }
+
     /**
      * Increments the startDate of the interval by the amount corresponding to timeInterval
      * @param startDateTime starting dateTime of the interval
