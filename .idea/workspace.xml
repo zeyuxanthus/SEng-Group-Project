@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="">
+    <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="Fix LineGraph calculations related to rates.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" afterDir="false" />
@@ -11,11 +11,12 @@
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Metric.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Metric.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/LineGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LineGraph.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -29,20 +30,21 @@
     <session id="1068642574">
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="6392" />
-          <entry key="PLAIN_TEXT" value="391" />
+          <entry key="JAVA" value="6401" />
+          <entry key="PLAIN_TEXT" value="436" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="7" />
+          <entry key="project.closed" value="9" />
           <entry key="project.open.time.10" value="1" />
-          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.12" value="2" />
+          <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.9" value="2" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -50,16 +52,18 @@
           <entry key="CLASS" value="4" />
           <entry key="CSS" value="1" />
           <entry key="IDEA_MODULE" value="1" />
-          <entry key="JAVA" value="42" />
+          <entry key="JAVA" value="44" />
           <entry key="JSON" value="12" />
           <entry key="PLAIN_TEXT" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages">
         <counts>
-          <entry key="git.branch.compare" value="2" />
+          <entry key="git.branch.checkout.with.rebase" value="1" />
+          <entry key="git.branch.compare" value="3" />
           <entry key="git.branch.create.new" value="1" />
-          <entry key="git.branch.merge" value="4" />
+          <entry key="git.branch.merge" value="8" />
+          <entry key="git.branch.rebase" value="1" />
         </counts>
       </usages-collector>
     </session>
@@ -67,21 +71,9 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Controller.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="30" column="7" selection-start-line="30" selection-start-column="7" selection-end-line="30" selection-end-column="7" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Campaign.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3125">
+            <state relative-caret-position="4471">
               <caret line="303" selection-start-line="303" selection-end-line="303" />
             </state>
           </provider>
@@ -90,10 +82,9 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="355" column="91" lean-forward="true" selection-start-line="354" selection-start-column="7" selection-end-line="355" selection-end-column="91" />
+            <state relative-caret-position="467">
+              <caret line="77" column="43" lean-forward="true" selection-start-line="77" selection-start-column="43" selection-end-line="77" selection-end-column="43" />
               <folding>
-                <element signature="method#calculateTotalImpressions#0;class#LineGraph#0" />
                 <element signature="method#calculateImpressionCosts#0;class#LineGraph#0" />
               </folding>
             </state>
@@ -101,9 +92,18 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Click.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="9" column="52" selection-start-line="9" selection-start-column="52" selection-end-line="9" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MyTests.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="478">
+            <state relative-caret-position="884">
               <caret line="60" selection-start-line="60" selection-end-line="60" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -116,16 +116,7 @@
         <entry file="file://$PROJECT_DIR$/src/GUI.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
-              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/BarChartType.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="12" selection-start-column="12" selection-end-column="12" />
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -143,7 +134,7 @@
         <entry file="file://$PROJECT_DIR$/src/DataPoint.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
-              <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+              <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -151,36 +142,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="582">
-              <caret line="558" column="18" lean-forward="true" selection-start-line="558" selection-start-column="18" selection-end-line="558" selection-end-column="18" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2992#2993#0" expanded="true" />
-                <element signature="e#3007#3008#0" expanded="true" />
-                <element signature="e#4256#4257#0" expanded="true" />
-                <element signature="e#4279#4280#0" expanded="true" />
-                <element signature="e#8021#8035#0" expanded="true" />
-                <element signature="e#9980#9994#0" expanded="true" />
-                <element signature="e#11179#11187#0" expanded="true" />
-                <element signature="e#11907#11915#0" expanded="true" />
-                <element signature="e#11966#11974#0" expanded="true" />
-                <element signature="e#12023#12031#0" expanded="true" />
-                <element signature="e#14523#14531#0" expanded="true" />
-                <element signature="e#14620#14628#0" expanded="true" />
-                <element signature="e#14720#14728#0" expanded="true" />
-                <element signature="e#14814#14822#0" expanded="true" />
-                <element signature="e#15463#15479#0" expanded="true" />
-                <element signature="e#17059#17073#0" expanded="true" />
-                <element signature="e#18325#18333#0" expanded="true" />
-                <element signature="e#18382#18390#0" expanded="true" />
-                <element signature="e#19413#19421#0" expanded="true" />
-                <element signature="e#19472#19480#0" expanded="true" />
-                <element signature="e#19529#19537#0" expanded="true" />
-                <element signature="e#20965#20973#0" expanded="true" />
-                <element signature="e#21732#21740#0" expanded="true" />
-                <element signature="e#22201#22209#0" expanded="true" />
-                <element signature="e#22887#22902#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="274">
+              <caret line="502" column="74" lean-forward="true" selection-start-line="502" selection-start-column="74" selection-end-line="502" selection-end-column="74" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Metric.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="14" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -219,7 +191,6 @@
       <find>clicks</find>
       <find>click</find>
       <find>cpm</find>
-      <find>CPM</find>
       <find>campaign.get</find>
       <find>conversionRate</find>
       <find>launch</find>
@@ -236,6 +207,7 @@
       <find>line</find>
       <find>bounce</find>
       <find>/</find>
+      <find>CPM</find>
     </findStrings>
     <replaceStrings>
       <replace>controller</replace>
@@ -297,8 +269,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1619" />
-    <option name="y" value="-18" />
+    <option name="x" value="221" />
+    <option name="y" value="-23" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
@@ -327,23 +299,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="SEng-Group-Project" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="AdAuction" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-            <path>
-              <item name="SEng-Group-Project" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="AdAuction" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -364,6 +319,23 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="SEng-Group-Project" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="AdAuction" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="SEng-Group-Project" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="AdAuction" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -373,7 +345,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1587820963069" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1587827986314" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -484,6 +456,8 @@
       <workItem from="1585735159372" duration="1201000" />
       <workItem from="1586021160889" duration="29000" />
       <workItem from="1587802687007" duration="3852000" />
+      <workItem from="1587836120615" duration="51000" />
+      <workItem from="1588062847804" duration="688000" />
     </task>
     <task id="LOCAL-00001" summary="Test Git IntelliJ">
       <created>1584892594479</created>
@@ -562,7 +536,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587818168220</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fix LineGraph calculations related to rates.">
+      <created>1587820985047</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1587820985047</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -598,7 +579,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54351000" />
+    <option name="totallyTimeSpent" value="57786000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -610,10 +591,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1928" y="-9" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19936034" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20362474" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -622,16 +603,16 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989339" visible="true" weight="0.23943663" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49840087" visible="true" weight="0.23943663" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32936078" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989339" weight="0.32936078" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.23943663" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.32827735" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50159913" side_tool="true" visible="true" weight="0.23943663" />
+      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.4989339" weight="0.32827735" />
       <window_info anchor="bottom" id="Docker" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -692,7 +673,8 @@
     <MESSAGE value="Filters and calculations now happen in Controller." />
     <MESSAGE value="Merge GUI 1 (merge not fully successful)" />
     <MESSAGE value="Branches merged correctly." />
-    <option name="LAST_COMMIT_MESSAGE" value="Branches merged correctly." />
+    <MESSAGE value="Fix LineGraph calculations related to rates." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix LineGraph calculations related to rates." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -732,20 +714,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Click.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="9" column="52" selection-start-line="9" selection-start-column="52" selection-end-line="9" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Bar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
-          <folding>
-            <element signature="e#476#477#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -780,13 +752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Metric.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="1" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/HistogramBar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -808,6 +773,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="467">
+          <caret line="564" column="1" lean-forward="true" selection-start-line="564" selection-start-column="1" selection-end-line="564" selection-end-column="1" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Campaign.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4471">
+          <caret line="303" selection-start-line="303" selection-end-line="303" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Click.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="9" column="52" selection-start-line="9" selection-start-column="52" selection-end-line="9" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/MyTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="884">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GUI.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/FileDelete.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -815,27 +821,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Campaign.java">
+    <entry file="file://$PROJECT_DIR$/src/DataPoint.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3125">
-          <caret line="303" selection-start-line="303" selection-end-line="303" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GUI.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/MyTests.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="60" selection-start-line="60" selection-end-line="60" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="204">
+          <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -848,62 +837,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="582">
-          <caret line="558" column="18" lean-forward="true" selection-start-line="558" selection-start-column="18" selection-end-line="558" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2992#2993#0" expanded="true" />
-            <element signature="e#3007#3008#0" expanded="true" />
-            <element signature="e#4256#4257#0" expanded="true" />
-            <element signature="e#4279#4280#0" expanded="true" />
-            <element signature="e#8021#8035#0" expanded="true" />
-            <element signature="e#9980#9994#0" expanded="true" />
-            <element signature="e#11179#11187#0" expanded="true" />
-            <element signature="e#11907#11915#0" expanded="true" />
-            <element signature="e#11966#11974#0" expanded="true" />
-            <element signature="e#12023#12031#0" expanded="true" />
-            <element signature="e#14523#14531#0" expanded="true" />
-            <element signature="e#14620#14628#0" expanded="true" />
-            <element signature="e#14720#14728#0" expanded="true" />
-            <element signature="e#14814#14822#0" expanded="true" />
-            <element signature="e#15463#15479#0" expanded="true" />
-            <element signature="e#17059#17073#0" expanded="true" />
-            <element signature="e#18325#18333#0" expanded="true" />
-            <element signature="e#18382#18390#0" expanded="true" />
-            <element signature="e#19413#19421#0" expanded="true" />
-            <element signature="e#19472#19480#0" expanded="true" />
-            <element signature="e#19529#19537#0" expanded="true" />
-            <element signature="e#20965#20973#0" expanded="true" />
-            <element signature="e#21732#21740#0" expanded="true" />
-            <element signature="e#22201#22209#0" expanded="true" />
-            <element signature="e#22887#22902#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="274">
+          <caret line="502" column="74" lean-forward="true" selection-start-line="502" selection-start-column="74" selection-end-line="502" selection-end-column="74" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DataPoint.java">
+    <entry file="file://$PROJECT_DIR$/src/Metric.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="30" column="7" selection-start-line="30" selection-start-column="7" selection-end-line="30" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="187">
+          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="14" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="355" column="91" lean-forward="true" selection-start-line="354" selection-start-column="7" selection-end-line="355" selection-end-column="91" />
+        <state relative-caret-position="467">
+          <caret line="77" column="43" lean-forward="true" selection-start-line="77" selection-start-column="43" selection-end-line="77" selection-end-column="43" />
           <folding>
-            <element signature="method#calculateTotalImpressions#0;class#LineGraph#0" />
             <element signature="method#calculateImpressionCosts#0;class#LineGraph#0" />
           </folding>
         </state>

@@ -66,16 +66,20 @@ public class LineGraph {
             case TOTAL_UNIQUES:
                 dataPoints = calculateTotalUniques();
                 break;
-            case CTR:
+            case CLICK_THROUGH_RATE:
                 dataPoints = calculateCTRs();
                 break;
-            case CPA:
+            case COST_PER_AQUISITION:
                 dataPoints = calculateCPAs();
                 break;
-            case CPC:
+            case COST_PER_CLICK:
                 dataPoints = calculateCPCs();
                 break;
-            case CPM:
+            case COST_PER_1000_IMPRESSIONS:
+               // CLICK_THROUGH_RATE,
+                //        COST_PER_AQUISITION,
+                //        COST_PER_CLICK,
+                //        COST_PER_1000_IMPRESSIONS
                 // impression
                 break;
         }
