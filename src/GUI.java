@@ -237,7 +237,7 @@ public class GUI extends Application {
         conversionRateField.setText("" + controller.getConversionRate());
 
 
-        Label granularityLabel = new Label("Granularity");
+        Label granularityLabel = new Label("Time Interval");
         ComboBox<TimeInterval> granularityField =
 				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
         granularityField.setValue(TimeInterval.WEEK);
@@ -356,11 +356,25 @@ public class GUI extends Application {
 
         filters.setPrefColumns(3);
         filters.setPrefRows(2);
-
+        
+        VBox ageBox = new VBox(5);
+        VBox entryBox = new VBox(5);
+        VBox exitBox = new VBox(5);
+        VBox contextBox = new VBox(5);
+        VBox genderBox = new VBox(5);
+        VBox incomeBox = new VBox(5);
+        
+        Label ageLabel = new Label("Age Group");
+        Label entryLabel = new Label("Date From");
+        Label exitLabel = new Label("Date Until");
+        Label contextLabel = new Label("Context");
+        Label genderLabel = new Label("Gender");
+        Label incomeLabel = new Label("Income");
+        
         TextField entryDate = new TextField();
         TextField exitDate = new TextField();
-        entryDate.setPromptText("Date From");
-        exitDate.setPromptText("Date Until");
+//        entryDate.setPromptText("Date From");
+//        exitDate.setPromptText("Date Until");
         ComboBox<String> age = new ComboBox<String>(FXCollections.observableArrayList(ageGroups));
         ComboBox<String> context = new ComboBox<String>(FXCollections.observableArrayList(contextGroups));
         ComboBox<String> gender = new ComboBox<String>(FXCollections.observableArrayList(genders));
@@ -371,12 +385,19 @@ public class GUI extends Application {
         gender.setPrefWidth(100);
         income.setPrefWidth(100);
         
-        age.setPromptText("Age Group");
-        context.setPromptText("Context");
-        gender.setPromptText("Gender");
-        income.setPromptText("Income");
+//        age.setPromptText("Age Group");
+//        context.setPromptText("Context");
+//        gender.setPromptText("Gender");
+//        income.setPromptText("Income");
 
-        filters.getChildren().addAll(entryDate, exitDate, context, gender, age, income);
+        entryBox.getChildren().addAll(entryLabel, entryDate);
+        exitBox.getChildren().addAll(exitLabel, exitDate);
+        contextBox.getChildren().addAll(contextLabel, context);
+        genderBox.getChildren().addAll(genderLabel, gender);
+        ageBox.getChildren().addAll(ageLabel, age);
+        incomeBox.getChildren().addAll(incomeLabel, income);
+        
+        filters.getChildren().addAll(entryBox, exitBox, contextBox, genderBox, ageBox, incomeBox);
 
         return filters;
     }
@@ -450,11 +471,15 @@ public class GUI extends Application {
 
 
                 for (Node n : filterNodes) {
-                    if (n instanceof TextField) {
-                        filters.add(((TextField) n).getText());
-                    } else if (n instanceof ComboBox) {
-                        filters.add((String) ((ComboBox) n).getValue());
-                    }
+                	if (n instanceof VBox) {
+                		for (Node m : ((VBox) n).getChildren()) {
+                			 if (m instanceof TextField) {
+                                 filters.add(((TextField) m).getText());
+                             } else if (m instanceof ComboBox) {
+                                 filters.add((String) ((ComboBox) m).getValue());
+                             }
+                		}
+                	}
                 }
 
                 LocalDateTime startDate = null;
@@ -537,22 +562,115 @@ public class GUI extends Application {
         final LineChart<String, Number> lineChart =
                 new LineChart<String, Number>(xAxis, yAxis);
 
-        lineChart.setTitle("impression line chart");
+        lineChart.setTitle(metric + " line chart");
 
         XYChart.Series series = new XYChart.Series();
-        series.setName("");
+        series.setName(metric + " per " + interval);
+        
 
         LineGraph lineGraph = new LineGraph(metric, interval, controller, filters); //this is where the
 		// filters, metric and granularity will be passed
         ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use
 		// it in the graph
-        System.out.println("This is data points" + dataPoints);
 
         for (DataPoint dp : dataPoints) {
             series.getData().add(new XYChart.Data(dp.getStartTime().toString(), dp.getMetric()));
         }
 
-        Scene scene = new Scene(lineChart, 800, 600);
+        TilePane impressionFilterOptions = impressionFilters();
+
+        HBox impressionMetricsOptions = addImpHbox();
+        VBox filterPane = new VBox(10);
+        Label granLabel = new Label("Granularity: ");
+        filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
+
+        ComboBox<TimeInterval> granularity =
+				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
+        granularity.setValue(TimeInterval.DAY);
+
+        VBox windowLayout = new VBox(10);
+        HBox metricsGranularity = new HBox(10);
+
+        Button createLineGraph = new Button("Create");
+
+        createLineGraph.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<Metric> metrics = new ArrayList<Metric>();
+                ObservableList<Node> filterNodes = null;
+                ObservableList<Node> metricsNodes = null;
+                metricsNodes = impressionMetricsOptions.getChildren();
+                filterNodes = impressionFilterOptions.getChildren();
+
+                for (Node n : metricsNodes) {
+                    if (n instanceof ChoiceBox) {
+                        metrics.add((Metric) ((ChoiceBox) n).getValue());
+                    }
+                }
+
+
+                for (Node n : filterNodes) {
+                	if (n instanceof VBox) {
+                		for (Node m : ((VBox) n).getChildren()) {
+                			 if (m instanceof TextField) {
+                                 filters.add(((TextField) m).getText());
+                             } else if (m instanceof ComboBox) {
+                                 filters.add((String) ((ComboBox) m).getValue());
+                             }
+                		}
+                	}
+                }
+
+                LocalDateTime startDate = null;
+                LocalDateTime endDate = null;
+                ArrayList<String> context = new ArrayList<String>();
+                ArrayList<String> ageGroups = new ArrayList<String>();
+                ArrayList<String> incomes = new ArrayList<String>();
+                //Same situation as above, this time looking for each filter
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                if (filters.get(0).equals("") == false) {
+                    startDate = LocalDateTime.parse(filters.get(0), formatter);
+                }
+                if (filters.get(1).equals("") == false) {
+                    endDate = LocalDateTime.parse(filters.get(1), formatter);
+                }
+                if (filters.get(2) != null)
+                    context.add(filters.get(2));
+                if (filters.get(4) != null)
+                    ageGroups.add(filters.get(4));
+                if (filters.get(5) != null)
+                    incomes.add(filters.get(5));
+
+                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                LineGraph lineGraph = new LineGraph(metrics.get(0), granularity.getValue(), controller, filter); //this is where the
+        		// filters, metric and granularity will be passed
+                ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use
+        		// it in the graph
+                XYChart.Series series2 = new XYChart.Series();
+                series2.setName(metrics.get(0) + " per " + granularity.getValue());
+                for (DataPoint dp : dataPoints) {
+                    series2.getData().add(new XYChart.Data(dp.getStartTime().toString(), dp.getMetric()));
+                }
+                lineChart.getData().clear();
+                lineChart.getData().add(series2);
+                lineChart.setTitle(metrics.get(0) + " line chart");
+
+            }
+        });
+
+        lineChart.setMinHeight(600);
+        
+        metricsGranularity.getChildren().addAll(granLabel, granularity);
+        HBox metricsAndCreate = new HBox(25);
+        metricsAndCreate.getChildren().addAll(metricsGranularity, createLineGraph);
+        
+        VBox mainWindow = new VBox(20);
+        HBox filterOptions = new HBox(10);
+        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
+        mainWindow.getChildren().addAll(lineChart, filterOptions);
+        mainWindow.setStyle("-fx-background-color: #c8e3f0;");
+        Scene scene = new Scene(mainWindow, 800, 800);
         lineChart.getData().add(series);
 
         stage.setScene(scene);
