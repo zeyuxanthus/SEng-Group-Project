@@ -9,8 +9,8 @@ public enum Metric {
     BOUNCES,
     BOUNCE_RATE,
     TOTAL_UNIQUES,
-    CTR,
-    CPA,
-    CPC,
-    CPM
+    CLICK_THROUGH_RATE,
+    COST_PER_AQUISITION,
+    COST_PER_CLICK,
+    COST_PER_1000_IMPRESSIONS
 }
