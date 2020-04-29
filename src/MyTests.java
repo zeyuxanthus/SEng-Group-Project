@@ -21,9 +21,9 @@ public class MyTests {
     @Test
     public void mergeArrays(){
         Controller controller = new Controller();
-        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
-        ArrayList<Click> myclicks = campaign.getClicks();
-        ArrayList<ServerEntry> myServer = campaign.getServerEntries();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        ArrayList<Click> myclicks = controller.getCampaign().getClicks();
+        ArrayList<ServerEntry> myServer = controller.getCampaign().getServerEntries();
         assertNotNull(myclicks.get(0).getContext());
         assertNotNull(myServer.get(0).getContext());
     }
@@ -468,9 +468,6 @@ public class MyTests {
         assertEquals(a, controller.filterClickLog(filter).size());
     }
 
-
-
-
 /**
  *
  *      Filter by income
@@ -494,17 +491,8 @@ public class MyTests {
         ArrayList<String> ageGroup = new ArrayList<>();
         Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
 
-        int a = 0;
-//        for(Impression i: controller.getCampaign().getImpressions()){
-//            if(i.getIncome().equals("High")){
-//                a++;
-//            }
-//        }
         assertEquals(486104, controller.filterImpressionLog(filter).size());
     }
-
-
-
 
     @Test
     public void filterImpressionLog_byIncome(){
@@ -602,7 +590,7 @@ public class MyTests {
         ArrayList<String> ageGroup = new ArrayList<>();
 
 
-        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:00:02", formatter);
+        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:00:00", formatter);
         LocalDateTime exitDate = LocalDateTime.parse("2015-01-04 00:00:16", formatter);
 
         LocalDateTime entryDate2 = LocalDateTime.parse("2015-01-02 00:00:04", formatter);
@@ -618,12 +606,25 @@ public class MyTests {
         mydatapoints.add(new DataPoint<Integer, LocalDateTime>(22049, entryDate));
         mydatapoints.add(new DataPoint<Integer, LocalDateTime>(32772, entryDate2 ));
 
+        // expecting two whole days between these two dates
         assertEquals(2, datapoints.size());
         assertEquals(33320, datapoints.get(0).getMetric());
-        assertEquals(entryDate, datapoints.get(0).getStartTime());
-        assertEquals(32772, datapoints.get(0).getMetric());
+        //checking first date is date expected from the dataset
+        assertEquals("2015-01-01T12:00:02", datapoints.get(0).getStartTime().toString());
+        assertEquals(33978, datapoints.get(1).getMetric());
     }
 
+    // testing dates are what are expected
+    @Test
+    public void testDates(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime endDateTime;
+        LocalDateTime startDateTime = LocalDateTime.parse("2015-01-01 12:00:02", formatter);
+        endDateTime = startDateTime.plusHours(1);
+
+        assertEquals("2015-01-01T13:00:02",endDateTime.toString());
+
+    }
 
 
     // ------ TEST DRIVEN DEVELOPMENT ----------------------------------------------------------------------------------
@@ -696,7 +697,11 @@ public class MyTests {
      */
 
 
-
+    //test will be written in increment 3
+    @Test
+    public void barChart(){
+        Controller controller = new Controller();
+    }
 
 
 
@@ -711,7 +716,7 @@ public class MyTests {
     @Test
     public void totalCost(){
         Controller myController = new Controller();
-        assertEquals(110, myController.calcTotalCost(impressions, clicks) );
+        assertEquals(110.0, myController.calcTotalCost(impressions, clicks) );
 
     }
 
@@ -725,7 +730,7 @@ public class MyTests {
     @Test
     public void impCost(){
         Controller myController = new Controller();
-        assertEquals(55, myController.calcTotalImpCost(impressions));
+        assertEquals(55.0, myController.calcTotalImpCost(impressions));
 
     }
 
@@ -740,7 +745,7 @@ public class MyTests {
     @Test
     public void clickCost(){
         Controller myController = new Controller();
-        assertEquals(55, myController.calcTotalClickCost(clicks));
+        assertEquals(55.0, myController.calcTotalClickCost(clicks));
 
     }
 
@@ -785,14 +790,14 @@ public class MyTests {
     @Test
     public void calcCTR(){
         Controller myController = new Controller();
-        assertEquals(1, myController.calcCTR(clicks, impressions));
+        assertEquals(1.0, myController.calcCTR(clicks, impressions));
     }
 
 
     @Test
     public void calcCPA(){
         Controller myController = new Controller();
-        assertEquals(55, myController.calcCPA(impressions, clicks, serverEntryArrayList2));
+        assertEquals(55.0, myController.calcCPA(impressions, clicks, serverEntryArrayList2));
         assertEquals(12.222222222222221, myController.calcCPA(impressions, clicks, serverEntryArrayList9));
     }
 
@@ -805,7 +810,7 @@ public class MyTests {
     @Test
     public void calcCPM(){
         Controller myController = new Controller();
-        assertEquals(5500, myController.calcCPM(impressions));
+        assertEquals(5500.0, myController.calcCPM(impressions));
     }
 
 
