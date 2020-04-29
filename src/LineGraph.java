@@ -76,6 +76,7 @@ public class LineGraph {
                 dataPoints = calculateCPCs();
                 break;
             case COST_PER_1000_IMPRESSIONS:
+                dataPoints = calculateCPMs();
                // CLICK_THROUGH_RATE,
                 //        COST_PER_AQUISITION,
                 //        COST_PER_CLICK,
