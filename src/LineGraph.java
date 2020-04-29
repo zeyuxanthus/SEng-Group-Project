@@ -70,16 +70,21 @@ public class LineGraph {
             case TOTAL_UNIQUES:
                 dataPoints = calculateTotalUniques();
                 break;
-            case CTR:
+            case CLICK_THROUGH_RATE:
                 dataPoints = calculateCTRs();
                 break;
-            case CPA:
+            case COST_PER_AQUISITION:
                 dataPoints = calculateCPAs();
                 break;
-            case CPC:
+            case COST_PER_CLICK:
                 dataPoints = calculateCPCs();
                 break;
-            case CPM:
+            case COST_PER_1000_IMPRESSIONS:
+                dataPoints = calculateCPMs();
+               // CLICK_THROUGH_RATE,
+                //        COST_PER_AQUISITION,
+                //        COST_PER_CLICK,
+                //        COST_PER_1000_IMPRESSIONS
                 // impression
                 break;
         }
@@ -354,6 +359,32 @@ public class LineGraph {
                 startDateTime = endDateTime;
                 endDateTime = getEndDateTime(startDateTime);
                 clicks = new ArrayList<Click>();
+                i--;
+            }
+            i++;
+        }
+        return dataPoints;
+    }
+
+    private ArrayList<DataPoint<Double, LocalDateTime>> calculateCPMs(){
+        ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
+        ArrayList<Impression> impressionLog = controller.filterImpressionLog(filter);
+        Collections.sort(impressionLog);
+
+        LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
+        LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        int i = 0;
+        ArrayList<Impression> impressions = new ArrayList<>();
+        while(impressionLog.size() > i){
+            Impression impression = impressionLog.get(i);
+            if (impression.getDateTime().isBefore(endDateTime)){
+                impressions.add(impression);
+            }
+            else {
+                dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcCPM(impressions), startDateTime));
+                startDateTime = endDateTime;
+                endDateTime = getEndDateTime(startDateTime);
+                impressions = new ArrayList<Impression>();
                 i--;
             }
             i++;
