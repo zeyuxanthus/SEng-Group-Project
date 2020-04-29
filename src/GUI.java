@@ -419,6 +419,7 @@ public class GUI extends Application {
         yAxis.setLabel("Frequency");
         chart.setTitle("Total Cost Histogram");
         XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Frequency of each cost range");
         chart.setBarGap(0);
         chart.setCategoryGap(0);
 
@@ -433,6 +434,7 @@ public class GUI extends Application {
         VBox vbox = new VBox(15);
         vbox.getChildren().addAll(chartLabel, chart);
 
+        vbox.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(vbox, 700, 700);
         window.setScene(scene);
         window.show();
