@@ -36,6 +36,10 @@ public class Campaign implements Serializable {
 	private double CPM; // cost-per-thousand impressions
 
 	private Controller controller;
+	public String serverPath;
+	public String clickPath;
+	public String impressionPath;
+
 
 	public Campaign(){
 
@@ -46,6 +50,11 @@ public class Campaign implements Serializable {
 	 */
 	public Campaign(String serverFilePath, String clickFilePath, String impressionFilePath, Controller controller){
 		this.controller = controller;
+
+		this.serverPath = serverFilePath;
+		this.clickPath = clickFilePath;
+		this.impressionPath = impressionFilePath;
+
 		loadImpressionLog(impressionFilePath);
 		loadSeverlog(serverFilePath);
 		loadClickLog(clickFilePath);

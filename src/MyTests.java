@@ -1,26 +1,31 @@
 
 import org.junit.Test;
+import org.testng.Assert;
 //import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
 public class MyTests {
 
+
+
+    //--------- LOADING DATA TESTS -------------------------------------------------------------------------------------
     /**
      *     checking whether after merging the array that the clicks have impression features filled out
      */
-
     @Test
     public void mergeArrays(){
         Controller controller = new Controller();
         Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
         ArrayList<Click> myclicks = campaign.getClicks();
+        ArrayList<ServerEntry> myServer = campaign.getServerEntries();
         assertNotNull(myclicks.get(0).getContext());
+        assertNotNull(myServer.get(0).getContext());
     }
 
     /**
@@ -30,24 +35,55 @@ public class MyTests {
     @Test
     public void loadDatasets(){
         Controller controller = new Controller();
-        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
-        assertNotNull(campaign.getClicks());
-        assertNotNull(campaign.getImpressions());
-        assertNotNull(campaign.getServerEntries());
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        assertNotNull(controller.getCampaign().getClicks());
+        assertNotNull(controller.getCampaign().getImpressions());
+        assertNotNull(controller.getCampaign().getServerEntries());
     }
+
+    /**
+     *      correct data sets are coming through, integration through the campaign and the controller
+     */
 
     @Test
     public void datasets(){
         Controller controller = new Controller();
-        Campaign campaign = new Campaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", controller);
-        ArrayList<Click> clicks = campaign.getClicks();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        ArrayList<Click> clicks = controller.getCampaign().getClicks();
         assertEquals(clicks.get(0).getID(), "8895519749317550080");
     }
 
+
+    // ---------FILTERS TESTING ----------------------------------------------------------------------------------------
+    /**
+     *      checking the filters are being made correctly
+     */
     @Test
-    public void filterServerLog(){
+    public void filters(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:01:21", formatter);
+        LocalDateTime exitDate = LocalDateTime.parse("2015-01-01 12:04:29", formatter);
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = "Male";
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+
+        assertEquals("Male", filter.getGender());
+        assertEquals(entryDate, filter.getStartDate());
+        assertEquals(exitDate, filter.getEndDate());
+
+    }
+
+    /**
+     *      checking the filters are filtering correctly by date on the server log
+     */
+
+    @Test
+    public void filterServerLog_bydate(){
         Controller controller = new Controller();
-        controller.loadNewCampaign("/Users/danielraad/IdeaProjects/TestCode/server_log.csv", "/Users/danielraad/IdeaProjects/TestCode/click_log.csv", "/Users/danielraad/IdeaProjects/TestCode/impression_log.csv", 1);
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:01:21", formatter);
         LocalDateTime exitDate = LocalDateTime.parse("2015-01-01 12:04:29", formatter);
@@ -59,61 +95,614 @@ public class MyTests {
         assertEquals(7, controller.filterServerLog(filter).size());
     }
 
-    @Test
-    public void filterClickLog(){
-
-    }
-
-    @Test
-    public void filterImpressionLog(){
-
-    }
-
-
-
 
     /**
-     * Will test whether the saveGraph method has correctly saved the file
-     * potentially change the route of the file so that Controller saves the file
-     */
-
-//    @Test
-//    public void saveChart(){
-//
-//        Campaign campaign = new Campaign();
-//        LineGraph line = new LineGraph(campaign);
-//        String chart = "graph1";
-//        File chartImage = new File(chart);
-//        line.saveGraph(chart);
-//        assertEquals(true, chartImage.exists());
-//
-//    }
-
-
-
-    /**
-     * checking whether or not the two arraylists produce the same results
+     *      checking the filters are filtering correctly by date on the click log
      */
     @Test
-    public void datapoint(){
-
+    public void filterClickLog_bydate(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:01:21", formatter);
+        LocalDateTime exitDate = LocalDateTime.parse("2015-01-01 12:04:29", formatter);
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(8, controller.filterClickLog(filter).size());
     }
 
-
+    /**
+     *      checking the filters are filtering correctly by date on the impression log
+     */
     @Test
-    public void granularityTesting(){
-
+    public void filterImpressionLog_bydate(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:01:21", formatter);
+        LocalDateTime exitDate = LocalDateTime.parse("2015-01-01 12:04:29", formatter);
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(112, controller.filterImpressionLog(filter).size());
     }
 
 
     /**
-     *  big data base testing the ability to load a million impressions
+     *      Testing filters for age <25
+     */
+
+    @Test
+    public void filterImpressionLog_byageLess(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        ageGroup.add("<25");
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(97050, controller.filterImpressionLog(filter).size());
+    }
+
+    @Test
+    public void filterServerLog_byageLess(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        ageGroup.add("<25");
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(2985, controller.filterServerLog(filter).size());
+    }
+
+
+    @Test
+    public void filterClickLog_byageLess(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        ageGroup.add("<25");
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(2985, controller.filterClickLog(filter).size());
+    }
+
+
+    /**
+     *      Testing filters for age >54
+     */
+
+
+    @Test
+    public void filterImpressionLog_byageMore(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        ageGroup.add(">54");
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(60972, controller.filterImpressionLog(filter).size());
+    }
+
+    @Test
+    public void filterServerLog_byageMore(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        ageGroup.add(">54");
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(1906, controller.filterServerLog(filter).size());
+    }
+
+
+    @Test
+    public void filterClickLog_byageMore(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        ageGroup.add(">54");
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(1906, controller.filterClickLog(filter).size());
+    }
+
+
+    /**
+     *
+     *      Testing filters for multiple age
+     *
+     */
+
+    @Test
+    public void filterImpressionLog_byageMultiple(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        ageGroup.add(">54");
+        ageGroup.add("<25");
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(158022, controller.filterImpressionLog(filter).size());
+    }
+
+    @Test
+    public void filterServerLog_byageMultiple(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        ageGroup.add(">54");
+        ageGroup.add("<25");
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(4891, controller.filterServerLog(filter).size());
+    }
+
+
+    @Test
+    public void filterClickLog_byageMultiple(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        ageGroup.add(">54");
+        ageGroup.add("<25");
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(4891, controller.filterClickLog(filter).size());
+    }
+
+
+    /**
+     *
+     *      Testing filters by gender
+     *
+     */
+
+
+    @Test
+    public void filterImpressionLog_byGender(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = "Female";
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(324635, controller.filterImpressionLog(filter).size());
+    }
+
+    @Test
+    public void filterServerLog_byGender(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = "Male";
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(7988, controller.filterServerLog(filter).size());
+    }
+
+    @Test
+    public void filterClickLog_byGender(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = "Male";
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(7988, controller.filterClickLog(filter).size());
+    }
+
+    @Test
+    public void filterImpressionLog_byAllGender(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(486104, controller.filterImpressionLog(filter).size());
+    }
+
+
+/**
+ *
+ *      Filter by context
+ *
+ */
+
+
+
+    @Test
+    public void filterImpressionLog_byAllContext(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        context.add("News");
+        context.add("Social Media");
+        context.add("Blog");
+        context.add("Shopping");
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+        assertEquals(486104, controller.filterImpressionLog(filter).size());
+    }
+
+
+    @Test
+    public void filterImpressionLog_byContext(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        context.add("News");
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        int a = 0;
+        for(Impression i: controller.getCampaign().getImpressions()){
+            if(i.getContext().equals("News")){
+                a++;
+            }
+        }
+        assertEquals(a, controller.filterImpressionLog(filter).size());
+    }
+
+
+    @Test
+    public void filterServerLog_byContext(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        context.add("News");
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        int a = 0;
+        for(ServerEntry i: controller.getCampaign().getServerEntries()){
+            if(i.getContext().equals("News")){
+                a++;
+            }
+        }
+        assertEquals(a, controller.filterServerLog(filter).size());
+    }
+
+
+    @Test
+    public void filterClickLog_byContext(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        context.add("News");
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        int a = 0;
+        for(Click i: controller.getCampaign().getClicks()){
+            if(i.getContext().equals("News")){
+                a++;
+            }
+        }
+        assertEquals(a, controller.filterClickLog(filter).size());
+    }
+
+
+
+
+/**
+ *
+ *      Filter by income
+ *
+ */
+
+
+    @Test
+    public void filterImpressionLog_byAllIncome(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        income.add("High");
+        income.add("Medium");
+        income.add("Low");
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        int a = 0;
+//        for(Impression i: controller.getCampaign().getImpressions()){
+//            if(i.getIncome().equals("High")){
+//                a++;
+//            }
+//        }
+        assertEquals(486104, controller.filterImpressionLog(filter).size());
+    }
+
+
+
+
+    @Test
+    public void filterImpressionLog_byIncome(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        income.add("High");
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        int a = 0;
+        for(Impression i: controller.getCampaign().getImpressions()){
+            if(i.getIncome().equals("High")){
+                a++;
+            }
+        }
+        assertEquals(a, controller.filterImpressionLog(filter).size());
+    }
+
+
+    @Test
+    public void filterServerLog_byIncome(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        income.add("High");
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        int a = 0;
+        for(ServerEntry i: controller.getCampaign().getServerEntries()){
+            if(i.getIncome().equals("High")){
+                a++;
+            }
+        }
+        assertEquals(a, controller.filterServerLog(filter).size());
+    }
+
+
+
+
+
+
+    @Test
+    public void filterClickLog_byIncome(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        income.add("High");
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        int a = 0;
+        for(Click i: controller.getCampaign().getClicks()){
+            if(i.getIncome().equals("High")){
+                a++;
+            }
+        }
+        assertEquals(a, controller.filterClickLog(filter).size());
+    }
+
+
+
+    //------- TEST LINE GRAPH DATA POINTS ------------------------------------------------------------------------------
+
+    /**
+     *
+     *      Tests for writing the line graph, checking between boundary dates and times
+     *
+     */
+
+    @Test
+    public void datapoints(){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+
+
+        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:00:02", formatter);
+        LocalDateTime exitDate = LocalDateTime.parse("2015-01-04 00:00:16", formatter);
+
+        LocalDateTime entryDate2 = LocalDateTime.parse("2015-01-02 00:00:04", formatter);
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        LineGraph line = new LineGraph(Metric.TOTAL_IMPRESSIONS, TimeInterval.DAY, controller, filter);
+
+        ArrayList<DataPoint> datapoints = line.getDataPoints();
+
+        ArrayList mydatapoints = new ArrayList();
+        mydatapoints.add(new DataPoint<Integer, LocalDateTime>(22049, entryDate));
+        mydatapoints.add(new DataPoint<Integer, LocalDateTime>(32772, entryDate2 ));
+
+        assertEquals(2, datapoints.size());
+        assertEquals(33320, datapoints.get(0).getMetric());
+        assertEquals(entryDate, datapoints.get(0).getStartTime());
+        assertEquals(32772, datapoints.get(0).getMetric());
+    }
+
+
+
+    // ------ TEST DRIVEN DEVELOPMENT ----------------------------------------------------------------------------------
+
+
+    /**
+     *
+     *      TestDrivenDevelopment for saving the charts
      *
      */
     @Test
-    public void millionImpressions(){
+    public void saveChart(){
+
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime entryDate = null;
+        LocalDateTime exitDate = null;
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        LineGraph line = new LineGraph(Metric.TOTAL_IMPRESSIONS, TimeInterval.DAY, controller,  filter);
+        String chart = "graph1";
+        File chartImage = new File(chart);
+        //this function will exist
+        line.saveGraph(chart);
+        assertEquals(true, chartImage.exists());
 
     }
+
+
+    /**
+     *
+     *      TestDrivenDevelopment for saving the campaign
+     *
+     */
+    @Test
+    public void stateCreated(){
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        States state = new States();
+        state.save("Nike", controller.getCampaign().getClicks(), controller.getCampaign().getServerEntries(), controller.getCampaign().getImpressions());
+    }
+
+    @Test
+    public void saveCampaign(){
+            Controller controller = new Controller();
+            controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+            controller.saveCampaign("/Users/danielraad/Desktop/test");
+            File camp = new File("/Users/danielraad/Desktop/test.txt");
+            assertEquals(true, camp.exists());
+    }
+
+    @Test
+    public void loadCampaign(){
+        Controller controller = new Controller();
+        controller.loadCampaign("/Users/danielraad/Desktop/test");
+        Assert.assertNotNull(controller.getCampaign().getClicks());
+    }
+
+
+    /**
+     *
+     *      TestDrivenDevelopment for the BarChart
+     *
+     */
+
+
+
+
+
+
+
+    // ---CALCULATION TESTING -------------------------------------------------------------------------------------------
+
 
     /**
      * Tests for the calculations when an array is being passed through
@@ -219,6 +808,10 @@ public class MyTests {
         assertEquals(5500, myController.calcCPM(impressions));
     }
 
+
+
+
+   // ---PRE DATASETS --------------------------------------------------------------------------------------------------
 
         ArrayList<ServerEntry> serverEntryArrayList9 = new ArrayList() {{
 
