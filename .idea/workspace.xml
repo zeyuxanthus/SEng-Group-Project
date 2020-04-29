@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/junit_4_12.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/States.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/gson_2_8_6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
     <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="Fix LineGraph calculations related to rates.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AdAuction.iml" beforeDir="false" afterPath="$PROJECT_DIR$/AdAuction.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Campaign.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Campaign.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/FileDelete.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/FileDelete.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$10.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$4.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$5.class" afterDir="false" />
@@ -21,24 +14,10 @@
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Histogram.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Histogram.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Campaign.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Campaign.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$1.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Metric.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Metric.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LineGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LineGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MyTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyTests.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,8 +31,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MyTests.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="589" column="87" selection-start-line="589" selection-start-column="87" selection-end-line="589" selection-end-column="87" />
+            <state relative-caret-position="255">
+              <caret line="17" column="7" lean-forward="true" selection-end-line="955" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -61,18 +40,34 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1395">
-              <caret line="96" column="38" selection-start-line="96" selection-start-column="38" selection-end-line="96" selection-end-column="38" />
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
-              <caret line="77" column="43" lean-forward="true" selection-start-line="77" selection-start-column="43" selection-end-line="77" selection-end-column="43" />
+            <state relative-caret-position="195">
+              <caret line="16" column="24" lean-forward="true" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
               <folding>
-                <element signature="method#calculateImpressionCosts#0;class#LineGraph#0" />
+                <element signature="e#3248#3283#0" expanded="true" />
+                <element signature="e#3716#3728#0" expanded="true" />
+                <element signature="e#4620#4654#0" expanded="true" />
+                <element signature="e#5003#5015#0" expanded="true" />
+                <element signature="e#5809#5844#0" expanded="true" />
+                <element signature="e#6167#6174#0" expanded="true" />
+                <element signature="e#6909#6943#0" expanded="true" />
+                <element signature="e#7266#7273#0" expanded="true" />
+                <element signature="e#8015#8049#0" expanded="true" />
+                <element signature="e#8673#8708#0" expanded="true" />
+                <element signature="e#9067#9080#0" expanded="true" />
+                <element signature="e#9895#9929#0" expanded="true" />
+                <element signature="e#10572#10607#0" expanded="true" />
+                <element signature="e#10966#10979#0" expanded="true" />
+                <element signature="e#11785#11819#0" expanded="true" />
+                <element signature="e#12434#12469#0" expanded="true" />
+                <element signature="e#12792#12799#0" expanded="true" />
+                <element signature="e#13529#13563#0" expanded="true" />
+                <element signature="e#14219#14253#0" expanded="true" />
+                <element signature="e#14875#14909#0" expanded="true" />
+                <element signature="e#15232#15239#0" expanded="true" />
+                <element signature="e#15963#15997#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -81,21 +76,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1002">
-              <caret line="41" column="13" lean-forward="true" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
-        <entry file="file://$PROJECT_DIR$/src/Click.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="9" column="52" selection-start-line="9" selection-start-column="52" selection-end-line="9" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/MyTests.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="884">
-              <caret line="60" selection-start-line="60" selection-end-line="60" />
+            <state relative-caret-position="255">
+              <caret line="17" column="32" lean-forward="true" selection-end-line="637" selection-end-column="1" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -106,8 +88,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Campaign.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="771">
-              <caret line="95" column="30" lean-forward="true" selection-start-line="95" selection-start-column="30" selection-end-line="95" selection-end-column="30" />
+            <state relative-caret-position="15">
+              <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -120,8 +102,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            <state relative-caret-position="85">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -148,22 +128,28 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GUI.java">
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9090">
-              <caret line="658" column="28" selection-start-line="658" selection-start-column="17" selection-end-line="658" selection-end-column="28" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="150">
+              <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
+            <state relative-caret-position="14070">
+              <caret line="938" column="10" selection-start-line="938" selection-start-column="10" selection-end-line="938" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Histogram.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-10">
+              <caret line="30" column="33" lean-forward="true" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -173,13 +159,22 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+      <find>chart4</find>
+      <find>chartOptions</find>
+      <find>load</find>
+      <find>get</find>
+      <find>loadLogs</find>
+      <find>getclicks</find>
+      <find>getBounce</find>
+      <find>bounceRate</find>
+      <find>ViewMetricsWindow</find>
       <find>ctr</find>
       <find>clicks</find>
       <find>click</find>
@@ -196,19 +191,11 @@
       <find>impressionSet</find>
       <find>filter</find>
       <find>Campaign</find>
-      <find>line</find>
-      <find>/</find>
       <find>campaign</find>
-      <find>controller.createLine</find>
-      <find>controller.create</find>
-      <find>createLineGraph</find>
-      <find>createLine</find>
-      <find>controller</find>
-      <find>bounceRate</find>
-      <find>lineChar</find>
-      <find>createLineChart</find>
+      <find>line</find>
       <find>bounce</find>
-      <find>createLineC</find>
+      <find>/</find>
+      <find>CPM</find>
     </findStrings>
     <replaceStrings>
       <replace>controller</replace>
@@ -248,14 +235,12 @@
         <option value="$PROJECT_DIR$/src/Bar.java" />
         <option value="$PROJECT_DIR$/src/BarChart.java" />
         <option value="$PROJECT_DIR$/src/Histogram.java" />
+        <option value="$PROJECT_DIR$/src/MyTests.java" />
+        <option value="$PROJECT_DIR$/src/Campaign.java" />
+        <option value="$PROJECT_DIR$/src/Controller.java" />
         <option value="$PROJECT_DIR$/src/GUI.java" />
         <option value="$PROJECT_DIR$/src/DataPoint.java" />
-        <option value="$PROJECT_DIR$/src/State.java" />
-        <option value="$PROJECT_DIR$/src/States.java" />
-        <option value="$PROJECT_DIR$/src/Controller.java" />
         <option value="$PROJECT_DIR$/src/LineGraph.java" />
-        <option value="$PROJECT_DIR$/src/Campaign.java" />
-        <option value="$PROJECT_DIR$/src/MyTests.java" />
       </list>
     </option>
   </component>
@@ -265,11 +250,11 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="367" />
-    <option name="y" value="163" />
-    <option name="width" value="1403" />
-    <option name="height" value="877" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="221" />
+    <option name="y" value="-23" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -292,26 +277,11 @@
     </entry>
   </component>
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="SEng-Group-Project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEng-Group-Project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SEng-Group-Project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SEng-Group-Project" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
       <pane id="PackagesPane" />
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
@@ -338,7 +308,6 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1588154984121" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1587827986314" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -367,68 +336,66 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.MyTests.datapoints">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.Main (1)">
+    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="AdAuction" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MyTests.datapoints" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MyTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="AdAuction" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="MyTests" />
-      <option name="METHOD_NAME" value="datapoints" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyTests.datasets" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="AdAuction" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="MyTests" />
+      <option name="METHOD_NAME" value="datasets" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MyTests.filterClickLog_byageMultiple" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MyTests.filterServerLog" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="AdAuction" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="MyTests" />
-      <option name="METHOD_NAME" value="filterClickLog_byageMultiple" />
+      <option name="METHOD_NAME" value="filterServerLog" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MyTests.loadCampaign" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MyTests.mergeArrays" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="AdAuction" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="MyTests" />
-      <option name="METHOD_NAME" value="loadCampaign" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MyTests.saveCampaign" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="AdAuction" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="MyTests" />
-      <option name="METHOD_NAME" value="saveCampaign" />
+      <option name="METHOD_NAME" value="mergeArrays" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Main" />
-      <item itemvalue="JUnit.MyTests.filterClickLog_byageMultiple" />
-      <item itemvalue="JUnit.MyTests.saveCampaign" />
-      <item itemvalue="JUnit.MyTests.loadCampaign" />
-      <item itemvalue="JUnit.MyTests.datapoints" />
+      <item itemvalue="Application.Main (1)" />
+      <item itemvalue="JUnit.MyTests.mergeArrays" />
+      <item itemvalue="JUnit.MyTests" />
+      <item itemvalue="JUnit.MyTests.datasets" />
+      <item itemvalue="JUnit.MyTests.filterServerLog" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.MyTests.datapoints" />
-        <item itemvalue="Application.Main" />
-        <item itemvalue="JUnit.MyTests.loadCampaign" />
-        <item itemvalue="JUnit.MyTests.saveCampaign" />
-        <item itemvalue="JUnit.MyTests.filterClickLog_byageMultiple" />
+        <item itemvalue="Application.Main (1)" />
+        <item itemvalue="JUnit.MyTests.filterServerLog" />
+        <item itemvalue="JUnit.MyTests.datasets" />
+        <item itemvalue="JUnit.MyTests" />
+        <item itemvalue="JUnit.MyTests.mergeArrays" />
       </list>
     </recent_temporary>
   </component>
@@ -452,10 +419,8 @@
       <workItem from="1585735159372" duration="1201000" />
       <workItem from="1586021160889" duration="29000" />
       <workItem from="1587802687007" duration="3852000" />
-      <workItem from="1587828123857" duration="965000" />
-      <workItem from="1588010950720" duration="8067000" />
-      <workItem from="1588076807061" duration="10497000" />
-      <workItem from="1588148423549" duration="1168000" />
+      <workItem from="1587836120615" duration="51000" />
+      <workItem from="1588062847804" duration="688000" />
     </task>
     <task id="LOCAL-00001" summary="Test Git IntelliJ">
       <created>1584892594479</created>
@@ -545,39 +510,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="MyTests_loadCampaign - 2020.04.28 at 18h 17m 54s.xml">
-      <configuration name="MyTests.loadCampaign" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 21h 32m 15s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyTests_loadCampaign - 2020.04.28 at 18h 25m 06s.xml">
-      <configuration name="MyTests.loadCampaign" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 21h 34m 08s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyTests_loadCampaign - 2020.04.28 at 18h 26m 02s.xml">
-      <configuration name="MyTests.loadCampaign" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 21h 34m 20s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyTests_loadCampaign - 2020.04.28 at 18h 26m 33s.xml">
-      <configuration name="MyTests.loadCampaign" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 21h 37m 06s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyTests_datapoints - 2020.04.28 at 19h 15m 20s.xml">
-      <configuration name="MyTests.datapoints" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 21h 38m 55s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyTests_datapoints - 2020.04.28 at 19h 16m 38s.xml">
-      <configuration name="MyTests.datapoints" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 21h 39m 35s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyTests_datapoints - 2020.04.28 at 19h 18m 19s.xml">
-      <configuration name="MyTests.datapoints" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 21h 58m 52s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyTests_datapoints - 2020.04.28 at 19h 20m 19s.xml">
-      <configuration name="MyTests.datapoints" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 21h 59m 32s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyTests_datapoints - 2020.04.28 at 19h 21m 00s.xml">
-      <configuration name="MyTests.datapoints" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 22h 01m 03s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MyTests_datapoints - 2020.04.28 at 19h 40m 56s.xml">
-      <configuration name="MyTests.datapoints" configurationId="JUnit" />
+    <history-entry file="MyTests_filterServerLog - 2020.03.23 at 22h 32m 16s.xml">
+      <configuration name="MyTests.filterServerLog" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77680000" />
+    <option name="totallyTimeSpent" value="57983000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -589,10 +554,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20362474" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1509299" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -601,7 +565,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49840087" visible="true" weight="0.23943663" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49840087" visible="true" weight="0.23943663" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -621,10 +585,9 @@
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Maven Projects" order="8" />
-      <window_info anchor="right" id="Maven" order="9" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15135929" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26492536" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -633,17 +596,16 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989339" visible="true" weight="0.21065675" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3990099" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.23943663" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32936078" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32970297" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.23943663" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.32673267" />
-      <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" weight="0.32970297" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.32827735" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -653,7 +615,6 @@
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Maven Projects" order="8" />
-      <window_info anchor="right" id="Maven" order="9" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -674,6 +635,18 @@
     <MESSAGE value="Fix LineGraph calculations related to rates." />
     <option name="LAST_COMMIT_MESSAGE" value="Fix LineGraph calculations related to rates." />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Controller.java</url>
+          <line>488</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/com/company/Main.java" />
     <entry file="file://$PROJECT_DIR$/src/View.java" />
@@ -693,10 +666,6 @@
     <entry file="jar://$USER_HOME$/Downloads/gson-2.8.6.jar!/com/google/gson/Gson.class" />
     <entry file="file://$PROJECT_DIR$/SerializedCampaign.json" />
     <entry file="file://$PROJECT_DIR$/SerializedCampaign" />
-    <entry file="file://$PROJECT_DIR$/src/Click.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="9" column="52" selection-start-line="9" selection-start-column="52" selection-end-line="9" selection-end-column="52" />
     <entry file="file://$PROJECT_DIR$/src/Impression.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
@@ -708,6 +677,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/BarChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="45" column="37" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
+          <folding>
+            <element signature="e#1662#1663#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -728,44 +714,38 @@
     <entry file="file://$PROJECT_DIR$/src/HistogramBar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+          <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Histogram.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="18" column="54" selection-start-line="18" selection-start-column="54" selection-end-line="18" selection-end-column="54" />
+        <state relative-caret-position="-10">
+          <caret line="30" column="33" lean-forward="true" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lineGraphIcon.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pieChartIcon.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home/lib/src.zip!/java.base/java/util/function/Predicate.java">
+    <entry file="file://$PROJECT_DIR$/src/BarChartType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="48" column="12" selection-start-line="48" selection-start-column="12" selection-end-line="48" selection-end-column="12" />
+        <state>
+          <caret column="12" selection-start-column="12" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="564" column="1" lean-forward="true" selection-start-line="564" selection-start-column="1" selection-end-line="564" selection-end-column="1" />
+        <state relative-caret-position="255">
+          <caret line="17" column="32" lean-forward="true" selection-end-line="637" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Impression.java">
+    <entry file="file://$PROJECT_DIR$/src/Campaign.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4471">
-          <caret line="303" selection-start-line="303" selection-end-line="303" />
+        <state relative-caret-position="15">
+          <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
         </state>
       </provider>
     </entry>
@@ -776,27 +756,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Filter.java">
+    <entry file="file://$PROJECT_DIR$/src/MyTests.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Nike.txt" />
-    <entry file="file://$PROJECT_DIR$/src/DataPoint.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/BarChart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="60" selection-start-line="60" selection-end-line="60" />
+        <state relative-caret-position="255">
+          <caret line="17" column="7" lean-forward="true" selection-end-line="955" />
           <folding>
-            <element signature="e#1662#1663#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -815,9 +780,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
+    <entry file="file://$PROJECT_DIR$/src/DataPoint.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
+        <state relative-caret-position="180">
           <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
         </state>
       </provider>
@@ -843,31 +808,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Campaign.java">
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="771">
-          <caret line="95" column="30" lean-forward="true" selection-start-line="95" selection-start-column="30" selection-end-line="95" selection-end-column="30" />
+        <state relative-caret-position="14070">
+          <caret line="938" column="10" selection-start-line="938" selection-start-column="10" selection-end-line="938" selection-end-column="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller.java">
+    <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1002">
-          <caret line="41" column="13" lean-forward="true" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
+        <state relative-caret-position="195">
+          <caret line="16" column="24" lean-forward="true" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
           <folding>
-            <element signature="imports" expanded="true" />
-        <state relative-caret-position="467">
-          <caret line="77" column="43" lean-forward="true" selection-start-line="77" selection-start-column="43" selection-end-line="77" selection-end-column="43" />
-          <folding>
-            <element signature="method#calculateImpressionCosts#0;class#LineGraph#0" />
+            <element signature="e#3248#3283#0" expanded="true" />
+            <element signature="e#3716#3728#0" expanded="true" />
+            <element signature="e#4620#4654#0" expanded="true" />
+            <element signature="e#5003#5015#0" expanded="true" />
+            <element signature="e#5809#5844#0" expanded="true" />
+            <element signature="e#6167#6174#0" expanded="true" />
+            <element signature="e#6909#6943#0" expanded="true" />
+            <element signature="e#7266#7273#0" expanded="true" />
+            <element signature="e#8015#8049#0" expanded="true" />
+            <element signature="e#8673#8708#0" expanded="true" />
+            <element signature="e#9067#9080#0" expanded="true" />
+            <element signature="e#9895#9929#0" expanded="true" />
+            <element signature="e#10572#10607#0" expanded="true" />
+            <element signature="e#10966#10979#0" expanded="true" />
+            <element signature="e#11785#11819#0" expanded="true" />
+            <element signature="e#12434#12469#0" expanded="true" />
+            <element signature="e#12792#12799#0" expanded="true" />
+            <element signature="e#13529#13563#0" expanded="true" />
+            <element signature="e#14219#14253#0" expanded="true" />
+            <element signature="e#14875#14909#0" expanded="true" />
+            <element signature="e#15232#15239#0" expanded="true" />
+            <element signature="e#15963#15997#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -900,7 +875,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
-          <last-edited>junit-4.12</last-edited>
+          <last-edited>testng</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -912,7 +887,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>11</last-edited>
+          <last-edited>1.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -936,7 +911,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>lib</last-edited>
+          <last-edited>gson-2.8.6</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
