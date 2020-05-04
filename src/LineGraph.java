@@ -24,6 +24,10 @@ public class LineGraph {
         calculateDataPoints();
     }
 
+    public void saveGraph(String filename){
+
+    }
+
     //--CALCULATIONS----------------------------------------------------------------------------------------------------
 
     /**
@@ -94,6 +98,8 @@ public class LineGraph {
         LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
 
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
+        System.out.println(startDateTime);
+        System.out.println(endDateTime);
         int i = 0;
         ArrayList<Impression> impressions = new ArrayList<Impression>();
         while(impressionLog.size() > i){
@@ -110,6 +116,9 @@ public class LineGraph {
                 i--;
             }
             i++;
+        }
+        for(DataPoint d : dataPoints){
+            System.out.println(d.getMetric());
         }
         return dataPoints;
     }

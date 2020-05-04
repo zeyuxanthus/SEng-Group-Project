@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="gson-2.8.6">
+  <library name="junit-4.12">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Downloads/gson-2.8.6.jar!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.12.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

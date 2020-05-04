@@ -11,12 +11,17 @@ public class Controller {
 
 	private Campaign campaign;
 	private GUI gui;
+	private States state = new States();
 
 	private int bounceDefinition = 1;
 
 	public void setGUI(GUI gui){
 
 		this.gui = gui;
+	}
+
+	public Campaign getCampaign(){
+		return this.campaign;
 	}
 
 	/**
@@ -69,9 +74,77 @@ public class Controller {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		long endTime = System.nanoTime();
-		System.out.println("Method took:" + (endTime - startTime) / 1000000);
+
 	}
+
+//	public void saveCampaign(String filename){
+//		state.save(filename, campaign.getClicks(), campaign.getServerEntries(), campaign.getImpressions());
+//	}
+//
+//	public void loadCampaign(String filename){
+//
+//		long startTime = System.nanoTime();
+//		ArrayList<Object> list = state.loadCampaign(filename);
+//
+//		ArrayList<Click> clicks = new ArrayList<>();
+//		ArrayList<ServerEntry> serverEntries = new ArrayList<>();
+//		ArrayList<Impression> impressions = new ArrayList<>();
+//
+//		for(Object o : list){
+//
+//			if( o instanceof Click){
+//				clicks.add((Click) o);
+//			}
+//
+//			if( o instanceof ServerEntry){
+//				serverEntries.add((ServerEntry) o );
+//			}
+//
+//			if( o instanceof Impression){
+//				impressions.add((Impression) o);
+//			}
+//
+//		}
+//
+//		Campaign campaign = new Campaign(serverEntries, clicks, impressions, this);
+//		this.campaign = campaign;
+//
+//		long endTime = System.nanoTime();
+//		System.out.println("Method took:" + (endTime - startTime) / 1000000);
+//
+//	}
+
+
+
+    public void saveCampaign(String filename){
+	    try {
+            String str = campaign.serverPath + " " + campaign.clickPath + " " + campaign.impressionPath;
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename + ".txt"));
+            writer.write(str);
+            writer.close();
+        }catch(IOException e){
+	        e.printStackTrace();
+        }
+    }
+
+    public void loadCampaign(String filename){
+        long startTime = System.nanoTime();
+	    try {
+	        BufferedReader reader = new BufferedReader(new FileReader(filename + ".txt"));
+	        String line = reader.readLine();
+	        String[] list = line.split(" ");
+            System.out.println(list[0]);
+            campaign = new Campaign(list[0], list[1], list[2], this);
+
+
+        }catch (FileNotFoundException e){
+	        e.printStackTrace();
+        }catch (IOException e){
+	        e.printStackTrace();
+        }
+	    long endTime = System.nanoTime();
+		System.out.println("Method took:" + (endTime - startTime) / 1000000);
+    }
 
 	public double getBounceRate(){
 		return campaign.getBounceRate();

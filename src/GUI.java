@@ -257,7 +257,8 @@ public class GUI extends Application {
         windowLayout.getChildren().addAll(granularityLayout, metricLayout);
         granularityLayout.setMargin(granularityLabel, new Insets(3, 0, 0, 0));
         //windowLayout.setMargin(granularityLayout, new Insets(10, 10, 5, 10));
-
+        
+        granularityLayout.setMargin(granularityLabel, new Insets(0,0,0,10));
         metricLayout.setMargin(metricLabels2, new Insets(5, 0, 0, 30));
         metricLayout.setMargin(metricLabels1, new Insets(5, 0, 0, 10));
 
@@ -296,13 +297,17 @@ public class GUI extends Application {
                filterNodes = impressionFilterOptions.getChildren();
 
 
-                for (Node n : filterNodes) {
-                    if (n instanceof TextField) {
-                        filters.add(((TextField) n).getText());
-                    } else if (n instanceof ComboBox) {
-                        filters.add((String) ((ComboBox) n).getValue());
-                    }
-                }
+               for (Node n : filterNodes) {
+               	if (n instanceof VBox) {
+               		for (Node m : ((VBox) n).getChildren()) {
+               			 if (m instanceof TextField) {
+                                filters.add(((TextField) m).getText());
+                            } else if (m instanceof ComboBox) {
+                                filters.add((String) ((ComboBox) m).getValue());
+                            }
+               		}
+               	}
+               }
 
                 LocalDateTime startDate = null;
                 LocalDateTime endDate = null;
@@ -414,6 +419,7 @@ public class GUI extends Application {
         yAxis.setLabel("Frequency");
         chart.setTitle("Total Cost Histogram");
         XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Frequency of each cost range");
         chart.setBarGap(0);
         chart.setCategoryGap(0);
 
@@ -428,6 +434,7 @@ public class GUI extends Application {
         VBox vbox = new VBox(15);
         vbox.getChildren().addAll(chartLabel, chart);
 
+        vbox.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(vbox, 700, 700);
         window.setScene(scene);
         window.show();
