@@ -7,14 +7,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -25,30 +22,19 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class GUI extends Application {
     private static Controller controller;
@@ -591,6 +577,7 @@ public class GUI extends Application {
         Label granLabel = new Label("Granularity: ");
         filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
 
+
         ComboBox<TimeInterval> granularity =
 				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
         granularity.setValue(TimeInterval.DAY);
@@ -662,7 +649,6 @@ public class GUI extends Application {
                 lineChart.getData().clear();
                 lineChart.getData().add(series2);
                 lineChart.setTitle(metrics.get(0) + " line chart");
-
             }
         });
 
@@ -678,8 +664,9 @@ public class GUI extends Application {
         mainWindow.getChildren().addAll(lineChart, filterOptions);
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(mainWindow, 800, 800);
-        lineChart.getData().add(series);
-
+        //lineChart.getData().add(series);
+        new ZoomManager<>(mainWindow, lineChart, series);
+        stage.setScene(scene);
         stage.setScene(scene);
         stage.show();
 

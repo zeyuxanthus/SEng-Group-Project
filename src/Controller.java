@@ -38,7 +38,6 @@ public class Controller {
 	 */
 	public void deserializeCampaign(String fileName){
 		System.out.println("Deserializing campaign ...");
-		long startTime = System.nanoTime();
 		try {
 			FileInputStream file = new FileInputStream(fileName);
 			ObjectInputStream in = new ObjectInputStream(file);
@@ -54,6 +53,8 @@ public class Controller {
 		catch (ClassNotFoundException ex) {
 			System.out.println("ClassNotFoundException" + " is caught");
 		}
+
+		long startTime = System.nanoTime();
 		long endTime = System.nanoTime();
 		System.out.println("Method took:" + (endTime - startTime) / 1000000);
 	}
@@ -115,7 +116,7 @@ public class Controller {
 //	}
 
 
-
+//save the log file 
     public void saveCampaign(String filename){
 	    try {
             String str = campaign.serverPath + " " + campaign.clickPath + " " + campaign.impressionPath;
@@ -145,6 +146,7 @@ public class Controller {
 	    long endTime = System.nanoTime();
 		System.out.println("Method took:" + (endTime - startTime) / 1000000);
     }
+
 
 	public double getBounceRate(){
 		return campaign.getBounceRate();
