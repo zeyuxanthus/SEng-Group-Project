@@ -835,5 +835,4 @@ public class GUI extends Application {
     	window.show();
     	
     }
-    
 }
