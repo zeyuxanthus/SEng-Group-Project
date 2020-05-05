@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -133,6 +134,12 @@ public class GUI extends Application {
                                 filters.add(((TextField) m).getText());
                             } else if (m instanceof ComboBox) {
                                 filters.add((String) ((ComboBox) m).getValue());
+                            } else if(m instanceof DatePicker) {
+                                try{
+                                    filters.add(((DatePicker) m).getValue().toString());
+                                }catch(NullPointerException e){
+                                    filters.add("");
+                                }
                             }
                         }
                     }
@@ -144,12 +151,12 @@ public class GUI extends Application {
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
                 //Same situation as above, this time looking for each filter
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                if (filters.get(0).equals("") == false) {
-                    startDate = LocalDateTime.parse(filters.get(0), formatter);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                if (!filters.get(0).equals("") && filters.get(0) != null) {
+                    startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
-                if (filters.get(1).equals("") == false) {
-                    endDate = LocalDateTime.parse(filters.get(1), formatter);
+                if (!filters.get(1).equals("") && filters.get(1) != null) {
+                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
                 if (filters.get(2) != null)
                     context.add(filters.get(2));
@@ -379,39 +386,46 @@ public class GUI extends Application {
                filterNodes = impressionFilterOptions.getChildren();
 
 
-               for (Node n : filterNodes) {
-               	if (n instanceof VBox) {
-               		for (Node m : ((VBox) n).getChildren()) {
-               			 if (m instanceof TextField) {
+
+
+                for (Node n : filterNodes) {
+                    if (n instanceof VBox) {
+                        for (Node m : ((VBox) n).getChildren()) {
+                            if (m instanceof TextField) {
                                 filters.add(((TextField) m).getText());
                             } else if (m instanceof ComboBox) {
                                 filters.add((String) ((ComboBox) m).getValue());
+                            } else if(m instanceof DatePicker) {
+                                try{
+                                    filters.add(((DatePicker) m).getValue().toString());
+                                }catch(NullPointerException e){
+                                    filters.add("");
+                                }
                             }
-               		}
-               	}
-               }
+                        }
+                    }
+                }
 
                 LocalDateTime startDate = null;
                 LocalDateTime endDate = null;
-                ArrayList<String> contexts = new ArrayList<String>();
+                ArrayList<String> context = new ArrayList<String>();
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                if (filters.get(0).equals("") == false) {
-                    startDate = LocalDateTime.parse(filters.get(0), formatter);
+                //Same situation as above, this time looking for each filter
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                if (!filters.get(0).equals("") && filters.get(0) != null) {
+                    startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
-                if (filters.get(1).equals("") == false) {
-                    endDate = LocalDateTime.parse(filters.get(1), formatter);
+                if (!filters.get(1).equals("") && filters.get(1) != null) {
+                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
-
-
                 if (filters.get(2) != null)
-                    contexts.add(filters.get(2));
+                    context.add(filters.get(2));
                 if (filters.get(4) != null)
                     ageGroups.add(filters.get(4));
                 if (filters.get(5) != null)
                     incomes.add(filters.get(5));
-                Filter filter = new Filter(startDate, endDate, contexts, filters.get(3), ageGroups, incomes);
+                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
                 createHistogram(filter);
 
 
@@ -452,14 +466,14 @@ public class GUI extends Application {
         VBox incomeBox = new VBox(5);
         
         Label ageLabel = new Label("Age Group");
-        Label entryLabel = new Label("Date From");
+        Label entryLabel = new Label("Date From");//TODO add earliest date in campaign to the name
         Label exitLabel = new Label("Date Until");
         Label contextLabel = new Label("Context");
         Label genderLabel = new Label("Gender");
         Label incomeLabel = new Label("Income");
         
-        TextField entryDate = new TextField();
-        TextField exitDate = new TextField();
+        DatePicker entryDate = new DatePicker();
+        DatePicker exitDate = new DatePicker();
 //        entryDate.setPromptText("Date From");
 //        exitDate.setPromptText("Date Until");
         ComboBox<String> age = new ComboBox<String>(FXCollections.observableArrayList(ageGroups));
@@ -558,15 +572,21 @@ public class GUI extends Application {
 
 
                 for (Node n : filterNodes) {
-                	if (n instanceof VBox) {
-                		for (Node m : ((VBox) n).getChildren()) {
-                			 if (m instanceof TextField) {
-                                 filters.add(((TextField) m).getText());
-                             } else if (m instanceof ComboBox) {
-                                 filters.add((String) ((ComboBox) m).getValue());
-                             }
-                		}
-                	}
+                    if (n instanceof VBox) {
+                        for (Node m : ((VBox) n).getChildren()) {
+                            if (m instanceof TextField) {
+                                filters.add(((TextField) m).getText());
+                            } else if (m instanceof ComboBox) {
+                                filters.add((String) ((ComboBox) m).getValue());
+                            } else if(m instanceof DatePicker) {
+                                try{
+                                    filters.add(((DatePicker) m).getValue().toString());
+                                }catch(NullPointerException e){
+                                    filters.add("");
+                                }
+                            }
+                        }
+                    }
                 }
 
                 LocalDateTime startDate = null;
@@ -575,12 +595,12 @@ public class GUI extends Application {
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
                 //Same situation as above, this time looking for each filter
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                if (filters.get(0).equals("") == false) {
-                    startDate = LocalDateTime.parse(filters.get(0), formatter);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                if (!filters.get(0).equals("") && filters.get(0) != null) {
+                    startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
-                if (filters.get(1).equals("") == false) {
-                    endDate = LocalDateTime.parse(filters.get(1), formatter);
+                if (!filters.get(1).equals("") && filters.get(1) != null) {
+                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
                 if (filters.get(2) != null)
                     context.add(filters.get(2));
@@ -699,15 +719,21 @@ public class GUI extends Application {
 
 
                 for (Node n : filterNodes) {
-                	if (n instanceof VBox) {
-                		for (Node m : ((VBox) n).getChildren()) {
-                			 if (m instanceof TextField) {
-                                 filters.add(((TextField) m).getText());
-                             } else if (m instanceof ComboBox) {
-                                 filters.add((String) ((ComboBox) m).getValue());
-                             }
-                		}
-                	}
+                    if (n instanceof VBox) {
+                        for (Node m : ((VBox) n).getChildren()) {
+                            if (m instanceof TextField) {
+                                filters.add(((TextField) m).getText());
+                            } else if (m instanceof ComboBox) {
+                                filters.add((String) ((ComboBox) m).getValue());
+                            } else if(m instanceof DatePicker) {
+                                try{
+                                    filters.add(((DatePicker) m).getValue().toString());
+                                }catch(NullPointerException e){
+                                    filters.add("");
+                                }
+                            }
+                        }
+                    }
                 }
 
                 LocalDateTime startDate = null;
@@ -716,12 +742,12 @@ public class GUI extends Application {
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
                 //Same situation as above, this time looking for each filter
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                if (filters.get(0).equals("") == false) {
-                    startDate = LocalDateTime.parse(filters.get(0), formatter);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                if (!filters.get(0).equals("") && filters.get(0) != null) {
+                    startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
-                if (filters.get(1).equals("") == false) {
-                    endDate = LocalDateTime.parse(filters.get(1), formatter);
+                if (!filters.get(1).equals("") && filters.get(1) != null) {
+                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
                 if (filters.get(2) != null)
                     context.add(filters.get(2));

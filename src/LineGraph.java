@@ -257,7 +257,7 @@ public class LineGraph {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
         ArrayList<ServerEntry> serverEntriesLog = controller.filterServerLog(filter);
         Collections.sort(serverEntriesLog);
-        LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
+        LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate(); //TODO handle index out of bound exception
 
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
         int i = 0;
