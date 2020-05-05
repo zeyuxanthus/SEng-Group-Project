@@ -160,6 +160,9 @@ public class GUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Ad Auction Dashboard");
         primaryStage.show();
+
+        //controller.createBarChar(Metric.TOTAL_IMPRESSIONS, BarChartType.DAY_OF_WEEK,
+        //              new Filter(null, null, new ArrayList<>(), null, new ArrayList<String>(), new ArrayList<String>()));
     }
 
     private VBox getMetricsWindow() {
@@ -405,7 +408,6 @@ public class GUI extends Application {
         yAxis.setLabel("Frequency");
         chart.setTitle("Total Cost Histogram");
         XYChart.Series series1 = new XYChart.Series();
-        series1.setName("Frequency of each cost range");
         chart.setBarGap(0);
         chart.setCategoryGap(0);
 
@@ -420,7 +422,6 @@ public class GUI extends Application {
         VBox vbox = new VBox(15);
         vbox.getChildren().addAll(chartLabel, chart);
 
-        vbox.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(vbox, 700, 700);
         window.setScene(scene);
         window.show();

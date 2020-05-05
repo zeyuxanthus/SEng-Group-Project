@@ -214,6 +214,10 @@ public class Controller {
 		return new Histogram(this, noBars, accuracy, filter);
 	}
 
+	public BarChart createBarChar(Metric metric, BarChartType barChartType, Filter filter){
+		return new BarChart(metric, barChartType, filter, this);
+	}
+
 	//--FILTERS---------------------------------------------------------------------------------------------------------
 
 	public ArrayList<Impression> filterImpressionLog(Filter filter){
