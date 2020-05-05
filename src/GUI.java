@@ -1,9 +1,11 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -212,18 +214,34 @@ public class GUI extends Application {
         TextField totalCostField = new TextField();
         TextField conversionRateField = new TextField();
 
-        bounceRateField.setText("" + controller.getBounceRate());
-        noImpressionsField.setText("" + controller.getTotalImpressions());
-        noClicksField.setText("" + controller.getTotalClicks());
-        noUniquesField.setText("" + controller.getTotalUnique());
-        noBouncesField.setText("" + controller.getTotalBounces());
-        noConversionsField.setText("" + controller.getTotalConversions());
-        ctrField.setText("" + controller.getCTR());
-        cpaField.setText("" + controller.getCPA());
-        cpcField.setText("" + controller.getCPC());
-        cpmField.setText("" + controller.getCPM());
-        totalCostField.setText("" + controller.getTotalCost());
-        conversionRateField.setText("" + controller.getConversionRate());
+        bounceRateField.setEditable(false);
+        noImpressionsField.setEditable(false);
+        noClicksField.setEditable(false);
+        noUniquesField.setEditable(false);
+        noBouncesField.setEditable(false);
+        bounceRateField.setEditable(false);
+        noConversionsField.setEditable(false);
+        ctrField.setEditable(false);
+        cpaField.setEditable(false);
+        cpcField.setEditable(false);
+        cpmField.setEditable(false);
+        totalCostField.setEditable(false);
+        conversionRateField.setEditable(false);
+
+        NumberFormat format = NumberFormat.getNumberInstance(Locale.UK);
+
+        bounceRateField.setText("" + format.format(controller.getBounceRate()));
+        noImpressionsField.setText("" + format.format(controller.getTotalImpressions()));
+        noClicksField.setText("" + format.format(controller.getTotalClicks()));
+        noUniquesField.setText("" + format.format(controller.getTotalUnique()));
+        noBouncesField.setText("" + format.format(controller.getTotalBounces()));
+        noConversionsField.setText("" + format.format(controller.getTotalConversions()));
+        ctrField.setText("" + format.format(controller.getCTR()));
+        cpaField.setText("" + format.format(controller.getCPA()));
+        cpcField.setText("" + format.format(controller.getCPC()));
+        cpmField.setText("" + format.format(controller.getCPM()));
+        totalCostField.setText("" + format.format(controller.getTotalCost()));
+        conversionRateField.setText("" + format.format(controller.getConversionRate()));
 
 
         Label granularityLabel = new Label("Time Interval");
