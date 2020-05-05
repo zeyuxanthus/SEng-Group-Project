@@ -47,6 +47,7 @@ public class GUI extends Application {
 			"Bounces", "Number of Conversions", "Total Cost", "Click Through Rate", "Cost per Acquisition", "Cost per " +
 			"Click", "Cost per thousand Impressions", "Bounce Rate"};
     private ComboBox<String> fileOption;
+    private ComboBox<String> settingOption;
     private final TimeInterval[] granularityOptions = {TimeInterval.HOUR, TimeInterval.DAY, TimeInterval.WEEK,
 			TimeInterval.MONTH};
     private final String[] genders = {"Male", "Female"};
@@ -84,10 +85,6 @@ public class GUI extends Application {
     }
 
 
-    public static void main(String[] args) {
-        launch();
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -107,6 +104,7 @@ public class GUI extends Application {
         HBox toolBar = new HBox();
         VBox chartOptions = new VBox(10);
         HBox mainArea = new HBox(10);
+        HBox options = new HBox();
 
         // Centre: metrics and filters
         VBox filtersAndMetrics = new VBox(20);
@@ -186,21 +184,37 @@ public class GUI extends Application {
         });
 
         String[] fileOptionText = {"Load...", "Save", "Save as..."};
+        String[] settingsOptionText = {"Text...", "Colour..."};
 
         fileOption = new ComboBox<String>(FXCollections.observableArrayList(fileOptionText));
         fileOption.setValue("File");
+        
+        settingOption = new ComboBox<String>(FXCollections.observableArrayList(settingsOptionText));
+        settingOption.setValue("Settings");
+        
         fileOption.setOnAction(e -> {
             if (fileOption.getValue().equals("Load...")) {
                 fileChooserWindow();
-
+            }
+            else if (fileOption.getValue().equals("Save")) {
+            	controller.saveCampaign("Default Name");
+            }
+            else if (fileOption.getValue().equals("Save as...")) {
+            	Scanner scanner = new Scanner(System.in);
+            	System.out.println("Enter what you want to save the campaign as: ");
+            	String name = scanner.nextLine();
+            	controller.saveCampaign(name);
+            	scanner.close();
             }
         });
 
 
-        toolBar.getChildren().add(fileOption);
+        options.getChildren().addAll(fileOption, settingOption);
+        
+        toolBar.getChildren().add(options);
         Button lineGraphButton = new Button();
         Button histogramButton = new Button();
-        Button pieChartButton = new Button();
+        Button barChartButton = new Button();
 
         histogramButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -219,19 +233,20 @@ public class GUI extends Application {
         });
 
 
-        Image lineGraphimage = new Image(new FileInputStream("lineGraphIcon.png"), 100, 100, true, true);
-        Image histogramimage = new Image(new FileInputStream("barChartIcon.png"), 100, 100, true, true);
-        Image pieChartImage = new Image(new FileInputStream("pieChartIcon.png"), 100, 100, true, true);
+
+        Image lineGraphimage = new Image(this.getClass().getResourceAsStream("lineGraphIcon.png"), 100, 100, true, true);
+        Image histogramimage = new Image(this.getClass().getResourceAsStream("barChartIcon.png"), 100, 100, true, true);
+        Image barChartImage = new Image(this.getClass().getResourceAsStream("dataIcon.png"), 100, 100, true, true);
 
         histogramButton.setGraphic(new ImageView(histogramimage));
-        pieChartButton.setGraphic(new ImageView(pieChartImage));
+        barChartButton.setGraphic(new ImageView(barChartImage));
         lineGraphButton.setGraphic(new ImageView(lineGraphimage));
 
 
         Label chart1 = new Label("Create Line Graph");
         Label chart2 = new Label("Create Histogram");
-        Label chart3 = new Label("Create Pie Chart");
-        chartOptions.getChildren().addAll(lineGraphButton, chart1, histogramButton, chart2, pieChartButton, chart3);
+        Label chart3 = new Label("Create Bar Chart");
+        chartOptions.getChildren().addAll(lineGraphButton, chart1, histogramButton, chart2, barChartButton, chart3);
         BorderPane.setMargin(filtersAndMetrics, new Insets(60, 100, 10, 50));//top was 150
         BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
 
@@ -528,7 +543,8 @@ public class GUI extends Application {
         Label chartLabel = new Label("Histogram for cost variation");
         VBox vbox = new VBox(15);
         vbox.getChildren().addAll(chartLabel, chart);
-
+        vbox.setStyle("-fx-background-color: #c8e3f0;");
+        
         Scene scene = new Scene(vbox, 700, 700);
         window.setScene(scene);
         window.show();
@@ -794,11 +810,22 @@ public class GUI extends Application {
 
     private void fileChooserWindow() {
 
-
+    	Label bounceLabel = new Label("How many pages define a bounce: ");
+    	TextField bounceField = new TextField("1");
+    	HBox bounceBox = new HBox(5);
+    	
+    	bounceBox.getChildren().addAll(bounceLabel, bounceField);
+    	
+    	Button loadButton = new Button("Load Previous...");
+    	
         VBox fileChooserButtons = new VBox(10);
-        VBox loadedFileText = new VBox(10);
+       
         HBox fileChooserLayout = new HBox(10);
 
+        HBox impressionVBox = new HBox(50);
+        HBox clicksVBox = new HBox(50);
+        HBox serverVBox = new HBox(50);
+        
         Stage newWindow = new Stage();
         newWindow.setTitle("Load files");
 
@@ -811,9 +838,22 @@ public class GUI extends Application {
         Label clickFileLabel = new Label();
         Label impressionFileLabel = new Label();
 
-        Label bounceLabel = new Label("How many pages define a bounce:");
-        TextField bounceDefiner = new TextField("1");
+        impressionVBox.getChildren().addAll(loadImpressions, impressionFileLabel);
+        clicksVBox.getChildren().addAll(loadClicks, clickFileLabel);
+        serverVBox.getChildren().addAll(loadServer, serverFileLabel);
+        
+        loadButton.setOnAction(new EventHandler<ActionEvent>() {
 
+			@Override
+			public void handle(ActionEvent event) {
+				//
+				
+			}
+        	
+        	
+		});
+        
+        
         loadImpressions.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -901,18 +941,26 @@ public class GUI extends Application {
             @Override
             public void handle(ActionEvent event) {
                 if (serverFile != null && clicksFile != null && impressionFile != null) {
-                    System.out.println(serverFile.getAbsolutePath());
-                    System.out.println(clicksFile.getAbsolutePath());
-                    System.out.println(impressionFile.getAbsolutePath());
-                    //campaign.setBounceDefinition(Integer.parseInt(bounceDefiner.getText()));
-                    controller.loadNewCampaign(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), 1);
-                    // TODO change 1 to use a bounceDefinition specified by the user
-                    try {
-                        mainWindow();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    newWindow.close();
+                	
+                	try {
+                		Integer bounceRate = Integer.parseInt(bounceField.getText());
+	                    System.out.println(serverFile.getAbsolutePath());
+	                    System.out.println(clicksFile.getAbsolutePath());
+	                    System.out.println(impressionFile.getAbsolutePath());
+	                    //campaign.setBounceDefinition(Integer.parseInt(bounceDefiner.getText()));
+	                    
+	                    controller.loadNewCampaign(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), 1);
+	                    // TODO change 1 to use a bounceDefinition specified by the user
+	                    try {
+	                        mainWindow();
+	                    } catch (Exception e) {
+	                        e.printStackTrace();
+	                    }
+	                    newWindow.close();
+                	}
+                	catch (NumberFormatException e) {
+                		displayError("Bounce value must be an integer");
+                	}
                 }
                 else {
                 	displayError("Not enough files selected");
@@ -925,22 +973,21 @@ public class GUI extends Application {
         loadClicks.setMinWidth(125);
         continueButton.setMinWidth(125);
 
-        loadedFileText.getChildren().addAll(clickFileLabel, impressionFileLabel, serverFileLabel);
-        loadedFileText.setMargin(clickFileLabel, new Insets(55, 10, 10, 20));
-        loadedFileText.setMargin(impressionFileLabel, new Insets(16, 10, 10, 20));
-        loadedFileText.setMargin(serverFileLabel, new Insets(19, 10, 10, 20));
+        
 
-        fileChooserButtons.getChildren().addAll(loadClicks, loadImpressions, loadServer, continueButton);
-        fileChooserButtons.setMargin(loadClicks, new Insets(50, 10, 10, 20));
-        fileChooserButtons.setMargin(loadImpressions, new Insets(10, 10, 10, 20));
-        fileChooserButtons.setMargin(loadServer, new Insets(10, 10, 10, 20));
-        fileChooserButtons.setMargin(continueButton, new Insets(10, 30, 10, 50));
+        fileChooserButtons.getChildren().addAll(loadButton, clicksVBox, impressionVBox, serverVBox, bounceBox, continueButton);
+        fileChooserButtons.setMargin(loadButton, new Insets(20, 10, 10, 20));
+        fileChooserButtons.setMargin(clicksVBox, new Insets(5, 10, 0, 20));
+        fileChooserButtons.setMargin(impressionVBox, new Insets(10, 10, 0, 20));
+        fileChooserButtons.setMargin(serverVBox, new Insets(10, 10, 0, 20));
+        fileChooserButtons.setMargin(continueButton, new Insets(30, 10, 10, 20));
+        fileChooserButtons.setMargin(bounceBox, new Insets(10, 10, 10, 20));
 
-        fileChooserLayout.getChildren().addAll(fileChooserButtons, loadedFileText);
+        fileChooserLayout.getChildren().addAll(fileChooserButtons);
         fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
 
 
-        Scene scene = new Scene(fileChooserLayout, 350, 300);
+        Scene scene = new Scene(fileChooserLayout, 400, 350);
         fileChooserLayout.getStylesheets().add("/GUI.css");
         newWindow.setScene(scene);
         newWindow.show();
