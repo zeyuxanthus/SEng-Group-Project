@@ -14,6 +14,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -23,11 +25,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -60,6 +58,22 @@ public class GUI extends Application {
             + "-fx-padding: 10;\n"
             + "-fx-border-style: segments(10,15,15,15) solid;\n";
 
+    // Metrics
+    private TextField bounceRateField;
+    private TextField noImpressionsField;
+    private TextField noClicksField;
+    private TextField noUniquesField;
+    private TextField noBouncesField;
+    private TextField noConversionsField;
+    private TextField ctrField;
+    private TextField cpaField;
+    private TextField cpcField;
+    private TextField cpmField;
+    private TextField totalCostField;
+    private TextField conversionRateField;
+
+    private NumberFormat format = NumberFormat.getNumberInstance(Locale.UK);
+
     public GUI() {
     }
 
@@ -88,14 +102,81 @@ public class GUI extends Application {
         StackPane layering = new StackPane();
         Canvas canvas = new Canvas();
 
-
         BorderPane mainWindow = new BorderPane();
         HBox toolBar = new HBox();
         VBox chartOptions = new VBox(10);
         HBox mainArea = new HBox(10);
 
-        VBox metrics = getMetricsWindow();
+        // Centre: metrics and filters
+        VBox filtersAndMetrics = new VBox(20);
+        TilePane impressionFilterOptions = impressionFilters();
+        BorderPane filters = new BorderPane();
+        Button filterButton = new Button("Apply Filters");
+        filters.setAlignment(filterButton, Pos.BOTTOM_RIGHT);
+        filterButton.setAlignment(Pos.BOTTOM_RIGHT);
+        filters.setLeft(impressionFilterOptions);
+        filters.setRight(filterButton);
+        filtersAndMetrics.getChildren().addAll(getMetricsWindow(), new Separator(), filters);
+        filtersAndMetrics.setMargin(filters, new Insets(0, 10, 0, 10));
 
+        filterButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ArrayList<String> filters = new ArrayList<String>();
+                ObservableList<Node> filterNodes = null;
+                filterNodes = impressionFilterOptions.getChildren();
+
+                for (Node n : filterNodes) {
+                    if (n instanceof VBox) {
+                        for (Node m : ((VBox) n).getChildren()) {
+                            if (m instanceof TextField) {
+                                filters.add(((TextField) m).getText());
+                            } else if (m instanceof ComboBox) {
+                                filters.add((String) ((ComboBox) m).getValue());
+                            }
+                        }
+                    }
+                }
+
+                LocalDateTime startDate = null;
+                LocalDateTime endDate = null;
+                ArrayList<String> context = new ArrayList<String>();
+                ArrayList<String> ageGroups = new ArrayList<String>();
+                ArrayList<String> incomes = new ArrayList<String>();
+                //Same situation as above, this time looking for each filter
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                if (filters.get(0).equals("") == false) {
+                    startDate = LocalDateTime.parse(filters.get(0), formatter);
+                }
+                if (filters.get(1).equals("") == false) {
+                    endDate = LocalDateTime.parse(filters.get(1), formatter);
+                }
+                if (filters.get(2) != null)
+                    context.add(filters.get(2));
+                if (filters.get(4) != null)
+                    ageGroups.add(filters.get(4));
+                if (filters.get(5) != null)
+                    incomes.add(filters.get(5));
+
+                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                ArrayList<Click> clicks = controller.filterClickLog(filter);
+                ArrayList<Impression> impressions = controller.filterImpressionLog(filter);
+                ArrayList<ServerEntry> serverEntries = controller.filterServerLog(filter);
+
+                bounceRateField.setText(format.format(controller.calcBounceRate(serverEntries, clicks)));
+                noImpressionsField.setText(format.format(controller.calcImpressions(impressions)));
+                noClicksField.setText(format.format(controller.calcClicks(clicks)));
+                noUniquesField.setText(format.format(controller.calcUniques(clicks)));
+                noBouncesField.setText(format.format(controller.calcBounces(serverEntries)));
+                noConversionsField.setText(format.format(controller.calcConversions(serverEntries)));
+                ctrField.setText(format.format(controller.calcCTR(clicks, impressions)));
+                cpaField.setText(format.format(controller.calcCPA(impressions, clicks, serverEntries)));
+                cpcField.setText(format.format(controller.calcCPC(clicks)));
+                cpmField.setText(format.format(controller.calcCPM(impressions)));
+                totalCostField.setText(format.format(controller.calcTotalCost(impressions, clicks)));
+                conversionRateField.setText(format.format(controller.calcConvRate(serverEntries, clicks)));
+            }
+        });
 
         String[] fileOptionText = {"Load...", "Save", "Save as..."};
 
@@ -144,13 +225,13 @@ public class GUI extends Application {
         Label chart2 = new Label("Create Histogram");
         Label chart3 = new Label("Create Pie Chart");
         chartOptions.getChildren().addAll(lineGraphButton, chart1, histogramButton, chart2, pieChartButton, chart3);
-        BorderPane.setMargin(metrics, new Insets(150, 100, 10, 50));
+        BorderPane.setMargin(filtersAndMetrics, new Insets(60, 100, 10, 50));//top was 150
         BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
 
 
         mainWindow.setTop(toolBar);
         mainWindow.setCenter(chartOptions);
-        mainWindow.setRight(metrics);
+        mainWindow.setRight(filtersAndMetrics);
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
         layering.getChildren().addAll(canvas, mainWindow);
         canvas.widthProperty().bind(primaryStage.widthProperty());
@@ -169,8 +250,6 @@ public class GUI extends Application {
 
     private VBox getMetricsWindow() {
 
-    	
-    	
         HBox metricLayout = new HBox(10);
         VBox metricLabels1 = new VBox(18);
         VBox metricLabels2 = new VBox(18);
@@ -184,9 +263,6 @@ public class GUI extends Application {
         Label impressionLabel = new Label(impressionFile.getName());
         Label clickLabel = new Label(clicksFile.getName());
 
-        
-        
-        
         Label bounceRateLabel = new Label("Bounce Rate");
         Label noImpressionsLabel = new Label("No. of Impressions");
         Label noClicksLabel = new Label("No. of Clicks");
@@ -200,19 +276,18 @@ public class GUI extends Application {
         Label totalCostLabel = new Label("Total Cost");
         Label conversionRateLabel = new Label("Conversion Rate");
 
-
-        TextField bounceRateField = new TextField();
-        TextField noImpressionsField = new TextField();
-        TextField noClicksField = new TextField();
-        TextField noUniquesField = new TextField();
-        TextField noBouncesField = new TextField();
-        TextField noConversionsField = new TextField();
-        TextField ctrField = new TextField();
-        TextField cpaField = new TextField();
-        TextField cpcField = new TextField();
-        TextField cpmField = new TextField();
-        TextField totalCostField = new TextField();
-        TextField conversionRateField = new TextField();
+        bounceRateField = new TextField();
+        noImpressionsField = new TextField();
+        noClicksField = new TextField();
+        noUniquesField = new TextField();
+        noBouncesField = new TextField();
+        noConversionsField = new TextField();
+        ctrField = new TextField();
+        cpaField = new TextField();
+        cpcField = new TextField();
+        cpmField = new TextField();
+        totalCostField = new TextField();
+        conversionRateField = new TextField();
 
         bounceRateField.setEditable(false);
         noImpressionsField.setEditable(false);
@@ -228,7 +303,7 @@ public class GUI extends Application {
         totalCostField.setEditable(false);
         conversionRateField.setEditable(false);
 
-        NumberFormat format = NumberFormat.getNumberInstance(Locale.UK);
+
 
         bounceRateField.setText("" + format.format(controller.getBounceRate()));
         noImpressionsField.setText("" + format.format(controller.getTotalImpressions()));
@@ -244,13 +319,15 @@ public class GUI extends Application {
         conversionRateField.setText("" + format.format(controller.getConversionRate()));
 
 
-        Label granularityLabel = new Label("Time Interval");
-        ComboBox<TimeInterval> granularityField =
-				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
-        granularityField.setValue(TimeInterval.WEEK);
+        TilePane impressionFilterOptions = impressionFilters();
+
+//        Label granularityLabel = new Label("Time Interval");
+//        ComboBox<TimeInterval> granularityField =
+//				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
+//        granularityField.setValue(TimeInterval.WEEK);
 
 
-        granularityLayout.getChildren().addAll(granularityLabel, granularityField);
+//        granularityLayout.getChildren().addAll(granularityLabel, granularityField);
         metricLabels1.getChildren().addAll(bounceRateLabel, noImpressionsLabel, noClicksLabel, noUniquesLabel,
 										   noBouncesLabel, noConversionsLabel);
         metricBoxes1.getChildren().addAll(bounceRateField, noImpressionsField, noClicksField, noUniquesField,
@@ -262,17 +339,15 @@ public class GUI extends Application {
 
         metricLayout.getChildren().addAll(metricLabels1, metricBoxes1, metricLabels2, metricBoxes2);
         windowLayout.getChildren().addAll(granularityLayout, metricLayout);
-        granularityLayout.setMargin(granularityLabel, new Insets(3, 0, 0, 0));
+//        granularityLayout.setMargin(granularityLabel, new Insets(3, 0, 0, 0));
         //windowLayout.setMargin(granularityLayout, new Insets(10, 10, 5, 10));
         
-        granularityLayout.setMargin(granularityLabel, new Insets(0,0,0,10));
+//        granularityLayout.setMargin(granularityLabel, new Insets(0,0,0,10));
         metricLayout.setMargin(metricLabels2, new Insets(5, 0, 0, 30));
         metricLayout.setMargin(metricLabels1, new Insets(5, 0, 0, 10));
 
 
         return windowLayout;
-
-
     }
 
     private void histogramWindow() {
