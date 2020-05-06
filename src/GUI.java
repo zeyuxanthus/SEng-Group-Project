@@ -50,6 +50,7 @@ public class GUI extends Application {
     private ComboBox<String> settingOption;
     private final TimeInterval[] granularityOptions = {TimeInterval.HOUR, TimeInterval.DAY, TimeInterval.WEEK,
 			TimeInterval.MONTH};
+    private final BarChartType[] barChartType = {BarChartType.DAY_OF_WEEK, BarChartType.TIME_OF_DAY};
     private final String[] genders = {"Male", "Female"};
     private final String[] ageGroups = {"<25", "25-34", "35-44", "45-54", ">54"};
     private final String[] incomeGroups = {"Low", "Medium", "High"};
@@ -229,6 +230,13 @@ public class GUI extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 lineWindow();
+            }
+        });
+        
+        barChartButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                barWindow();
             }
         });
 
@@ -457,6 +465,7 @@ public class GUI extends Application {
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(windowLayout, 400, 400);
         newWindow.setScene(scene);
+        scene.getStylesheets().add("/GUI.css");
         newWindow.setTitle("Create Histogram");
         newWindow.show();
 
@@ -536,16 +545,106 @@ public class GUI extends Application {
         for (HistogramBar b : histogramBars) {
             series1.getData().add(new XYChart.Data(b.getLowerBound() + " - " + b.getUpperBound(), b.getFrequency()));
         }
+        
 
         chart.getData().addAll(series1);
 
+        TilePane impressionFilterOptions = impressionFilters();
+
+        HBox impressionMetricsOptions = addImpHbox();
+        VBox filterPane = new VBox(10);
+        filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
+        HBox metricsGranularity = new HBox(10);
+
+        Button filterHistogram = new Button("Filter");
+
+        filterHistogram.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<Metric> metrics = new ArrayList<Metric>();
+                ObservableList<Node> filterNodes = null;
+                ObservableList<Node> metricsNodes = null;
+                
+                
+                
+                metricsNodes = impressionMetricsOptions.getChildren();
+                filterNodes = impressionFilterOptions.getChildren();
+
+                
+                for (Node n : metricsNodes) {
+                    if (n instanceof ChoiceBox) {
+                        metrics.add((Metric) ((ChoiceBox) n).getValue());
+                    }
+                }
+
+
+                for (Node n : filterNodes) {
+                    if (n instanceof VBox) {
+                        for (Node m : ((VBox) n).getChildren()) {
+                            if (m instanceof TextField) {
+                                filters.add(((TextField) m).getText());
+                            } else if (m instanceof ComboBox) {
+                                filters.add((String) ((ComboBox) m).getValue());
+                            } else if(m instanceof DatePicker) {
+                                try{
+                                    filters.add(((DatePicker) m).getValue().toString());
+                                }catch(NullPointerException e){
+                                    filters.add("");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                LocalDateTime startDate = null;
+                LocalDateTime endDate = null;
+                ArrayList<String> context = new ArrayList<String>();
+                ArrayList<String> ageGroups = new ArrayList<String>();
+                ArrayList<String> incomes = new ArrayList<String>();
+                //Same situation as above, this time looking for each filter
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                if (!filters.get(0).equals("") && filters.get(0) != null) {
+                    startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
+                }
+                if (!filters.get(1).equals("") && filters.get(1) != null) {
+                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                }
+                if (filters.get(2) != null)
+                    context.add(filters.get(2));
+                if (filters.get(4) != null)
+                    ageGroups.add(filters.get(4));
+                if (filters.get(5) != null)
+                    incomes.add(filters.get(5));
+
+                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                Histogram histogram = controller.createHistogram(5, 2, filter);
+                ArrayList<HistogramBar> bars = histogram.getHistogramBars();//you can then just grab the data from it and use
+        		// it in the graph
+                XYChart.Series series2 = new XYChart.Series();
+                for (HistogramBar b : bars) {
+                	series2.getData().add(new XYChart.Data(b.getLowerBound() + " - " + b.getUpperBound(), b.getFrequency()));
+                }
+                chart.getData().clear();
+                chart.getData().add(series2);
+                chart.setTitle("Total Cost Histogram");
+            }
+        });
+        
+        HBox metricsAndCreate = new HBox(25);
+        metricsAndCreate.getChildren().addAll(filterHistogram);
+        
+        HBox filterOptions = new HBox(10);
+        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
+   
         Stage window = new Stage();
         Label chartLabel = new Label("Histogram for cost variation");
         VBox vbox = new VBox(15);
-        vbox.getChildren().addAll(chartLabel, chart);
+        vbox.getChildren().addAll(chart, filterOptions);
         vbox.setStyle("-fx-background-color: #c8e3f0;");
         
         Scene scene = new Scene(vbox, 700, 700);
+        scene.getStylesheets().add("/GUI.css");
         window.setScene(scene);
         window.show();
 
@@ -637,9 +736,237 @@ public class GUI extends Application {
 
         Scene scene = new Scene(windowLayout, 400, 400);
         window.setScene(scene);
+        scene.getStylesheets().add("/GUI.css");
         window.setTitle("Create LineGraph");
         window.show();
 
+
+    }
+    
+    private void barWindow() {
+        Stage window = new Stage();
+
+        TilePane impressionFilterOptions = impressionFilters();
+
+        HBox impressionMetricsOptions = addImpHbox();
+        VBox filterPane = new VBox(10);
+        Label barTypeLabel = new Label("Type: ");
+        filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
+
+        ComboBox<BarChartType> type =
+				new ComboBox<BarChartType>(FXCollections.observableArrayList(barChartType));
+        type.setValue(BarChartType.DAY_OF_WEEK);
+
+        VBox windowLayout = new VBox(10);
+        HBox metricsType = new HBox(10);
+
+        Button filterBarChart = new Button("Filter");
+
+        filterBarChart.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<Metric> metrics = new ArrayList<Metric>();
+                ObservableList<Node> filterNodes = null;
+                ObservableList<Node> metricsNodes = null;
+                metricsNodes = impressionMetricsOptions.getChildren();
+                filterNodes = impressionFilterOptions.getChildren();
+
+                for (Node n : metricsNodes) {
+                    if (n instanceof ChoiceBox) {
+                        metrics.add((Metric) ((ChoiceBox) n).getValue());
+                    }
+                }
+
+
+                for (Node n : filterNodes) {
+                    if (n instanceof VBox) {
+                        for (Node m : ((VBox) n).getChildren()) {
+                            if (m instanceof TextField) {
+                                filters.add(((TextField) m).getText());
+                            } else if (m instanceof ComboBox) {
+                                filters.add((String) ((ComboBox) m).getValue());
+                            } else if(m instanceof DatePicker) {
+                                try{
+                                    filters.add(((DatePicker) m).getValue().toString());
+                                }catch(NullPointerException e){
+                                    filters.add("");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                LocalDateTime startDate = null;
+                LocalDateTime endDate = null;
+                ArrayList<String> context = new ArrayList<String>();
+                ArrayList<String> ageGroups = new ArrayList<String>();
+                ArrayList<String> incomes = new ArrayList<String>();
+                //Same situation as above, this time looking for each filter
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                if (!filters.get(0).equals("") && filters.get(0) != null) {
+                    startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
+                }
+                if (!filters.get(1).equals("") && filters.get(1) != null) {
+                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                }
+                if (filters.get(2) != null)
+                    context.add(filters.get(2));
+                if (filters.get(4) != null)
+                    ageGroups.add(filters.get(4));
+                if (filters.get(5) != null)
+                    incomes.add(filters.get(5));
+
+                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                createBarChart(metrics.get(0), filter, type.getValue());
+
+            }
+        });
+
+        metricsType.getChildren().addAll(barTypeLabel, type);
+        windowLayout.getChildren().addAll(filterPane, metricsType, filterBarChart);
+        windowLayout.setStyle("-fx-background-color: #c8e3f0;");
+
+        Scene scene = new Scene(windowLayout, 400, 400);
+        window.setScene(scene);
+        scene.getStylesheets().add("/GUI.css");
+        window.setTitle("Create LineGraph");
+        window.show();
+
+
+    }
+    
+    private void createBarChart(Metric metric, Filter filters, BarChartType type) {
+        Stage stage = new Stage();
+        stage.setTitle("Bar Chart");
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("" + type);
+
+
+        final BarChart<String, Number> barChart =
+                new BarChart<String, Number>(xAxis, yAxis);
+
+        barChart.setTitle(metric + " bar chart");
+
+        XYChart.Series series = new XYChart.Series();
+        series.setName(metric + " per " + type);
+        
+
+        BarGraph barGraph = new BarGraph(metric, type, filters, controller); //this is where the
+		// filters, metric and granularity will be passed
+        ArrayList<Bar> dataBars = barGraph.getBars();//you can then just grab the data from it and use
+		// it in the graph
+
+        for (Bar b : dataBars) {
+        	series.getData().add(new XYChart.Data(b.getCategory(), b.getMetric()));
+        }
+
+        TilePane impressionFilterOptions = impressionFilters();
+
+        HBox impressionMetricsOptions = addImpHbox();
+        VBox filterPane = new VBox(10);
+        Label granLabel = new Label("Granularity: ");
+        filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
+
+
+        ComboBox<BarChartType> barType =
+				new ComboBox<BarChartType>(FXCollections.observableArrayList(barChartType));
+        barType.setValue(BarChartType.DAY_OF_WEEK);
+
+        VBox windowLayout = new VBox(10);
+        HBox metricsGranularity = new HBox(10);
+
+        Button filterBarChart = new Button("Filter");
+
+        filterBarChart.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<Metric> metrics = new ArrayList<Metric>();
+                ObservableList<Node> filterNodes = null;
+                ObservableList<Node> metricsNodes = null;
+                metricsNodes = impressionMetricsOptions.getChildren();
+                filterNodes = impressionFilterOptions.getChildren();
+
+                for (Node n : metricsNodes) {
+                    if (n instanceof ChoiceBox) {
+                        metrics.add((Metric) ((ChoiceBox) n).getValue());
+                    }
+                }
+
+
+                for (Node n : filterNodes) {
+                    if (n instanceof VBox) {
+                        for (Node m : ((VBox) n).getChildren()) {
+                            if (m instanceof TextField) {
+                                filters.add(((TextField) m).getText());
+                            } else if (m instanceof ComboBox) {
+                                filters.add((String) ((ComboBox) m).getValue());
+                            } else if(m instanceof DatePicker) {
+                                try{
+                                    filters.add(((DatePicker) m).getValue().toString());
+                                }catch(NullPointerException e){
+                                    filters.add("");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                LocalDateTime startDate = null;
+                LocalDateTime endDate = null;
+                ArrayList<String> context = new ArrayList<String>();
+                ArrayList<String> ageGroups = new ArrayList<String>();
+                ArrayList<String> incomes = new ArrayList<String>();
+                //Same situation as above, this time looking for each filter
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                if (!filters.get(0).equals("") && filters.get(0) != null) {
+                    startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
+                }
+                if (!filters.get(1).equals("") && filters.get(1) != null) {
+                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                }
+                if (filters.get(2) != null)
+                    context.add(filters.get(2));
+                if (filters.get(4) != null)
+                    ageGroups.add(filters.get(4));
+                if (filters.get(5) != null)
+                    incomes.add(filters.get(5));
+
+                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                BarGraph barGraph = new BarGraph(metrics.get(0), barType.getValue(), filter, controller); //this is where the
+        		// filters, metric and granularity will be passed
+                ArrayList<Bar> dataBars = barGraph.getBars();//you can then just grab the data from it and use
+        		// it in the graph
+                XYChart.Series series2 = new XYChart.Series();
+                series2.setName(metrics.get(0) + " per " + barType.getValue());
+                for (Bar b : dataBars) {
+                    series2.getData().add(new XYChart.Data(b.getCategory(), b.getMetric()));
+                }
+                barChart.getData().clear();
+                barChart.getData().add(series2);
+                barChart.setTitle(metrics.get(0) + " line chart");
+            }
+        });
+
+        barChart.setMinHeight(600);
+        
+        metricsGranularity.getChildren().addAll(granLabel, barType);
+        HBox metricsAndCreate = new HBox(25);
+        metricsAndCreate.getChildren().addAll(metricsGranularity, filterBarChart);
+        
+        VBox mainWindow = new VBox(20);
+        HBox filterOptions = new HBox(10);
+        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
+        mainWindow.getChildren().addAll(barChart, filterOptions);
+        mainWindow.setStyle("-fx-background-color: #c8e3f0;");
+        Scene scene = new Scene(mainWindow, 900, 800);
+        //lineChart.getData().add(series);
+        new ZoomManager<>(mainWindow, barChart, series);
+        scene.getStylesheets().add("/GUI.css");
+        stage.setScene(scene);
+        stage.show();
 
     }
 
@@ -715,9 +1042,9 @@ public class GUI extends Application {
         VBox windowLayout = new VBox(10);
         HBox metricsGranularity = new HBox(10);
 
-        Button createLineGraph = new Button("Create");
+        Button filterLineGraph = new Button("Filter");
 
-        createLineGraph.setOnAction(new EventHandler<ActionEvent>() {
+        filterLineGraph.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 ArrayList<String> filters = new ArrayList<String>();
@@ -792,7 +1119,7 @@ public class GUI extends Application {
         
         metricsGranularity.getChildren().addAll(granLabel, granularity);
         HBox metricsAndCreate = new HBox(25);
-        metricsAndCreate.getChildren().addAll(metricsGranularity, createLineGraph);
+        metricsAndCreate.getChildren().addAll(metricsGranularity, filterLineGraph);
         
         VBox mainWindow = new VBox(20);
         HBox filterOptions = new HBox(10);
@@ -802,7 +1129,7 @@ public class GUI extends Application {
         Scene scene = new Scene(mainWindow, 800, 800);
         //lineChart.getData().add(series);
         new ZoomManager<>(mainWindow, lineChart, series);
-        stage.setScene(scene);
+        scene.getStylesheets().add("/GUI.css");
         stage.setScene(scene);
         stage.show();
 
@@ -949,7 +1276,7 @@ public class GUI extends Application {
 	                    System.out.println(impressionFile.getAbsolutePath());
 	                    //campaign.setBounceDefinition(Integer.parseInt(bounceDefiner.getText()));
 	                    
-	                    controller.loadNewCampaign(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), 1);
+	                    controller.loadNewCampaign(serverFile.getAbsolutePath(), clicksFile.getAbsolutePath(), impressionFile.getAbsolutePath(), bounceRate);
 	                    // TODO change 1 to use a bounceDefinition specified by the user
 	                    try {
 	                        mainWindow();

@@ -4,7 +4,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BarChart {
+public class BarGraph {
     private ArrayList<Bar> bars;
     private Metric metric;
     private BarChartType barChartType;
@@ -12,7 +12,7 @@ public class BarChart {
 
     private Controller controller;
 
-    public BarChart(Metric metric, BarChartType barChartType, Filter filter, Controller controller){
+    public BarGraph(Metric metric, BarChartType barChartType, Filter filter, Controller controller){
         this.metric = metric;
         this.barChartType = barChartType;
         this.filter = filter;
@@ -70,72 +70,72 @@ public class BarChart {
         switch (metric) {
             case TOTAL_IMPRESSIONS:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(partitionedImpressions.get(hour).size(), hour));
+                    bars.add(new Bar<>(partitionedImpressions.get(hour).size(), "" + hour));
                 }
                 break;
             case TOTAL_IMPRESSION_COST:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcTotalImpCost(partitionedImpressions.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcTotalImpCost(partitionedImpressions.get(hour)), "" + hour));
                 }
                 break;
             case TOTAL_CLICKS:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(partitionedClicks.get(hour).size(), hour));
+                    bars.add(new Bar<>(partitionedClicks.get(hour).size(), "" + hour));
                 }
                 break;
             case TOTAL_CLICK_COST:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcTotalClickCost(partitionedClicks.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcTotalClickCost(partitionedClicks.get(hour)), "" + hour));
                 }
                 break;
             case TOTAL_COST:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcTotalCost(partitionedImpressions.get(hour), partitionedClicks.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcTotalCost(partitionedImpressions.get(hour), partitionedClicks.get(hour)), "" + hour));
                 }
                 break;
             case TOTAL_CONVERSIONS:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcConversions(partitionedServerEntries.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcConversions(partitionedServerEntries.get(hour)), "" + hour));
                 }
                 break;
             case CONVERSION_RATE:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcConvRate(partitionedServerEntries.get(hour), partitionedClicks.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcConvRate(partitionedServerEntries.get(hour), partitionedClicks.get(hour)), "" + hour));
                 }
                 break;
             case BOUNCES:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcBounces(partitionedServerEntries.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcBounces(partitionedServerEntries.get(hour)), "" + hour));
                 }
                 break;
             case BOUNCE_RATE:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcBounceRate(partitionedServerEntries.get(hour), partitionedClicks.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcBounceRate(partitionedServerEntries.get(hour), partitionedClicks.get(hour)), "" + hour));
                 }
                 break;
             case TOTAL_UNIQUES:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcUniques(partitionedClicks.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcUniques(partitionedClicks.get(hour)), "" + hour));
                 }
                 break;
             case CLICK_THROUGH_RATE:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcCTR(partitionedClicks.get(hour), partitionedImpressions.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcCTR(partitionedClicks.get(hour), partitionedImpressions.get(hour)), "" + hour));
                 }
                 break;
             case COST_PER_AQUISITION:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcCPA(partitionedImpressions.get(hour), partitionedClicks.get(hour), partitionedServerEntries.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcCPA(partitionedImpressions.get(hour), partitionedClicks.get(hour), partitionedServerEntries.get(hour)), "" + hour));
                 }
                 break;
             case COST_PER_CLICK:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcCPC(partitionedClicks.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcCPC(partitionedClicks.get(hour)), "" + hour));
                 }
                 break;
             case COST_PER_1000_IMPRESSIONS:
                 for(int hour = 0; hour < 24; hour++){
-                    bars.add(new Bar<>(controller.calcCPM(partitionedImpressions.get(hour)), hour));
+                    bars.add(new Bar<>(controller.calcCPM(partitionedImpressions.get(hour)), "" + hour));
                 }
                 break;
         }
