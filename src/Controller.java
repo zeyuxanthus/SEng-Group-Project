@@ -214,8 +214,8 @@ public class Controller {
 		return new Histogram(this, noBars, accuracy, filter);
 	}
 
-	public BarChart createBarChar(Metric metric, BarChartType barChartType, Filter filter){
-		return new BarChart(metric, barChartType, filter, this);
+	public BarGraph createBarChar(Metric metric, BarChartType barChartType, Filter filter){
+		return new BarGraph(metric, barChartType, filter, this);
 	}
 
 	//--FILTERS---------------------------------------------------------------------------------------------------------

@@ -242,9 +242,9 @@ public class GUI extends Application {
 
 
 
-        Image lineGraphimage = new Image(this.getClass().getResourceAsStream("lineGraphIcon.png"), 100, 100, true, true);
-        Image histogramimage = new Image(this.getClass().getResourceAsStream("barChartIcon.png"), 100, 100, true, true);
-        Image barChartImage = new Image(this.getClass().getResourceAsStream("dataIcon.png"), 100, 100, true, true);
+        Image lineGraphimage = new Image(this.getClass().getResourceAsStream("/lineGraphIcon.png"), 100, 100, true, true);
+        Image histogramimage = new Image(this.getClass().getResourceAsStream("/barChartIcon.png"), 100, 100, true, true);
+        Image barChartImage = new Image(this.getClass().getResourceAsStream("/dataIcon.png"), 100, 100, true, true);
 
         histogramButton.setGraphic(new ImageView(histogramimage));
         barChartButton.setGraphic(new ImageView(barChartImage));
