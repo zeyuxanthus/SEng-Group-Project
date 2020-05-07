@@ -1300,7 +1300,7 @@ public class GUI extends Application {
         });
 
 	Slider slider = new Slider(6,20,10);
-        fileChooserLayout.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.valueProperty()));
+        fileChooserLayout.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.valueProperty()));
 
         loadServer.setMinWidth(125);
         loadClicks.setMinWidth(125);
