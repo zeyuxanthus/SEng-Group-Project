@@ -7,9 +7,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Scanner;
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -82,9 +84,12 @@ public class GUI extends Application {
 
     public GUI(Controller con) {
         this.controller = con;
-        launch();
     }
 
+
+    public void start(){
+        launch();
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -197,17 +202,43 @@ public class GUI extends Application {
         
         fileOption.setOnAction(e -> {
             if (fileOption.getValue().equals("Load...")) {
-                fileChooserWindow();
+                File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
+                ArrayList<String> campaigns = new ArrayList<String>();
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        campaigns.add(file.getName());
+                    }
+                }
+
+                ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
+                dialog.setTitle("AdAuction");
+                dialog.setHeaderText("Load Campaign");
+                dialog.setContentText("Select campaign to be loaded:");
+
+                Optional<String> result = dialog.showAndWait();
+                if (result.isPresent()) {
+                    controller.loadCampaign(result.get());
+                }
             }
             else if (fileOption.getValue().equals("Save")) {
-            	controller.saveCampaign("Default Name");
+            	controller.saveCampaign("Campaign " + System.nanoTime());
             }
             else if (fileOption.getValue().equals("Save as...")) {
-            	Scanner scanner = new Scanner(System.in);
-            	System.out.println("Enter what you want to save the campaign as: ");
-            	String name = scanner.nextLine();
-            	controller.saveCampaign(name);
-            	scanner.close();
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("AdAuction");
+                dialog.setHeaderText("Save campaign");
+                dialog.setContentText("Please enter the name of the campaign:");
+
+                Optional<String> result = dialog.showAndWait();
+                if (result.isPresent()){
+                    controller.saveCampaign(result.get());
+                }
+
+//                Scanner scanner = new Scanner(System.in);
+//            	System.out.println("Enter what you want to save the campaign as: ");
+//            	String name = scanner.nextLine();
+//            	controller.saveCampaign(name);
+//            	scanner.close();
             }
         });
 
@@ -266,8 +297,8 @@ public class GUI extends Application {
         mainWindow.setRight(filtersAndMetrics);
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
         layering.getChildren().addAll(canvas, mainWindow,slider);
-	slider.setMaxWidth(100);
-	layering.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.valueProperty()));
+	    slider.setMaxWidth(100);
+	    layering.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.valueProperty()));
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
 
@@ -291,11 +322,11 @@ public class GUI extends Application {
         VBox metricBoxes2 = new VBox(10);
         VBox windowLayout = new VBox(10);
         HBox granularityLayout = new HBox(10);
-        HBox files = new HBox(10);
+//        HBox files = new HBox(10);
         
-        Label serverLabel = new Label(serverFile.getName());
-        Label impressionLabel = new Label(impressionFile.getName());
-        Label clickLabel = new Label(clicksFile.getName());
+//        Label serverLabel = new Label(serverFile.getName());
+//        Label impressionLabel = new Label(impressionFile.getName());
+//        Label clickLabel = new Label(clicksFile.getName());
 
         Label bounceRateLabel = new Label("Bounce Rate");
         Label noImpressionsLabel = new Label("No. of Impressions");
@@ -369,7 +400,7 @@ public class GUI extends Application {
         metricLabels2.getChildren().addAll(ctrLabel, cpaLabel, cpcLabel, cpmLabel, totalCostLabel, conversionRateLabel);
         metricBoxes2.getChildren().addAll(ctrField, cpaField, cpcField, cpmField, totalCostField, conversionRateField);
 
-        files.getChildren().addAll(clickLabel, impressionLabel, serverLabel);
+//        files.getChildren().addAll(clickLabel, impressionLabel, serverLabel);
 
         metricLayout.getChildren().addAll(metricLabels1, metricBoxes1, metricLabels2, metricBoxes2);
         windowLayout.getChildren().addAll(granularityLayout, metricLayout);
@@ -1177,11 +1208,30 @@ public class GUI extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				//
-				
+                File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
+                ArrayList<String> campaigns = new ArrayList<String>();
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        campaigns.add(file.getName());
+                    }
+                }
+
+                ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
+                dialog.setTitle("AdAuction");
+                dialog.setHeaderText("Load Campaign");
+                dialog.setContentText("Select campaign to be loaded:");
+
+                Optional<String> result = dialog.showAndWait();
+                if (result.isPresent()) {
+                    controller.loadCampaign(result.get());
+                    try {
+                        mainWindow();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    newWindow.close();
+                }
 			}
-        	
-        	
 		});
         
         
@@ -1299,8 +1349,8 @@ public class GUI extends Application {
             }
         });
 
-	Slider slider = new Slider(6,20,10);
-        fileChooserLayout.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.valueProperty()));
+	    Slider slider = new Slider(6,20,10);
+            fileChooserLayout.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.valueProperty()));
 
         loadServer.setMinWidth(125);
         loadClicks.setMinWidth(125);
