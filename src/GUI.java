@@ -106,6 +106,8 @@ public class GUI extends Application {
         VBox chartOptions = new VBox(10);
         HBox mainArea = new HBox(10);
         HBox options = new HBox();
+	    
+	Slider slider = new Slider(6,20,10);
 
         // Centre: metrics and filters
         VBox filtersAndMetrics = new VBox(20);
@@ -263,7 +265,9 @@ public class GUI extends Application {
         mainWindow.setCenter(chartOptions);
         mainWindow.setRight(filtersAndMetrics);
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
-        layering.getChildren().addAll(canvas, mainWindow);
+        layering.getChildren().addAll(canvas, mainWindow,slider);
+	slider.setMaxWidth(100);
+	layering.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.valueProperty()));
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
 
@@ -1295,6 +1299,8 @@ public class GUI extends Application {
             }
         });
 
+	Slider slider = new Slider(6,20,10);
+        fileChooserLayout.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.valueProperty()));
 
         loadServer.setMinWidth(125);
         loadClicks.setMinWidth(125);
@@ -1310,8 +1316,8 @@ public class GUI extends Application {
         fileChooserButtons.setMargin(continueButton, new Insets(30, 10, 10, 20));
         fileChooserButtons.setMargin(bounceBox, new Insets(10, 10, 10, 20));
 
-        fileChooserLayout.getChildren().addAll(fileChooserButtons);
-        fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
+        fileChooserLayout.getChildren().addAll(fileChooserButtons,slider);
+        //fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
 
 
         Scene scene = new Scene(fileChooserLayout, 400, 350);
