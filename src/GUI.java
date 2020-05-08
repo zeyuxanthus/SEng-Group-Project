@@ -17,6 +17,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.print.JobSettings;
+import javafx.print.PrintColor;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -36,6 +40,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class GUI extends Application {
     private static Controller controller;
@@ -686,11 +691,22 @@ public class GUI extends Application {
         
         HBox filterOptions = new HBox(10);
         filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
+
+
    
         Stage window = new Stage();
         Label chartLabel = new Label("Histogram for cost variation");
+
+        HBox printAndSaveBox = new HBox();
+        printAndSaveBox.setAlignment(Pos.BOTTOM_RIGHT);
+        Button printButton = new Button("Print");
+        printButton.setOnAction(event -> {
+            printChart(chart, window);
+        });
+        printAndSaveBox.getChildren().addAll(printButton);
+
         VBox vbox = new VBox(15);
-        vbox.getChildren().addAll(chart, filterOptions);
+        vbox.getChildren().addAll(chart, new Separator(), filterOptions, printAndSaveBox);
         vbox.setStyle("-fx-background-color: #c8e3f0;");
         
         Scene scene = new Scene(vbox, 700, 700);
@@ -1017,10 +1033,18 @@ public class GUI extends Application {
         metricsGranularity.getChildren().addAll(granLabel, barType);
         HBox metricsAndCreate = new HBox(25);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterBarChart);
+
+        HBox printAndSaveBox = new HBox();
+        printAndSaveBox.setAlignment(Pos.BOTTOM_RIGHT);
+        Button printButton = new Button("Print");
+        printButton.setOnAction(event -> {
+            printChart(barChart, stage);
+        });
+        printAndSaveBox.getChildren().addAll(printButton);
         
         VBox mainWindow = new VBox(20);
         HBox filterOptions = new HBox(10);
-        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
+        filterOptions.getChildren().addAll(filterPane, new Separator(), metricsAndCreate, printAndSaveBox);
         mainWindow.getChildren().addAll(barChart, filterOptions);
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(mainWindow, 900, 800);
@@ -1365,6 +1389,14 @@ public class GUI extends Application {
         metricsGranularity.getChildren().addAll(granLabel, granularity);
         HBox metricsAndCreate = new HBox(25);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterLineGraph);
+
+        HBox printAndSaveBox = new HBox();
+        printAndSaveBox.setAlignment(Pos.BOTTOM_RIGHT);
+        Button printButton = new Button("Print");
+        printButton.setOnAction(event -> {
+            printChart(lineChart, stage);
+        });
+        printAndSaveBox.getChildren().addAll(printButton);
         
         VBox mainWindow = new VBox(20);
         HBox filterOptions = new HBox(10);
@@ -1373,7 +1405,7 @@ public class GUI extends Application {
         pane.setContent(lineChart);
 
 
-        mainWindow.getChildren().addAll(lineChart, filterOptions);
+        mainWindow.getChildren().addAll(lineChart, new Separator(), filterOptions, printAndSaveBox);
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(mainWindow, 800, 800);
 
@@ -1383,6 +1415,7 @@ public class GUI extends Application {
         stage.setScene(scene);
         stage.show();
 
+//        printChart(lineChart, stage);
     }
     private void fileChooserWindow() {
 
@@ -1588,6 +1621,59 @@ public class GUI extends Application {
         fileChooserLayout.getStylesheets().add("/GUI.css");
         newWindow.setScene(scene);
         newWindow.show();
+    }
+
+    /**
+     *
+     * @param node - element to be printed
+     * @param stage - stage containing the chart
+     */
+    public void printChart(Node node, Stage stage){
+
+        //Get the Default Printer
+        Printer defaultPrinter = Printer.getDefaultPrinter();
+
+        if (defaultPrinter != null)
+        {
+            System.out.println(defaultPrinter.getName());
+
+            // Create a printer job for the default printer
+            PrinterJob job = PrinterJob.createPrinterJob();
+            JobSettings jobSettings = job.getJobSettings();
+            jobSettings.setPrintColor(PrintColor.MONOCHROME);
+
+            if (job != null && job.showPageSetupDialog(stage))
+            {
+                // Show the printer job status
+                System.out.println(job.jobStatusProperty().asString());
+
+                // Print the node
+                boolean printed = job.printPage(node);
+
+                if (printed)
+                {
+                    // End the printer job
+                    System.out.println(job.jobStatusProperty().asString());
+                    job.endJob();
+                    System.out.println(job.jobStatusProperty().asString());
+                }
+                else
+                {
+                    // Write Error Message
+                    System.err.println("Printing failed.");
+                }
+            }
+            else
+            {
+                // Write Error Message
+                System.err.println("Could not create a printer job.");
+            }
+
+        }
+        else
+        {
+            System.err.println("No printers installed.");
+        }
     }
     
     public void displayError(String error) {

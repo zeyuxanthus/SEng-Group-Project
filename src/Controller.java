@@ -210,7 +210,6 @@ public class Controller {
 		System.out.println("Method took:" + (endTime - startTime) / 1000000);
     }
 
-
 	public double getBounceRate(){
 		return campaign.getBounceRate();
 	}
