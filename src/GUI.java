@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javafx.application.Application;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,16 +17,9 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.chart.*;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -35,6 +29,8 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.gillius.jfxutils.chart.ChartPanManager;
+import org.gillius.jfxutils.chart.JFXChartUtil;
 
 public class GUI extends Application {
     private static Controller controller;
@@ -544,31 +540,208 @@ public class GUI extends Application {
         return impMetricBox;
     }
 
+//    private void createLineChart(Metric metric, Filter filters, TimeInterval interval) {
+//        Stage stage = new Stage();
+//        stage.setTitle("Line Chart");
+//        final NumberAxis xAxis = new NumberAxis();
+//        final NumberAxis yAxis = new NumberAxis();
+////        final CategoryAxis xAxis = new CategoryAxis();
+////        xAxis.setLabel("Date");
+//
+//
+//
+//        XYChart.Series series = new XYChart.Series();
+//        series.setName(metric + " per " + interval);
+//
+//
+//        LineGraph lineGraph = new LineGraph(metric, interval, controller, filters); //this is where the
+//		// filters, metric and granularity will be passed
+//        ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use
+//		// it in the graph
+//
+//
+//        if(interval == TimeInterval.HOUR){
+//            for (DataPoint dp : dataPoints) {
+//                series.getData().add(new XYChart.Data(((LocalDateTime)dp.getStartTime()).getHour(), dp.getMetric()));
+//            }
+//        } else if(interval == TimeInterval.DAY){
+//            for (DataPoint dp : dataPoints) {
+//                series.getData().add(new XYChart.Data(((LocalDateTime)dp.getStartTime()).getDayOfYear(), dp.getMetric()));
+//            }
+//        } else if(interval == TimeInterval.WEEK){
+//            for (DataPoint dp : dataPoints) {
+//                series.getData().add(new XYChart.Data(((LocalDateTime)dp.getStartTime()).getDayOfYear(), dp.getMetric()));
+//            }
+//        } else if(interval == TimeInterval.MONTH){
+//            for (DataPoint dp : dataPoints) {
+//                series.getData().add(new XYChart.Data(((LocalDateTime)dp.getStartTime()).getMonthValue(), dp.getMetric()));
+//            }
+//        }
+//
+//
+//
+//
+//
+//        final LineChart<Number, Number> lineChart =
+//                new LineChart<Number, Number>(xAxis, yAxis);
+//
+////        final LineChart<String, Number> lineChart =
+////                new LineChart<String, Number>(xAxis, yAxis);
+//
+//
+//        lineChart.setTitle(metric + " line chart");
+//
+//        TilePane impressionFilterOptions = impressionFilters();
+//
+//        HBox impressionMetricsOptions = addImpHbox();
+//        VBox filterPane = new VBox(10);
+//        Label granLabel = new Label("Granularity: ");
+//        filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
+//
+//
+//        ComboBox<TimeInterval> granularity =
+//				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
+//        granularity.setValue(TimeInterval.DAY);
+//
+//        VBox windowLayout = new VBox(10);
+//        HBox metricsGranularity = new HBox(10);
+//
+//        Button createLineGraph = new Button("Create");
+//
+//        if(interval == TimeInterval.HOUR) {
+//            ToggleButton trendButton = new ToggleButton("Trend View");
+//            metricsGranularity.getChildren().addAll(trendButton);
+//        }
+//
+//
+//
+//        createLineGraph.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//                ArrayList<String> filters = new ArrayList<String>();
+//                ArrayList<Metric> metrics = new ArrayList<Metric>();
+//                ObservableList<Node> filterNodes = null;
+//                ObservableList<Node> metricsNodes = null;
+//                metricsNodes = impressionMetricsOptions.getChildren();
+//                filterNodes = impressionFilterOptions.getChildren();
+//                ObservableList<Node> createNodes = metricsGranularity.getChildren();
+//
+//                for (Node n : metricsNodes) {
+//                    if (n instanceof ChoiceBox) {
+//                        metrics.add((Metric) ((ChoiceBox) n).getValue());
+//                    }
+//                }
+//
+//
+//                for (Node n : filterNodes) {
+//                	if (n instanceof VBox) {
+//                		for (Node m : ((VBox) n).getChildren()) {
+//                			 if (m instanceof TextField) {
+//                                 filters.add(((TextField) m).getText());
+//                             } else if (m instanceof ComboBox) {
+//                                 filters.add((String) ((ComboBox) m).getValue());
+//                             }
+//                		}
+//                	}
+//                }
+//
+//                LocalDateTime startDate = null;
+//                LocalDateTime endDate = null;
+//                ArrayList<String> context = new ArrayList<String>();
+//                ArrayList<String> ageGroups = new ArrayList<String>();
+//                ArrayList<String> incomes = new ArrayList<String>();
+//                //Same situation as above, this time looking for each filter
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+//                if (filters.get(0).equals("") == false) {
+//                    startDate = LocalDateTime.parse(filters.get(0), formatter);
+//                }
+//                if (filters.get(1).equals("") == false) {
+//                    endDate = LocalDateTime.parse(filters.get(1), formatter);
+//                }
+//                if (filters.get(2) != null)
+//                    context.add(filters.get(2));
+//                if (filters.get(4) != null)
+//                    ageGroups.add(filters.get(4));
+//                if (filters.get(5) != null)
+//                    incomes.add(filters.get(5));
+//
+//                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+//                LineGraph lineGraph = new LineGraph(metrics.get(0), granularity.getValue(), controller, filter); //this is where the
+//        		// filters, metric and granularity will be passed
+//                ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use
+//        		// it in the graph
+//                XYChart.Series series2 = new XYChart.Series();
+//                series2.setName(metrics.get(0) + " per " + granularity.getValue());
+//                for (DataPoint dp : dataPoints) {
+//                    series2.getData().add(new XYChart.Data(dp.getStartTime().toString(), dp.getMetric()));
+//                }
+//                lineChart.getData().clear();
+//                lineChart.getData().add(series2);
+//                lineChart.setTitle(metrics.get(0) + " line chart");
+//            }
+//        });
+//
+//        lineChart.setMinHeight(600);
+//
+//        metricsGranularity.getChildren().addAll(granLabel, granularity);
+//        HBox metricsAndCreate = new HBox(25);
+//        metricsAndCreate.getChildren().addAll(metricsGranularity, createLineGraph);
+//
+//        VBox mainWindow = new VBox(20);
+//        HBox filterOptions = new HBox(10);
+//        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
+//        ScrollPane pane = new ScrollPane();
+//        pane.setContent(lineChart);
+//
+//
+//        mainWindow.getChildren().addAll(lineChart, filterOptions);
+//        mainWindow.setStyle("-fx-background-color: #c8e3f0;");
+//        Scene scene = new Scene(mainWindow, 800, 800);
+//
+//
+////        new ZoomManager<>(mainWindow, lineChart, series);
+//
+//        ChartPanManager panManager = new ChartPanManager(lineChart);
+//        panManager.start();
+//        lineChart.getData().add(series);
+//        JFXChartUtil.setupZooming(lineChart, panManager.getMouseFilter());
+//
+//        stage.setScene(scene);
+//        stage.setScene(scene);
+//        stage.show();
+//
+//    }
+
+
     private void createLineChart(Metric metric, Filter filters, TimeInterval interval) {
         Stage stage = new Stage();
         stage.setTitle("Line Chart");
-        final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
+        final CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Date");
+
+
+
+        XYChart.Series series = new XYChart.Series();
+        series.setName(metric + " per " + interval);
+
+
+        LineGraph lineGraph = new LineGraph(metric, interval, controller, filters); //this is where the
+        // filters, metric and granularity will be passed
+        ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use
+        // it in the graph
+
+
+        for (DataPoint dp : dataPoints) {
+            series.getData().add(new XYChart.Data(dp.getStartTime().toString(), dp.getMetric()));
+        }
 
 
         final LineChart<String, Number> lineChart =
                 new LineChart<String, Number>(xAxis, yAxis);
 
+
         lineChart.setTitle(metric + " line chart");
-
-        XYChart.Series series = new XYChart.Series();
-        series.setName(metric + " per " + interval);
-        
-
-        LineGraph lineGraph = new LineGraph(metric, interval, controller, filters); //this is where the
-		// filters, metric and granularity will be passed
-        ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use
-		// it in the graph
-
-        for (DataPoint dp : dataPoints) {
-            series.getData().add(new XYChart.Data(dp.getStartTime().toString(), dp.getMetric()));
-        }
 
         TilePane impressionFilterOptions = impressionFilters();
 
@@ -579,13 +752,20 @@ public class GUI extends Application {
 
 
         ComboBox<TimeInterval> granularity =
-				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
+                new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
         granularity.setValue(TimeInterval.DAY);
 
         VBox windowLayout = new VBox(10);
         HBox metricsGranularity = new HBox(10);
 
         Button createLineGraph = new Button("Create");
+
+        if(interval == TimeInterval.HOUR) {
+            ToggleButton trendButton = new ToggleButton("Trend View");
+            metricsGranularity.getChildren().addAll(trendButton);
+        }
+
+
 
         createLineGraph.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -596,6 +776,7 @@ public class GUI extends Application {
                 ObservableList<Node> metricsNodes = null;
                 metricsNodes = impressionMetricsOptions.getChildren();
                 filterNodes = impressionFilterOptions.getChildren();
+                ObservableList<Node> createNodes = metricsGranularity.getChildren();
 
                 for (Node n : metricsNodes) {
                     if (n instanceof ChoiceBox) {
@@ -605,15 +786,15 @@ public class GUI extends Application {
 
 
                 for (Node n : filterNodes) {
-                	if (n instanceof VBox) {
-                		for (Node m : ((VBox) n).getChildren()) {
-                			 if (m instanceof TextField) {
-                                 filters.add(((TextField) m).getText());
-                             } else if (m instanceof ComboBox) {
-                                 filters.add((String) ((ComboBox) m).getValue());
-                             }
-                		}
-                	}
+                    if (n instanceof VBox) {
+                        for (Node m : ((VBox) n).getChildren()) {
+                            if (m instanceof TextField) {
+                                filters.add(((TextField) m).getText());
+                            } else if (m instanceof ComboBox) {
+                                filters.add((String) ((ComboBox) m).getValue());
+                            }
+                        }
+                    }
                 }
 
                 LocalDateTime startDate = null;
@@ -638,9 +819,9 @@ public class GUI extends Application {
 
                 Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
                 LineGraph lineGraph = new LineGraph(metrics.get(0), granularity.getValue(), controller, filter); //this is where the
-        		// filters, metric and granularity will be passed
+                // filters, metric and granularity will be passed
                 ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use
-        		// it in the graph
+                // it in the graph
                 XYChart.Series series2 = new XYChart.Series();
                 series2.setName(metrics.get(0) + " per " + granularity.getValue());
                 for (DataPoint dp : dataPoints) {
@@ -653,25 +834,30 @@ public class GUI extends Application {
         });
 
         lineChart.setMinHeight(600);
-        
+
         metricsGranularity.getChildren().addAll(granLabel, granularity);
         HBox metricsAndCreate = new HBox(25);
         metricsAndCreate.getChildren().addAll(metricsGranularity, createLineGraph);
-        
+
         VBox mainWindow = new VBox(20);
         HBox filterOptions = new HBox(10);
         filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
+        ScrollPane pane = new ScrollPane();
+        pane.setContent(lineChart);
+
+
         mainWindow.getChildren().addAll(lineChart, filterOptions);
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(mainWindow, 800, 800);
-        //lineChart.getData().add(series);
+
+
         new ZoomManager<>(mainWindow, lineChart, series);
+
         stage.setScene(scene);
         stage.setScene(scene);
         stage.show();
 
     }
-
     private void fileChooserWindow() {
 
 
