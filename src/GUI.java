@@ -53,10 +53,10 @@ public class GUI extends Application {
     private final TimeInterval[] granularityOptions = {TimeInterval.HOUR, TimeInterval.DAY, TimeInterval.WEEK,
 			TimeInterval.MONTH};
     private final BarChartType[] barChartType = {BarChartType.DAY_OF_WEEK, BarChartType.TIME_OF_DAY};
-    private final String[] genders = {"Male", "Female"};
-    private final String[] ageGroups = {"<25", "25-34", "35-44", "45-54", ">54"};
-    private final String[] incomeGroups = {"Low", "Medium", "High"};
-    private final String[] contextGroups = {"News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel"};
+    private final String[] genders = {"","Male", "Female"};
+    private final String[] ageGroups = {"", "<25", "25-34", "35-44", "45-54", ">54"};
+    private final String[] incomeGroups = {"", "Low", "Medium", "High"};
+    private final String[] contextGroups = {"", "News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel"};
     final String cssDefault = "-fx-border-color: black;\n"
             + "-fx-border-insets: 50.0 10.0 0.0 10.0;\n"
             + "-fx-border-width: 3;\n"
@@ -473,6 +473,8 @@ public class GUI extends Application {
                 ArrayList<String> context = new ArrayList<String>();
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
+                String gender = new String();
+                gender = null;
                 //Same situation as above, this time looking for each filter
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 if (!filters.get(0).equals("") && filters.get(0) != null) {
@@ -481,13 +483,16 @@ public class GUI extends Application {
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
                     endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
-                if (filters.get(2) != null)
+                if (filters.get(2) != null && !filters.get(2).equals(""))
                     context.add(filters.get(2));
-                if (filters.get(4) != null)
+                if (filters.get(3) != null && !filters.get(3).equals(""))
+                    gender = filters.get(3);
+                if (filters.get(4) != null && !filters.get(4).equals(""))
                     ageGroups.add(filters.get(4));
-                if (filters.get(5) != null)
+                if (filters.get(5) != null && !filters.get(5).equals(""))
                     incomes.add(filters.get(5));
-                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+
+                Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 createHistogram(filter);
 
 
@@ -641,6 +646,8 @@ public class GUI extends Application {
                 ArrayList<String> context = new ArrayList<String>();
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
+                String gender = new String();
+                gender = null;
                 //Same situation as above, this time looking for each filter
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 if (!filters.get(0).equals("") && filters.get(0) != null) {
@@ -649,14 +656,16 @@ public class GUI extends Application {
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
                     endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
-                if (filters.get(2) != null)
+                if (filters.get(2) != null && !filters.get(2).equals(""))
                     context.add(filters.get(2));
-                if (filters.get(4) != null)
+                if (filters.get(3) != null && !filters.get(3).equals(""))
+                    gender = filters.get(3);
+                if (filters.get(4) != null && !filters.get(4).equals(""))
                     ageGroups.add(filters.get(4));
-                if (filters.get(5) != null)
+                if (filters.get(5) != null && !filters.get(5).equals(""))
                     incomes.add(filters.get(5));
 
-                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 Histogram histogram = controller.createHistogram(5, 2, filter);
                 ArrayList<HistogramBar> bars = histogram.getHistogramBars();//you can then just grab the data from it and use
         		// it in the graph
@@ -748,6 +757,8 @@ public class GUI extends Application {
                 ArrayList<String> context = new ArrayList<String>();
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
+                String gender = new String();
+                gender = null;
                 //Same situation as above, this time looking for each filter
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 if (!filters.get(0).equals("") && filters.get(0) != null) {
@@ -756,14 +767,16 @@ public class GUI extends Application {
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
                     endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
-                if (filters.get(2) != null)
+                if (filters.get(2) != null && !filters.get(2).equals(""))
                     context.add(filters.get(2));
-                if (filters.get(4) != null)
+                if (filters.get(3) != null && !filters.get(3).equals(""))
+                    gender = filters.get(3);
+                if (filters.get(4) != null && !filters.get(4).equals(""))
                     ageGroups.add(filters.get(4));
-                if (filters.get(5) != null)
+                if (filters.get(5) != null && !filters.get(5).equals(""))
                     incomes.add(filters.get(5));
 
-                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 createLineChart(metrics.get(0), filter, granularity.getValue());
 
             }
@@ -841,6 +854,8 @@ public class GUI extends Application {
                 ArrayList<String> context = new ArrayList<String>();
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
+                String gender = new String();
+                gender = null;
                 //Same situation as above, this time looking for each filter
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 if (!filters.get(0).equals("") && filters.get(0) != null) {
@@ -849,14 +864,16 @@ public class GUI extends Application {
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
                     endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
-                if (filters.get(2) != null)
+                if (filters.get(2) != null && !filters.get(2).equals(""))
                     context.add(filters.get(2));
-                if (filters.get(4) != null)
+                if (filters.get(3) != null && !filters.get(3).equals(""))
+                    gender = filters.get(3);
+                if (filters.get(4) != null && !filters.get(4).equals(""))
                     ageGroups.add(filters.get(4));
-                if (filters.get(5) != null)
+                if (filters.get(5) != null && !filters.get(5).equals(""))
                     incomes.add(filters.get(5));
 
-                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 createBarChart(metrics.get(0), filter, type.getValue());
 
             }
@@ -958,6 +975,8 @@ public class GUI extends Application {
                 ArrayList<String> context = new ArrayList<String>();
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
+                String gender = new String();
+                gender = null;
                 //Same situation as above, this time looking for each filter
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 if (!filters.get(0).equals("") && filters.get(0) != null) {
@@ -966,14 +985,16 @@ public class GUI extends Application {
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
                     endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
-                if (filters.get(2) != null)
+                if (filters.get(2) != null && !filters.get(2).equals(""))
                     context.add(filters.get(2));
-                if (filters.get(4) != null)
+                if (filters.get(3) != null && !filters.get(3).equals(""))
+                    gender = filters.get(3);
+                if (filters.get(4) != null && !filters.get(4).equals(""))
                     ageGroups.add(filters.get(4));
-                if (filters.get(5) != null)
+                if (filters.get(5) != null && !filters.get(5).equals(""))
                     incomes.add(filters.get(5));
 
-                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 BarGraph barGraph = new BarGraph(metrics.get(0), barType.getValue(), filter, controller); //this is where the
         		// filters, metric and granularity will be passed
                 ArrayList<Bar> dataBars = barGraph.getBars();//you can then just grab the data from it and use
@@ -1052,7 +1073,8 @@ public class GUI extends Application {
                 new LineChart<String, Number>(xAxis, yAxis);
 
         lineChart.setTitle(metric + " line chart");
-
+        lineChart.setAnimated(false);
+        
         XYChart.Series series = new XYChart.Series();
         series.setName(metric + " per " + interval);
         
@@ -1123,6 +1145,8 @@ public class GUI extends Application {
                 ArrayList<String> context = new ArrayList<String>();
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
+                String gender = new String();
+                gender = null;
                 //Same situation as above, this time looking for each filter
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 if (!filters.get(0).equals("") && filters.get(0) != null) {
@@ -1131,14 +1155,16 @@ public class GUI extends Application {
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
                     endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
-                if (filters.get(2) != null)
+                if (filters.get(2) != null && !filters.get(2).equals(""))
                     context.add(filters.get(2));
-                if (filters.get(4) != null)
+                if (filters.get(3) != null && !filters.get(3).equals(""))
+                    gender = filters.get(3);
+                if (filters.get(4) != null && !filters.get(4).equals(""))
                     ageGroups.add(filters.get(4));
-                if (filters.get(5) != null)
+                if (filters.get(5) != null && !filters.get(5).equals(""))
                     incomes.add(filters.get(5));
 
-                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 LineGraph lineGraph = new LineGraph(metrics.get(0), granularity.getValue(), controller, filter); //this is where the
         		// filters, metric and granularity will be passed
                 ArrayList<DataPoint> dataPoints = lineGraph.getDataPoints();//you can then just grab the data from it and use
