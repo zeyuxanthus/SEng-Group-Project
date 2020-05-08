@@ -295,14 +295,18 @@ public class GUI extends Application {
         mainWindow.setTop(toolBar);
         mainWindow.setCenter(chartOptions);
         mainWindow.setRight(filtersAndMetrics);
-        mainWindow.setStyle("-fx-background-color: #c8e3f0;");
-        layering.getChildren().addAll(canvas, mainWindow,slider);
+        //mainWindow.setStyle("-fx-background-color: #c8e3f0;");
+	    
+	    HBox h = new HBox(mainWindow,slider);
+	    h.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.valueProperty()));
+	    layering.getChildren().addAll(canvas, h);
 	    slider.setMaxWidth(100);
-	    layering.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.valueProperty()));
+	
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
 
         root.getChildren().add(layering);
+	    root.setAutoSizeChildren(true);
         Scene scene = new Scene(root, 900, 550);
         scene.getStylesheets().add("/GUI.css");
         primaryStage.setScene(scene);
