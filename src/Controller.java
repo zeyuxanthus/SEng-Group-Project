@@ -1,6 +1,11 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -14,6 +19,13 @@ public class Controller {
 	private States state = new States();
 
 	private int bounceDefinition = 1;
+
+	public static final String AD_AUCTION_FOLDER = "AdAuction";
+	public static final String CAMPAIGN_FOLDER = "Campaign";
+	public static final String IMAGE_FOLDER = "Images";
+	public static final String CLICK_LOG_NAME = "click_log.csv";
+	public static final String SERVER_LOG_NAME = "server_log.csv";
+	public static final String IMPRESSION_LOG_NAME = "impression_log.csv";
 
 	public void setGUI(GUI gui){
 
@@ -117,27 +129,78 @@ public class Controller {
 
 
 //save the log file 
-    public void saveCampaign(String filename){
-	    try {
-            String str = campaign.serverPath + " " + campaign.clickPath + " " + campaign.impressionPath;
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filename + ".txt"));
-            writer.write(str);
-            writer.close();
-        }catch(IOException e){
-	        e.printStackTrace();
-        }
+    public void saveCampaign(String campaignName){
+		Path path = Paths.get(System.getProperty("user.dir") + "\\" + AD_AUCTION_FOLDER + "\\" + CAMPAIGN_FOLDER + "\\" + campaignName);
+
+		// Create directories if the don't yet exist
+		if (!Files.exists(path)) {
+			try {
+				Files.createDirectories(path);
+			} catch (IOException e) {
+				//fail to create directory
+				e.printStackTrace();
+			}
+		}
+
+		// Copy campaigns
+
+		File serverSource = new File(campaign.serverPath);
+		File clickSource = new File(campaign.clickPath);
+		File impressionSource = new File(campaign.impressionPath);
+
+		File serverDestination = new File(path + "\\" + SERVER_LOG_NAME);
+		File clickDestination = new File(path + "\\" + CLICK_LOG_NAME);
+		File impressionDestination = new File(path + "\\" + IMPRESSION_LOG_NAME);
+
+		HashMap<File, File> sourcesAndDestinations = new HashMap<>();
+		sourcesAndDestinations.put(serverSource, serverDestination);
+		sourcesAndDestinations.put(clickSource,clickDestination);
+		sourcesAndDestinations.put(impressionSource, impressionDestination);
+
+		for(Map.Entry<File, File> sourceAndDestination : sourcesAndDestinations.entrySet()){
+			try{
+				FileInputStream fis = new FileInputStream(sourceAndDestination.getKey());
+				FileOutputStream fos = new FileOutputStream(sourceAndDestination.getValue());
+
+				byte[] buffer = new byte[1024];
+				int length;
+
+				while ((length = fis.read(buffer)) > 0) {
+
+					fos.write(buffer, 0, length);
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+
+		// Create config file
+		File file = new File( path + "\\config.txt");
+		try{
+			String str = Integer.toString(bounceDefinition);
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
+			writer.write(str);
+			writer.close();
+		}
+		catch (IOException e){
+			System.err.println("Cannot create directories - " + e);
+			e.printStackTrace();
+		}
+
     }
 
-    public void loadCampaign(String filename){
+    public void loadCampaign(String campaignName){
         long startTime = System.nanoTime();
+		Path path = Paths.get(System.getProperty("user.dir") + "\\" + AD_AUCTION_FOLDER + "\\" + CAMPAIGN_FOLDER + "\\" + campaignName);
 	    try {
-	        BufferedReader reader = new BufferedReader(new FileReader(filename + ".txt"));
-	        String line = reader.readLine();
-	        String[] list = line.split(" ");
-            System.out.println(list[0]);
-            campaign = new Campaign(list[0], list[1], list[2], this);
+			BufferedReader reader = new BufferedReader(new FileReader(path + "\\config.txt"));
+			String line = reader.readLine();
+			String[] list = line.split(" ");
+			System.out.println(list[0]);
 
+	    	loadNewCampaign(path + "\\" + SERVER_LOG_NAME, path + "\\" + CLICK_LOG_NAME, path + "\\" + IMPRESSION_LOG_NAME, Integer.parseInt(list[0]));
 
+	    	System.out.println(gui == null);
         }catch (FileNotFoundException e){
 	        e.printStackTrace();
         }catch (IOException e){
@@ -212,6 +275,10 @@ public class Controller {
 	 */
 	public Histogram createHistogram(int noBars, int accuracy, Filter filter){
 		return new Histogram(this, noBars, accuracy, filter);
+	}
+
+	public BarGraph createBarChar(Metric metric, BarChartType barChartType, Filter filter){
+		return new BarGraph(metric, barChartType, filter, this);
 	}
 
 	//--FILTERS---------------------------------------------------------------------------------------------------------
