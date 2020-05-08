@@ -7,9 +7,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="Fix LineGraph calculations related to rates.">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/org_gillius_jfxutils_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/production/AdAuction/barChartIcon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/production/AdAuction/lineGraphIcon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AdAuction.iml" beforeDir="false" afterPath="$PROJECT_DIR$/AdAuction.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/barChartIcon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/lineGraphIcon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/pieChartIcon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Campaign.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Campaign.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Controller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/FileDelete.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/FileDelete.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$3.class" afterDir="false" />
@@ -20,20 +27,20 @@
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/MyTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/MyTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Histogram.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Histogram.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/META-INF/AdAuction.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/States.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/States.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager$4.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/ZoomManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BarGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BarGraph.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MyTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ZoomManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ZoomManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataIcon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/production/AdAuction/dataIcon.png" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,156 +49,8 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="1068642574">
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="JAVA" value="4552" />
-          <entry key="PLAIN_TEXT" value="156" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="CSS" value="1" />
-          <entry key="Image" value="1" />
-          <entry key="JAVA" value="4" />
-          <entry key="Manifest" value="1" />
-          <entry key="PLAIN_TEXT" value="4" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.vcs.git.usages">
-        <counts>
-          <entry key="git.branch.merge" value="3" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="2" />
-          <entry key="project.open.time.11" value="1" />
-          <entry key="project.open.time.16" value="1" />
-          <entry key="project.opened" value="2" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Controller.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="22" column="55" selection-start-line="22" selection-start-column="55" selection-end-line="22" selection-end-column="55" />
-              <folding>
-                <element signature="e#514#515#0" expanded="true" />
-                <element signature="e#541#542#0" expanded="true" />
-                <element signature="e#545#673#0" />
-                <element signature="e#931#1633#0" />
-                <element signature="e#1637#1694#0" />
-                <element signature="e#1637#2079#0" />
-                <element signature="e#4496#4497#0" expanded="true" />
-                <element signature="e#4534#4535#0" expanded="true" />
-                <element signature="e#4570#4571#0" expanded="true" />
-                <element signature="e#4614#4615#0" expanded="true" />
-                <element signature="e#4645#4646#0" expanded="true" />
-                <element signature="e#4684#4685#0" expanded="true" />
-                <element signature="e#4715#4716#0" expanded="true" />
-                <element signature="e#4754#4755#0" expanded="true" />
-                <element signature="e#4786#4787#0" expanded="true" />
-                <element signature="e#4826#4827#0" expanded="true" />
-                <element signature="e#4862#4863#0" expanded="true" />
-                <element signature="e#4906#4907#0" expanded="true" />
-                <element signature="e#4932#4933#0" expanded="true" />
-                <element signature="e#4963#4964#0" expanded="true" />
-                <element signature="e#4989#4990#0" expanded="true" />
-                <element signature="e#5020#5021#0" expanded="true" />
-                <element signature="e#5046#5047#0" expanded="true" />
-                <element signature="e#5077#5078#0" expanded="true" />
-                <element signature="e#5103#5104#0" expanded="true" />
-                <element signature="e#5134#5135#0" expanded="true" />
-                <element signature="e#5166#5167#0" expanded="true" />
-                <element signature="e#5203#5204#0" expanded="true" />
-                <element signature="e#5240#5241#0" expanded="true" />
-                <element signature="e#5282#5283#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/GUI.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="565">
-              <caret line="717" column="37" selection-start-line="717" selection-start-column="37" selection-end-line="717" selection-end-column="37" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3962#3963#0" expanded="true" />
-                <element signature="e#4006#4007#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ZoomManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/TimeInterval.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="12" selection-start-column="12" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Metric.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="1" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DataPoint.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/MyTests.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9090">
-              <caret line="617" selection-start-line="617" selection-end-line="617" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5955">
-              <caret line="400" column="8" selection-start-line="400" selection-start-column="8" selection-end-line="400" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -203,7 +62,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>conversionRate</find>
       <find>launch</find>
       <find>histogram</find>
       <find>serverFile</find>
@@ -233,6 +91,7 @@
       <find>HOUR</find>
       <find>METRICSnODES</find>
       <find>getXaXISlOWER</find>
+      <find>.png</find>
     </findStrings>
     <replaceStrings>
       <replace>controller</replace>
@@ -278,15 +137,10 @@
         <option value="$PROJECT_DIR$/src/DataPoint.java" />
         <option value="$PROJECT_DIR$/src/Metric.java" />
         <option value="$PROJECT_DIR$/src/ResizableChartWithinScrollPane.java" />
+        <option value="$PROJECT_DIR$/src/BarGraph.java" />
         <option value="$PROJECT_DIR$/src/GUI.java" />
       </list>
     </option>
-  </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="MavenProjectNavigator">
     <treeState>
@@ -294,11 +148,11 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="11" />
-    <option name="y" value="-22" />
-    <option name="width" value="1920" />
-    <option name="height" value="1080" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="x" value="82" />
+    <option name="y" value="44" />
+    <option name="width" value="891" />
+    <option name="height" value="828" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -311,40 +165,19 @@
         <subPane>
           <expand>
             <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
+              <item name="SEng-Group-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SEng-Group-Project" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-              <item name="AdAuction" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-              <item name="AdAuction" type="462c0819:PsiDirectoryNode" />
-              <item name="Campaign" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-              <item name="AdAuction" type="462c0819:PsiDirectoryNode" />
-              <item name="Campaign" type="462c0819:PsiDirectoryNode" />
-              <item name="campaign test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-              <item name="inspection" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
+              <item name="SEng-Group-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SEng-Group-Project" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="SEng-Group-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SEng-Group-Project" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="production.AdAuction" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -359,7 +192,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1588863891664" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1588942067715" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -368,17 +201,19 @@
     <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\IJ\PleaseWorkNow\src" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src" />
-      <recent name="C:\Users\Arkadiusz\Downloads\AdAuction" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/out/production/AdAuction" />
+      <recent name="$PROJECT_DIR$/src/production/AdAuction" />
+      <recent name="$PROJECT_DIR$/out/production" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="C:\IJ\PleaseWorkNow\out\production\AdAuction" />
-      <recent name="C:\IJ\PleaseWorkNow" />
-      <recent name="C:\IJ\PleaseWorkNow\src" />
-      <recent name="C:\Users\Arkadiusz\Downloads\AdAuction\src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/out/production/AdAuction" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/out/production" />
+      <recent name="$PROJECT_DIR$/out" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -440,10 +275,10 @@
     </configuration>
     <list>
       <item itemvalue="Application.Main" />
+      <item itemvalue="Application.GUI" />
       <item itemvalue="JUnit.MyTests.testDates" />
       <item itemvalue="JUnit.MyTests.datapointsDatesBoundaryDay" />
       <item itemvalue="JUnit.Main" />
-      <item itemvalue="Application.GUI" />
     </list>
     <recent_temporary>
       <list>
@@ -654,7 +489,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91863000" />
+    <option name="totallyTimeSpent" value="93555000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -666,10 +501,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17668097" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17668097" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -678,7 +512,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49733758" visible="true" weight="0.25421688" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49733758" visible="true" weight="0.25421688" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -739,9 +573,6 @@
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.csv" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Test Git IntelliJ" />
     <MESSAGE value="Remove unused enums." />
@@ -764,9 +595,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Moved icons to class files." />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/company/Main.java" />
-    <entry file="file://$PROJECT_DIR$/src/View.java" />
-    <entry file="file://$PROJECT_DIR$/src/Chart.java" />
     <entry file="file://$PROJECT_DIR$/SerialisedCampaign" />
     <entry file="jar://$USER_HOME$/Downloads/kryo-5.0.0-RC5/kryo-5.0.0-RC5.jar!/com/esotericsoftware/kryo/KryoSerializable.class" />
     <entry file="jar://$USER_HOME$/Downloads/kryo-5.0.0-RC5/kryo-5.0.0-RC5.jar!/com/esotericsoftware/kryo/Kryo.class" />
@@ -834,16 +662,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BarChart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="45" column="37" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
-          <folding>
-            <element signature="e#1662#1663#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/BarChart.java" />
     <entry file="file://$PROJECT_DIR$/src/Histogram.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
@@ -858,12 +677,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pieChartIcon.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lineGraphIcon.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ServerEntry.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -873,8 +686,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/MyTests.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="629" column="74" selection-start-line="629" selection-start-column="74" selection-end-line="629" selection-end-column="74" />
+        <state relative-caret-position="9090">
+          <caret line="617" selection-start-line="617" selection-end-line="617" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -908,8 +721,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="28" selection-start-column="7" selection-end-column="28" />
+        <state relative-caret-position="165">
+          <caret line="11" column="37" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -936,18 +749,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ZoomManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9090">
-          <caret line="617" selection-start-line="617" selection-end-line="617" />
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5955">
-          <caret line="400" column="8" selection-start-line="400" selection-start-column="8" selection-end-line="400" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -960,8 +766,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="649">
-          <caret line="264" column="12" selection-start-line="264" selection-start-column="12" selection-end-line="264" selection-end-column="12" />
+        <state relative-caret-position="5955">
+          <caret line="400" column="8" selection-start-line="400" selection-start-column="8" selection-end-line="400" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -975,14 +781,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GUI.java">
+    <entry file="file://$PROJECT_DIR$/src/BarGraph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="565">
-          <caret line="717" column="37" selection-start-line="717" selection-start-column="37" selection-end-line="717" selection-end-column="37" />
+        <state>
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3962#3963#0" expanded="true" />
-            <element signature="e#4006#4007#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/out/production/AdAuction/pieChartIcon.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/out/production/pieChartIcon.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/barChartIcon.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lineGraphIcon.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/lineGraphIcon.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/dataIcon.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/barChartIcon.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dataIcon.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/GUI.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/META-INF/MANIFEST.MF">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/Bar.class">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/GUI.class">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/Main.class">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/Click.class">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/GUI$1.class">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/production/AdAuction/GUI$2.class">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="279" selection-start-line="279" selection-end-line="279" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

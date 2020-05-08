@@ -1,0 +1,63 @@
+/* 
+    Document   : controlStyle1
+*/
+
+.root{
+
+}
+
+.choice-box .context-menu { -fx-background-color: #5babd1; -fx-border-color: #5babd1; -fx-text-fill: #e4f1f7;}
+
+.choice-box .menu-item:focused { -fx-background-color: #248fc1; }
+
+.choice-box:hover{ -fx-background-color: #248fc1; }
+
+.choice-box {
+  -fx-background-color: #5babd1; 
+  -fx-mark-color: #e4f1f7;
+}
+
+
+
+
+
+.combo-box-popup .list-view .list-cell{
+	-fx-background-color: #5babd1; -fx-border-color: #5babd1; -fx-text-fill: #e4f1f7;
+}
+.combo-box-popup .list-view .list-cell:hover{
+    -fx-background-color: #248fc1; -fx-text-fill: #e4f1f7;
+}
+.combo-box-base {
+	-fx-background-color: #5babd1; -fx-text-fill: #e4f1f7;
+	
+}
+
+.combo-box-base:hover{
+	-fx-background-color: #248fc1; -fx-text-fill: #e4f1f7;
+	
+}
+
+.region {
+	-fx-background-color: blue;
+}
+
+.combo-box .arrow, .combo-box .arrow-button{
+    -fx-background-color: transparent;
+}
+
+.button {
+    -fx-background-color: #5babd1; -fx-border-color: #5babd1;
+    -fx-text-fill: #e4f1f7;
+}
+
+.button:hover{
+    -fx-background-color: #248fc1; -fx-border-color: #248fc1;
+}
+
+.vbox{
+    -fx-background-color: #accaf5;
+}
+
+.hbox{
+    -fx-background-color: #accaf5;
+}

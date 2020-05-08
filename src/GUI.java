@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -17,13 +16,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.chart.*;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -39,8 +36,6 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.gillius.jfxutils.chart.ChartPanManager;
-import org.gillius.jfxutils.chart.JFXChartUtil;
 
 public class GUI extends Application {
     private static Controller controller;
@@ -1268,10 +1263,6 @@ public class GUI extends Application {
         for (DataPoint dp : dataPoints) {
             series.getData().add(new XYChart.Data(dp.getStartTime().toString(), dp.getMetric()));
         }
-
-
-        final LineChart<String, Number> lineChart =
-                new LineChart<String, Number>(xAxis, yAxis);
 
 
         lineChart.setTitle(metric + " line chart");
