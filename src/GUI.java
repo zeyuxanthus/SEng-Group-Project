@@ -156,6 +156,8 @@ public class GUI extends Application {
                 ArrayList<String> context = new ArrayList<String>();
                 ArrayList<String> ageGroups = new ArrayList<String>();
                 ArrayList<String> incomes = new ArrayList<String>();
+                String gender = new String();
+                gender = null;
                 //Same situation as above, this time looking for each filter
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 if (!filters.get(0).equals("") && filters.get(0) != null) {
@@ -164,14 +166,16 @@ public class GUI extends Application {
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
                     endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
                 }
-                if (filters.get(2) != null)
+                if (filters.get(2) != null && !filters.get(2).equals(""))
                     context.add(filters.get(2));
-                if (filters.get(4) != null)
+                if (filters.get(3) != null && !filters.get(3).equals(""))
+                    gender = filters.get(3);
+                if (filters.get(4) != null && !filters.get(4).equals(""))
                     ageGroups.add(filters.get(4));
-                if (filters.get(5) != null)
+                if (filters.get(5) != null && !filters.get(5).equals(""))
                     incomes.add(filters.get(5));
 
-                Filter filter = new Filter(startDate, endDate, context, filters.get(3), ageGroups, incomes);
+                Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 ArrayList<Click> clicks = controller.filterClickLog(filter);
                 ArrayList<Impression> impressions = controller.filterImpressionLog(filter);
                 ArrayList<ServerEntry> serverEntries = controller.filterServerLog(filter);
@@ -1064,12 +1068,12 @@ public class GUI extends Application {
     private void createLineChart(Metric metric, Filter filters, TimeInterval interval) {
         Stage stage = new Stage();
         stage.setTitle("Line Chart");
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Date");
 
 
-        final LineChart<String, Number> lineChart =
+        LineChart<String, Number> lineChart =
                 new LineChart<String, Number>(xAxis, yAxis);
 
         lineChart.setTitle(metric + " line chart");
