@@ -117,9 +117,7 @@ public class LineGraph {
             }
             i++;
         }
-        for(DataPoint d : dataPoints){
-            System.out.println(d.getMetric());
-        }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcImpressions(impressions), startDateTime));
         return dataPoints;
     }
 
@@ -147,6 +145,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcTotalImpCost(impressions), startDateTime));
         return dataPoints;
     }
 
@@ -173,6 +172,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcClicks(clicks), startDateTime));
         return dataPoints;
     }
 
@@ -199,6 +199,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcTotalClickCost(clicks), startDateTime));
         return dataPoints;
     }
 
@@ -210,7 +211,6 @@ public class LineGraph {
         for(int i = 0; i < clickCosts.size(); i++){
             dataPoints.add(new DataPoint<Double, LocalDateTime>((clickCosts.get(i).getMetric() + impressionCosts.get(i).getMetric()), clickCosts.get(i).getStartTime()));
         }
-
         return dataPoints;
     }
 
@@ -238,6 +238,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcConversions(serverEntries), startDateTime));
         return dataPoints;
     }
 
@@ -256,6 +257,9 @@ public class LineGraph {
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateBounces() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
         ArrayList<ServerEntry> serverEntriesLog = controller.filterServerLog(filter);
+//        for(ServerEntry e : serverEntriesLog){
+//            System.out.println(e.getEntryDate());
+//        }
         Collections.sort(serverEntriesLog);
         LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate(); //TODO handle index out of bound exception
 
@@ -264,6 +268,7 @@ public class LineGraph {
         ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
         while(serverEntriesLog.size() > i){
             ServerEntry serverEntry = serverEntriesLog.get(i);
+            System.out.println(serverEntry.getEntryDate() + " isBefore " + endDateTime + " " + serverEntry.getEntryDate().isBefore(endDateTime));
             if(serverEntry.getEntryDate().isBefore(endDateTime)){
                 serverEntries.add(serverEntry);
             }
@@ -277,6 +282,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcBounces(serverEntries), startDateTime));
         return dataPoints;
     }
 
@@ -314,6 +320,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcUniques(clicks), startDateTime));
         return dataPoints;
     }
 
@@ -363,6 +370,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcCPC(clicks), startDateTime));
         return dataPoints;
     }
 
@@ -389,6 +397,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcCPM(impressions), startDateTime));
         return dataPoints;
     }
 
@@ -407,7 +416,7 @@ public class LineGraph {
                 endDateTime = startDateTime.plusDays(1);
                 break;
             case WEEK:
-                endDateTime= startDateTime.plusWeeks(1);
+                endDateTime = startDateTime.plusWeeks(1);
                 break;
             case MONTH:
                 endDateTime = startDateTime.plusMonths(1);
