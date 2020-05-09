@@ -233,14 +233,22 @@ public class GUI extends Application {
                     }
                 }
 
-                ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
-                dialog.setTitle("AdAuction");
-                dialog.setHeaderText("Load Campaign");
-                dialog.setContentText("Select campaign to be loaded:");
+                if(campaigns.size() == 0){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Load Campaign");
+                    alert.setHeaderText(null);
+                    alert.setContentText("There are no campaigns to load.");
 
-                Optional<String> result = dialog.showAndWait();
-                if (result.isPresent()) {
-                    controller.loadCampaign(result.get());
+                    alert.showAndWait();
+                }
+                else{
+                    ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
+                    dialog.setTitle("AdAuction");
+                    dialog.setHeaderText("Load Campaign");
+                    dialog.setContentText("Select campaign to be loaded:");
+
+                    Optional<String> result = dialog.showAndWait();
+                    result.ifPresent(s -> controller.loadCampaign(s));
                 }
             }
             else if (fileOption.getValue().equals("Save")) {
@@ -1560,20 +1568,30 @@ public class GUI extends Application {
                     }
                 }
 
-                ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
-                dialog.setTitle("AdAuction");
-                dialog.setHeaderText("Load Campaign");
-                dialog.setContentText("Select campaign to be loaded:");
+                if(campaigns.size() == 0){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Load Campaign");
+                    alert.setHeaderText(null);
+                    alert.setContentText("There are no campaigns to load.");
 
-                Optional<String> result = dialog.showAndWait();
-                if (result.isPresent()) {
-                    controller.loadCampaign(result.get());
-                    try {
-                        mainWindow();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    alert.showAndWait();
+                }
+                else{
+                    ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
+                    dialog.setTitle("AdAuction");
+                    dialog.setHeaderText("Load Campaign");
+                    dialog.setContentText("Select campaign to be loaded:");
+
+                    Optional<String> result = dialog.showAndWait();
+                    if (result.isPresent()) {
+                        controller.loadCampaign(result.get());
+                        try {
+                            mainWindow();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        newWindow.close();
                     }
-                    newWindow.close();
                 }
 			}
 		});
