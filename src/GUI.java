@@ -248,11 +248,27 @@ public class GUI extends Application {
                     dialog.setContentText("Select campaign to be loaded:");
 
                     Optional<String> result = dialog.showAndWait();
-                    result.ifPresent(s -> controller.loadCampaign(s));
+                    String campaignName;
+                    if (result.isPresent()){
+                        controller.loadCampaign(result.get());
+
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Load Campaign");
+                        alert.setHeaderText(null);
+                        alert.setContentText(result.get() + " has been loaded.");
+                        alert.showAndWait();
+                    }
                 }
             }
             else if (fileOption.getValue().equals("Save")) {
-            	controller.saveCampaign("Campaign " + System.nanoTime());
+                String campaignName = "Campaign " + System.nanoTime();
+            	controller.saveCampaign(campaignName);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Load Campaign");
+                alert.setHeaderText(null);
+                alert.setContentText("Campaign saved as \"" + campaignName + "\".");
+                alert.showAndWait();
             }
             else if (fileOption.getValue().equals("Save as...")) {
                 TextInputDialog dialog = new TextInputDialog();
@@ -262,7 +278,22 @@ public class GUI extends Application {
 
                 Optional<String> result = dialog.showAndWait();
                 if (result.isPresent()){
-                    controller.saveCampaign(result.get());
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setTitle("Load Campaign");
+                    if(result.get().equals("")){
+                        alert.setContentText("Campaign saving failed. You need to provide the name of the campaign. Please try again.");
+
+                    }
+                    else if(!controller.isCampaignNameFree(result.get())){
+                        alert.setContentText("Campaign saving failed. The name is already used by another campaign. Please try again with a different name.");
+                    } else{
+                        controller.saveCampaign(result.get());
+
+                        alert.setContentText("Campaign saved as \"" + result.get() + "\".");
+                    }
+                    alert.showAndWait();
+
                 }
 
 //                Scanner scanner = new Scanner(System.in);

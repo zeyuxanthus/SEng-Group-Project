@@ -731,4 +731,20 @@ public class Controller {
 		double CPM =   ((double) totalImpCost / impressionArray.size()) * 1000;
 		return CPM;
 	}
+
+	public boolean isCampaignNameFree(String name) {
+		File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
+		ArrayList<String> campaigns = new ArrayList<String>();
+		for (File file : files) {
+			if (file.isDirectory()) {
+				campaigns.add(file.getName());
+			}
+		}
+		for(String campaignName : campaigns){
+			if(campaignName.equals(name)){
+				return false;
+			}
+		}
+		return true;
+	}
 }
