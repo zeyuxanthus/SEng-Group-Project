@@ -1139,21 +1139,24 @@ public class GUI extends Application {
     //Metric
     public HBox addImpHbox() {
         ChoiceBox<Metric> impressionMetricChoices = new ChoiceBox<Metric>();
-        impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSIONS);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSION_COST);
-        impressionMetricChoices.getItems().add(Metric.COST_PER_AQUISITION);
-        impressionMetricChoices.getItems().add(Metric.COST_PER_CLICK);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_UNIQUES);
-        impressionMetricChoices.setValue(Metric.TOTAL_IMPRESSIONS);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICKS);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICK_COST);
-        impressionMetricChoices.getItems().add(Metric.CLICK_THROUGH_RATE);
-        impressionMetricChoices.getItems().add(Metric.COST_PER_1000_IMPRESSIONS);
-        impressionMetricChoices.setValue(Metric.TOTAL_CLICKS);
-        impressionMetricChoices.getItems().add(Metric.BOUNCES);
-        impressionMetricChoices.getItems().add(Metric.BOUNCE_RATE);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_CONVERSIONS);
-        impressionMetricChoices.getItems().add(Metric.CONVERSION_RATE);
+        for(Metric metric : Metric.values()){
+            impressionMetricChoices.getItems().add(metric);
+        }
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSIONS);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSION_COST);
+//        impressionMetricChoices.getItems().add(Metric.COST_PER_AQUISITION);
+//        impressionMetricChoices.getItems().add(Metric.COST_PER_CLICK);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_UNIQUES);
+//        impressionMetricChoices.setValue(Metric.TOTAL_IMPRESSIONS);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICKS);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICK_COST);
+//        impressionMetricChoices.getItems().add(Metric.CLICK_THROUGH_RATE);
+//        impressionMetricChoices.getItems().add(Metric.COST_PER_1000_IMPRESSIONS);
+//        impressionMetricChoices.setValue(Metric.TOTAL_CLICKS);
+//        impressionMetricChoices.getItems().add(Metric.BOUNCES);
+//        impressionMetricChoices.getItems().add(Metric.BOUNCE_RATE);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_CONVERSIONS);
+//        impressionMetricChoices.getItems().add(Metric.CONVERSION_RATE);
         impressionMetricChoices.setValue(Metric.BOUNCES);
         Label impressionMetricLabel = new Label("Metric: ");
         HBox impMetricBox = new HBox(impressionMetricLabel, impressionMetricChoices);
