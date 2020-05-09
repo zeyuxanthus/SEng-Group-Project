@@ -8,10 +8,12 @@
   <component name="ChangeListManager">
     <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Controller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Histogram.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Histogram.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/LineGraph.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Histogram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Histogram.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LineGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LineGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,14 +35,14 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="2" />
-          <entry key="JAVA" value="13" />
+          <entry key="JAVA" value="14" />
           <entry key="PLAIN_TEXT" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1681" />
-          <entry key="PLAIN_TEXT" value="313" />
+          <entry key="JAVA" value="1733" />
+          <entry key="PLAIN_TEXT" value="349" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
@@ -54,11 +56,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-970">
-              <caret line="128" column="15" lean-forward="true" selection-start-line="128" selection-start-column="15" selection-end-line="128" selection-end-column="27" />
+            <state relative-caret-position="135">
+              <caret line="1458" column="30" lean-forward="true" selection-start-line="1458" selection-start-column="30" selection-end-line="1458" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3461#3462#0" expanded="true" />
@@ -140,15 +142,24 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="727" column="21" lean-forward="true" selection-start-line="727" selection-start-column="21" selection-end-line="727" selection-end-column="21" />
+            <state relative-caret-position="379">
+              <caret line="460" column="8" selection-start-line="460" selection-start-column="8" selection-end-line="460" selection-end-column="8" />
               <folding>
                 <element signature="e#6775#6776#0" expanded="true" />
                 <element signature="e#6806#6807#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Filter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="24" selection-start-line="24" selection-end-line="24" />
             </state>
           </provider>
         </entry>
@@ -165,7 +176,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Histogram.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
+            <state relative-caret-position="544">
               <caret line="51" column="9" lean-forward="true" selection-start-line="51" selection-start-column="9" selection-end-line="51" selection-end-column="9" />
             </state>
           </provider>
@@ -213,10 +224,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>.png</find>
-      <find>createLineChart</find>
-      <find>BOTTOM</find>
-      <find>Pos</find>
       <find>lineWindow</find>
       <find>lineWindow()</find>
       <find>lineChart</find>
@@ -243,6 +250,10 @@
       <find>calcBounceRate</find>
       <find>filter</find>
       <find>calculateBounces()</find>
+      <find>calc</find>
+      <find>filterClickL</find>
+      <find>DatePicker</find>
+      <find>atStartOfDay</find>
     </findStrings>
     <replaceStrings>
       <replace>controller</replace>
@@ -287,10 +298,10 @@
         <option value="$PROJECT_DIR$/src/ResizableChartWithinScrollPane.java" />
         <option value="$PROJECT_DIR$/src/BarGraph.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
-        <option value="$PROJECT_DIR$/src/GUI.java" />
         <option value="$PROJECT_DIR$/src/Histogram.java" />
         <option value="$PROJECT_DIR$/src/LineGraph.java" />
         <option value="$PROJECT_DIR$/src/Controller.java" />
+        <option value="$PROJECT_DIR$/src/GUI.java" />
       </list>
     </option>
   </component>
@@ -374,7 +385,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/IJ/PleaseWorkNow/src/Main.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589037785669" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589042149444" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/controlsfx.jar!/" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -507,7 +518,7 @@
       <workItem from="1588846459935" duration="9761000" />
       <workItem from="1588930922801" duration="1520000" />
       <workItem from="1588961240222" duration="658000" />
-      <workItem from="1589021059522" duration="12847000" />
+      <workItem from="1589021059522" duration="15792000" />
     </task>
     <task id="LOCAL-00001" summary="Test Git IntelliJ">
       <created>1584892594479</created>
@@ -670,7 +681,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589034731543</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Fix: calculations handle empty data sets.">
+      <created>1589037868865</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1589037868865</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -706,7 +724,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="117935000" />
+    <option name="totallyTimeSpent" value="120880000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -845,7 +863,8 @@
     <MESSAGE value="Fix: All entries of Metric enum are displayed in GUI." />
     <MESSAGE value="Fix: Handle the case where there are no campaign to load." />
     <MESSAGE value="Fix: Controller.getCPC() and getCPM() calls correct methods." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix: Controller.getCPC() and getCPM() calls correct methods." />
+    <MESSAGE value="Fix: calculations handle empty data sets." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix: calculations handle empty data sets." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/fileName" />
@@ -1001,13 +1020,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Filter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/BarGraph.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3815">
@@ -1052,10 +1064,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="130" selection-start-line="130" selection-end-line="130" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Filter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="24" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Histogram.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="51" column="9" lean-forward="true" selection-start-line="51" selection-start-column="9" selection-end-line="51" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="460" column="8" selection-start-line="460" selection-start-column="8" selection-end-line="460" selection-end-column="8" />
+          <folding>
+            <element signature="e#6775#6776#0" expanded="true" />
+            <element signature="e#6806#6807#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-970">
-          <caret line="128" column="15" lean-forward="true" selection-start-line="128" selection-start-column="15" selection-end-line="128" selection-end-column="27" />
+        <state relative-caret-position="135">
+          <caret line="1458" column="30" lean-forward="true" selection-start-line="1458" selection-start-column="30" selection-end-line="1458" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3461#3462#0" expanded="true" />
@@ -1123,31 +1167,6 @@
             <element signature="e#62968#62976#0" expanded="true" />
             <element signature="e#63039#63047#0" expanded="true" />
             <element signature="e#63108#63116#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Histogram.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="51" column="9" lean-forward="true" selection-start-line="51" selection-start-column="9" selection-end-line="51" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/LineGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="130" selection-start-line="130" selection-end-line="130" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="727" column="21" lean-forward="true" selection-start-line="727" selection-start-column="21" selection-end-line="727" selection-end-column="21" />
-          <folding>
-            <element signature="e#6775#6776#0" expanded="true" />
-            <element signature="e#6806#6807#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -293,7 +293,7 @@ public class Controller {
 		// Predicate for startDate
 		Predicate<Impression> startDatePredicate;
 		if(filter.getStartDate() != null){
-			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
+			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()) || c.getDateTime().isEqual(filter.getEndDate()) ; // TODO Discuss if it needs to be inclusive
 		}
 		else{
 			System.out.println("startDate is null");
@@ -303,7 +303,7 @@ public class Controller {
 		// Predicate for endDate
 		Predicate<Impression> endDatePredicate;
 		if(filter.getEndDate() != null){
-			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate());
+			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate()) || c.getDateTime().isEqual(filter.getEndDate());
 		}
 		else{
 			System.out.println("endDate is null");
@@ -371,7 +371,7 @@ public class Controller {
 		// Predicate for startDate
 		Predicate<ServerEntry> startDatePredicate;
 		if(filter.getStartDate() != null){
-			startDatePredicate = c -> c.getEntryDate().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
+			startDatePredicate = c -> c.getEntryDate().isAfter(filter.getStartDate()) || c.getEntryDate().isEqual(filter.getEndDate()); // TODO Discuss if it needs to be inclusive
 		}
 		else{
 			System.out.println("startDate is null");
@@ -381,7 +381,7 @@ public class Controller {
 		// Predicate for endDate
 		Predicate<ServerEntry> endDatePredicate;
 		if(filter.getEndDate() != null){
-			endDatePredicate = c -> c.getEntryDate().isBefore(filter.getEndDate());
+			endDatePredicate = c -> c.getEntryDate().isBefore(filter.getEndDate()) || c.getEntryDate().isEqual(filter.getEndDate());
 		}
 		else{
 			System.out.println("endDate is null");
@@ -449,7 +449,7 @@ public class Controller {
 		// Predicate for startDate
 		Predicate<Click> startDatePredicate;
 		if(filter.getStartDate() != null){
-			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
+			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()) || c.getDateTime().isEqual(filter.getEndDate()); // TODO Discuss if it needs to be inclusive
 		}
 		else{
 			System.out.println("startDate is null");
@@ -459,7 +459,7 @@ public class Controller {
 		// Predicate for endDate
 		Predicate<Click> endDatePredicate;
 		if(filter.getEndDate() != null){
-			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate());
+			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate()) || c.getDateTime().isEqual(filter.getEndDate());
 		}
 		else{
 			System.out.println("endDate is null");
