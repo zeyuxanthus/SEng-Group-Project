@@ -619,7 +619,11 @@ public class Controller {
 				totalConversions += 1;
 			}
 		}
-		System.out.println(totalConversions);
+
+		if(totalClicks <= 0 || totalConversions <= 0){
+			return 0;
+		}
+
 		double conversionRate =   (double) totalConversions / totalClicks;
 		return  conversionRate;
 	}
@@ -632,6 +636,7 @@ public class Controller {
 				myBounces += 1;
 			}
 		}
+
 		return myBounces;
 	}
 
@@ -644,6 +649,9 @@ public class Controller {
 			}
 		}
 		int totalClicks = clickArray.size();
+		if(totalClicks <= 0 || bounces <= 0){
+			return 0;
+		}
 		double bounceRate = (double) bounces / totalClicks;
 		return bounceRate;
 	}
@@ -658,6 +666,11 @@ public class Controller {
 	}
 
 	public double calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
+
+		if(clickArray.size() <= 0 || impressionArray.size() <= 0){
+			return 0;
+		}
+
 		double CTR =  ((double) clickArray.size() / impressionArray.size());
 		return  CTR;
 	}
@@ -682,6 +695,11 @@ public class Controller {
 				totalConversions += 1;
 			}
 		}
+
+		if(totalCost <= 0 || totalConversions <= 0){
+			return 0;
+		}
+
 		double CPA = totalCost / totalConversions;
 		return CPA;
 	}
@@ -691,6 +709,11 @@ public class Controller {
 		for (Click click: clickArray) {
 			totalClickCost += click.getClickCost();
 		}
+
+		if(totalClickCost <= 0 || clickArray.size() <= 0){
+			return 0;
+		}
+
 		double CPC = (totalClickCost / clickArray.size());
 		return CPC;
 	}
@@ -700,6 +723,11 @@ public class Controller {
 		for (Impression imp: impressionArray) {
 			totalImpCost += imp.getImpressionCost();
 		}
+
+		if(totalImpCost <= 0 || impressionArray.size() <= 0){
+			return 0;
+		}
+
 		double CPM =   ((double) totalImpCost / impressionArray.size()) * 1000;
 		return CPM;
 	}
