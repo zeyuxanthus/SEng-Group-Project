@@ -116,7 +116,7 @@ public class GUI extends Application {
 
         BorderPane mainWindow = new BorderPane();
         HBox toolBar = new HBox();
-        VBox chartOptions = new VBox(10);
+        VBox chartOptions = new VBox(20);
         HBox mainArea = new HBox(10);
         HBox options = new HBox();
 	    
@@ -314,11 +314,17 @@ public class GUI extends Application {
         barChartButton.setGraphic(new ImageView(barChartImage));
         lineGraphButton.setGraphic(new ImageView(lineGraphimage));
 
+        VBox chart1 = new VBox();
+            chart1.getChildren().addAll(lineGraphButton, new Label("Create Line Graph"));
+            chart1.setAlignment(Pos.CENTER);
+        VBox chart2 = new VBox();
+            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram"));
+            chart2.setAlignment(Pos.CENTER);
+        VBox chart3 = new VBox();
+            chart3.getChildren().addAll(barChartButton, new Label("Create Bar Chart"));
+            chart3.setAlignment(Pos.CENTER);
 
-        Label chart1 = new Label("Create Line Graph");
-        Label chart2 = new Label("Create Histogram");
-        Label chart3 = new Label("Create Bar Chart");
-        chartOptions.getChildren().addAll(lineGraphButton, chart1, histogramButton, chart2, barChartButton, chart3);
+        chartOptions.getChildren().addAll(chart1, chart2, chart3);
         BorderPane.setMargin(filtersAndMetrics, new Insets(60, 100, 10, 50));//top was 150
         BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
 
