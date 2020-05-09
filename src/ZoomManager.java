@@ -1,5 +1,3 @@
-//https://github.com/kerner1000/javafx-chart-zooming/blob/master/src/main/java/com/github/javafx/charts/zooming/ZoomManager.java
-
 import java.util.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -122,26 +120,6 @@ public class ZoomManager<X, Y> {
         setUpZooming(zoomRect, chart);
 
     }
-
-    /**
-     *
-     *
-     * Creates a new {@code ZoomManager}.
-     * </p>
-     * <b> Due to a bug, {@code series} must not be added to the chart! </b> If you
-     * do so, the chart will be emtpy.
-     * </p>
-     *
-     *
-     * @param chartParent
-     *            the chart's parent {@link Pane}.
-     * @param chart
-     *            the {@link XYChart} to which zooming functionality is added
-     * @param series
-     *            array of chart data to display
-     * @throws IllegalArgumentException
-     *             if chart data is empty or {@code null}
-     */
     public ZoomManager(final Pane chartParent, final XYChart<X, Y> chart, final Series<X, Y>... series) {
         this(chartParent, chart, Arrays.asList(series));
 
