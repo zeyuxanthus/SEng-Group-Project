@@ -184,7 +184,7 @@ public class GUI extends Application {
                     startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
-                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                    endDate = LocalDate.parse(filters.get(1), formatter).atTime(23, 59, 59);
                 }
 
                 if (filters.get(2) != null && !filters.get(2).equals(""))
@@ -558,7 +558,7 @@ public class GUI extends Application {
                      startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                  }
                  if (!filters.get(1).equals("") && filters.get(1) != null) {
-                     endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                     endDate = LocalDate.parse(filters.get(1), formatter).atTime(23, 59, 59);
                  }
 
                  if (filters.get(2) != null && !filters.get(2).equals(""))
@@ -616,8 +616,8 @@ public class GUI extends Application {
         Label genderLabel = new Label("Gender");
         Label incomeLabel = new Label("Income");
         
-        DatePicker entryDate = new DatePicker();
-        DatePicker exitDate = new DatePicker();
+        DatePicker entryDate = new DatePicker(controller.getCampaignStartDate());
+        DatePicker exitDate = new DatePicker(controller.getCampaignEndDate());
 //        entryDate.setPromptText("Date From");
 //        exitDate.setPromptText("Date Until");
         CheckComboBox<String> age = new CheckComboBox<String>(FXCollections.observableArrayList(ageGroups));

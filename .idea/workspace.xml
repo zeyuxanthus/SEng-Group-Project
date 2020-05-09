@@ -8,13 +8,15 @@
   <component name="ChangeListManager">
     <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$11.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$12.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$12.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$13.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$13.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$14.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$14.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$15.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$15.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/Controller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$10.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
     </list>
@@ -44,8 +46,8 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="2614" />
-          <entry key="PLAIN_TEXT" value="433" />
+          <entry key="JAVA" value="2992" />
+          <entry key="PLAIN_TEXT" value="502" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
@@ -62,8 +64,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="290" column="62" lean-forward="true" selection-start-line="290" selection-start-column="62" selection-end-line="290" selection-end-column="62" />
+            <state relative-caret-position="203">
+              <caret line="1499" column="89" selection-start-line="1499" selection-start-column="75" selection-end-line="1499" selection-end-column="89" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3461#3462#0" expanded="true" />
@@ -139,8 +141,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="737" column="28" lean-forward="true" selection-start-line="737" selection-start-column="28" selection-end-line="737" selection-end-column="28" />
+            <state relative-caret-position="311">
+              <caret line="300" column="52" lean-forward="true" selection-start-line="300" selection-start-column="52" selection-end-line="300" selection-end-column="52" />
               <folding>
                 <element signature="e#6775#6776#0" expanded="true" />
                 <element signature="e#6806#6807#0" expanded="true" />
@@ -219,8 +221,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>lineChart</find>
-      <find>histogramWindow</find>
       <find>createLine</find>
       <find>printCha</find>
       <find>createLineGraph</find>
@@ -238,17 +238,19 @@
       <find>addImpHbox</find>
       <find>Load Previous</find>
       <find>getCPC</find>
-      <find>Apply Filters</find>
       <find>calcBounceRate</find>
       <find>filter</find>
       <find>calc</find>
       <find>filterClickL</find>
-      <find>DatePicker</find>
       <find>atStartOfDay</find>
       <find>calculateMetrics</find>
       <find>Load...</find>
       <find>calculateBounces()</find>
+      <find>DatePicker</find>
       <find>save</find>
+      <find>Apply Filters</find>
+      <find>filterClickLog</find>
+      <find>atStartOfDay()</find>
     </findStrings>
     <replaceStrings>
       <replace>controller</replace>
@@ -386,7 +388,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/IJ/PleaseWorkNow/src/Main.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589045923282" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589049383128" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/controlsfx.jar!/" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -519,7 +521,7 @@
       <workItem from="1588846459935" duration="9761000" />
       <workItem from="1588930922801" duration="1520000" />
       <workItem from="1588961240222" duration="658000" />
-      <workItem from="1589021059522" duration="19477000" />
+      <workItem from="1589021059522" duration="22078000" />
     </task>
     <task id="LOCAL-00001" summary="Test Git IntelliJ">
       <created>1584892594479</created>
@@ -703,7 +705,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589043646082</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Notify user whether campaign was loaded successfully or not.">
+      <created>1589045969875</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1589045969875</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -739,7 +748,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="124565000" />
+    <option name="totallyTimeSpent" value="127166000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -855,7 +864,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Remove unused enums." />
     <MESSAGE value="Remove Chart interface." />
     <MESSAGE value="Add bounceDefinition which specifies how bounce is registered." />
     <MESSAGE value="Removed campaign reference in GUI." />
@@ -880,7 +888,8 @@
     <MESSAGE value="Fix: calculations handle empty data sets." />
     <MESSAGE value="Fix: date filters are inclusive." />
     <MESSAGE value="Fix: chart button labels appear closer to the buttons." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix: chart button labels appear closer to the buttons." />
+    <MESSAGE value="Notify user whether campaign was loaded successfully or not." />
+    <option name="LAST_COMMIT_MESSAGE" value="Notify user whether campaign was loaded successfully or not." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/fileName" />
@@ -1103,8 +1112,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="737" column="28" lean-forward="true" selection-start-line="737" selection-start-column="28" selection-end-line="737" selection-end-column="28" />
+        <state relative-caret-position="311">
+          <caret line="300" column="52" lean-forward="true" selection-start-line="300" selection-start-column="52" selection-end-line="300" selection-end-column="52" />
           <folding>
             <element signature="e#6775#6776#0" expanded="true" />
             <element signature="e#6806#6807#0" expanded="true" />
@@ -1115,8 +1124,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="290" column="62" lean-forward="true" selection-start-line="290" selection-start-column="62" selection-end-line="290" selection-end-column="62" />
+        <state relative-caret-position="203">
+          <caret line="1499" column="89" selection-start-line="1499" selection-start-column="75" selection-end-line="1499" selection-end-column="89" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3461#3462#0" expanded="true" />

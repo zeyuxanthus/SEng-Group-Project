@@ -2,6 +2,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -293,7 +295,7 @@ public class Controller {
 		// Predicate for startDate
 		Predicate<Impression> startDatePredicate;
 		if(filter.getStartDate() != null){
-			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()) || c.getDateTime().isEqual(filter.getEndDate()) ; // TODO Discuss if it needs to be inclusive
+			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()) || c.getDateTime().isEqual(filter.getStartDate()) ; // TODO Discuss if it needs to be inclusive
 		}
 		else{
 			System.out.println("startDate is null");
@@ -371,7 +373,7 @@ public class Controller {
 		// Predicate for startDate
 		Predicate<ServerEntry> startDatePredicate;
 		if(filter.getStartDate() != null){
-			startDatePredicate = c -> c.getEntryDate().isAfter(filter.getStartDate()) || c.getEntryDate().isEqual(filter.getEndDate()); // TODO Discuss if it needs to be inclusive
+			startDatePredicate = c -> c.getEntryDate().isAfter(filter.getStartDate()) || c.getEntryDate().isEqual(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
 		}
 		else{
 			System.out.println("startDate is null");
@@ -449,7 +451,7 @@ public class Controller {
 		// Predicate for startDate
 		Predicate<Click> startDatePredicate;
 		if(filter.getStartDate() != null){
-			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()) || c.getDateTime().isEqual(filter.getEndDate()); // TODO Discuss if it needs to be inclusive
+			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()) || c.getDateTime().isEqual(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
 		}
 		else{
 			System.out.println("startDate is null");
@@ -746,5 +748,49 @@ public class Controller {
 			}
 		}
 		return true;
+	}
+
+	public LocalDate getCampaignStartDate() {
+		LocalDateTime earliestTime = LocalDateTime.MAX;
+		for(Click click : campaign.getClicks()){
+			if(click.getDateTime().isBefore(earliestTime)){
+				earliestTime = click.getDateTime();
+			}
+		}
+		for(Impression impression : campaign.getImpressions()){
+			if(impression.getDateTime().isBefore(earliestTime)){
+				earliestTime = impression.getDateTime();
+			}
+		}
+
+		for(ServerEntry se : campaign.getServerEntries()){
+			if(se.getEntryDate().isBefore(earliestTime)){
+				earliestTime = se.getEntryDate();
+			}
+		}
+
+		return earliestTime.toLocalDate();
+	}
+
+	public LocalDate getCampaignEndDate() {
+		LocalDateTime latestTime = LocalDateTime.MIN;
+		for(Click click : campaign.getClicks()){
+			if(click.getDateTime().isAfter(latestTime)){
+				latestTime = click.getDateTime();
+			}
+		}
+		for(Impression impression : campaign.getImpressions()){
+			if(impression.getDateTime().isAfter(latestTime)){
+				latestTime = impression.getDateTime();
+			}
+		}
+
+		for(ServerEntry se : campaign.getServerEntries()){
+			if(se.getEntryDate().isAfter(latestTime)){
+				latestTime = se.getEntryDate();
+			}
+		}
+
+		return latestTime.toLocalDate();
 	}
 }
