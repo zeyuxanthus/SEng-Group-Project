@@ -243,11 +243,11 @@ public class Controller {
 	}
 
 	public double getCPC(){
-		return campaign.getCTR();
+		return campaign.getCPC();
 	}
 
 	public double getCPM(){
-		return campaign.getCTR();
+		return campaign.getCPM();
 	}
 
 	public double getTotalCost(){
