@@ -295,6 +295,7 @@ public class GUI extends Application {
                     alert.showAndWait();
 
                 }
+                
 
 //                Scanner scanner = new Scanner(System.in);
 //            	System.out.println("Enter what you want to save the campaign as: ");
@@ -375,7 +376,7 @@ public class GUI extends Application {
 
         root.getChildren().add(layering);
 	    root.setAutoSizeChildren(true);
-        Scene scene = new Scene(root, 900, 550);
+        Scene scene = new Scene(root, 1200, 600);
         scene.getStylesheets().add("/GUI.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Ad Auction Dashboard");
@@ -582,8 +583,12 @@ public class GUI extends Application {
 
 
         windowLayout.getChildren().addAll(filterPane, metricsGranularity, createChart);
+        windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
+        windowLayout.setMargin(metricsGranularity, new Insets(0, 10, 0, 20));
+        windowLayout.setMargin(createChart, new Insets(0, 10, 0, 20));
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(windowLayout, 400, 400);
+
         newWindow.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
         newWindow.setTitle("Create Histogram");
@@ -770,26 +775,32 @@ public class GUI extends Application {
         metricsAndCreate.getChildren().addAll(filterHistogram);
         
         HBox filterOptions = new HBox(10);
-        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
-
-
-   
+        
         Stage window = new Stage();
         Label chartLabel = new Label("Histogram for cost variation");
 
-        HBox printAndSaveBox = new HBox();
-        printAndSaveBox.setAlignment(Pos.BOTTOM_RIGHT);
+        VBox filterPrintSave = new VBox(10);
+
+        filterHistogram.setMinWidth(50);
+       
+
         Button printButton = new Button("Print");
         printButton.setOnAction(event -> {
             printChart(chart, window);
         });
-        printAndSaveBox.getChildren().addAll(printButton);
-
+        
+        printButton.setMinWidth(50);
+        filterPrintSave.getChildren().addAll(filterHistogram, printButton);
+        metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
+        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
+        filterOptions.setMargin(filterPane, new Insets(0, 20, 0, 0));
+        
         VBox vbox = new VBox(15);
-        vbox.getChildren().addAll(chart, new Separator(), filterOptions, printAndSaveBox);
+        vbox.getChildren().addAll(chart,filterOptions);
         vbox.setStyle("-fx-background-color: #c8e3f0;");
         
-        Scene scene = new Scene(vbox, 700, 700);
+        
+        Scene scene = new Scene(vbox, 800, 700);
         scene.getStylesheets().add("/GUI.css");
         window.setScene(scene);
         window.show();
@@ -897,7 +908,10 @@ public class GUI extends Application {
         metricsGranularity.getChildren().addAll(granLabel, granularity);
         windowLayout.getChildren().addAll(filterPane, metricsGranularity, createLineGraph);
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
-
+        windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
+        windowLayout.setMargin(metricsGranularity, new Insets(0, 10, 0, 20));
+        windowLayout.setMargin(createLineGraph, new Insets(0, 10, 0, 20));
+        
         Scene scene = new Scene(windowLayout, 400, 400);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
@@ -1008,6 +1022,10 @@ public class GUI extends Application {
 
         metricsType.getChildren().addAll(barTypeLabel, type);
         windowLayout.getChildren().addAll(filterPane, metricsType, filterBarChart);
+        windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
+        windowLayout.setMargin(metricsType, new Insets(0, 10, 0, 20));
+        windowLayout.setMargin(filterBarChart, new Insets(0, 10, 0, 20));
+        
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 
         Scene scene = new Scene(windowLayout, 400, 400);
@@ -1154,23 +1172,26 @@ public class GUI extends Application {
 
         barChart.setMinHeight(600);
         
+        VBox filterPrintSave = new VBox(10);
         metricsGranularity.getChildren().addAll(granLabel, barType);
         HBox metricsAndCreate = new HBox(25);
-        metricsAndCreate.getChildren().addAll(metricsGranularity, filterBarChart);
+       filterBarChart.setMinWidth(50);
+       
 
-        HBox printAndSaveBox = new HBox();
-        printAndSaveBox.setAlignment(Pos.BOTTOM_RIGHT);
         Button printButton = new Button("Print");
         printButton.setOnAction(event -> {
             printChart(barChart, stage);
         });
-        printAndSaveBox.getChildren().addAll(printButton);
         
+        printButton.setMinWidth(50);
+        filterPrintSave.getChildren().addAll(filterBarChart, printButton);
+        metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         VBox mainWindow = new VBox(20);
         HBox filterOptions = new HBox(10);
-        filterOptions.getChildren().addAll(filterPane, new Separator(), metricsAndCreate, printAndSaveBox);
+        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
         mainWindow.getChildren().addAll(barChart, filterOptions);
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
+        mainWindow.setMargin(filterOptions, new Insets(0, 20, 0, 10));
         Scene scene = new Scene(mainWindow, 900, 800);
         //lineChart.getData().add(series);
         new ZoomManager<>(mainWindow, barChart, series);
@@ -1530,15 +1551,20 @@ public class GUI extends Application {
 
         metricsGranularity.getChildren().addAll(granLabel, granularity);
         HBox metricsAndCreate = new HBox(25);
-        metricsAndCreate.getChildren().addAll(metricsGranularity, filterLineGraph);
+        
 
-        HBox printAndSaveBox = new HBox();
-        printAndSaveBox.setAlignment(Pos.BOTTOM_RIGHT);
+        VBox filterPrintSave = new VBox(10);
+        filterLineGraph.setMinWidth(50);
+       
+
         Button printButton = new Button("Print");
         printButton.setOnAction(event -> {
             printChart(lineChart, stage);
         });
-        printAndSaveBox.getChildren().addAll(printButton);
+        
+        printButton.setMinWidth(50);
+        filterPrintSave.getChildren().addAll(filterLineGraph, printButton);
+        metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         
         VBox mainWindow = new VBox(20);
         HBox filterOptions = new HBox(10);
@@ -1547,9 +1573,10 @@ public class GUI extends Application {
         pane.setContent(lineChart);
 
 
-        mainWindow.getChildren().addAll(lineChart, new Separator(), filterOptions, printAndSaveBox);
+        mainWindow.getChildren().addAll(lineChart, filterOptions);
+        mainWindow.setMargin(filterOptions, new Insets(0, 20, 0, 10));
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
-        Scene scene = new Scene(mainWindow, 800, 800);
+        Scene scene = new Scene(mainWindow, 900, 800);
 
 
         new ZoomManager<>(mainWindow, lineChart, series);
@@ -1769,7 +1796,7 @@ public class GUI extends Application {
         //fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
 
 
-        Scene scene = new Scene(fileChooserLayout, 400, 350);
+        Scene scene = new Scene(fileChooserLayout, 600, 400);
         fileChooserLayout.getStylesheets().add("/GUI.css");
         newWindow.setScene(scene);
         newWindow.show();
