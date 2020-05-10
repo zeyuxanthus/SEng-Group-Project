@@ -1,5 +1,11 @@
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.WritableImage;
+import javafx.stage.Stage;
+
+import javax.imageio.ImageIO;
 import java.io.*;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -235,6 +241,17 @@ public class Campaign implements Serializable {
 		CPA = controller.calcCPA(impList, clickList, serverEntries);
 		CPC = controller.calcCPC(clickList);
 		CPM = controller.calcCPM(impList);
+	}
+
+	public void saveAsPng(Stage stage) {
+		String timeStamp = new SimpleDateFormat("HHmmss_yyyyMMdd").format(Calendar.getInstance().getTime());
+		WritableImage image = stage.getScene().snapshot(null);
+		File file = new File("Chart" + timeStamp + ".png");
+		try {
+			ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 
