@@ -11,6 +11,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Scanner;
 
+import javafx.print.*;
+import javafx.scene.transform.Scale;
 import org.controlsfx.control.CheckComboBox;
 
 import javafx.application.Application;
@@ -21,10 +23,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.print.JobSettings;
-import javafx.print.PrintColor;
-import javafx.print.Printer;
-import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -1952,25 +1950,29 @@ public class GUI extends Application {
      * @param stage - stage containing the chart
      */
     public void printChart(Node node, Stage stage){
-
-    	
         //Get the Default Printer
         Printer defaultPrinter = Printer.getDefaultPrinter();
-
+        Scale scale = null;
         if (defaultPrinter != null)
         {
             System.out.println(defaultPrinter.getName());
 
+
+
             // Create a printer job for the default printer
             PrinterJob job = PrinterJob.createPrinterJob();
             JobSettings jobSettings = job.getJobSettings();
+            jobSettings.setPageLayout(defaultPrinter.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE, Printer.MarginType.HARDWARE_MINIMUM));
             jobSettings.setPrintColor(PrintColor.MONOCHROME);
 
-            if (job != null && job.showPageSetupDialog(stage))
+
+            if (job.showPageSetupDialog(stage))
             {
                 // Show the printer job status
                 System.out.println(job.jobStatusProperty().asString());
 
+                scale = new Scale(jobSettings.getPageLayout().getPrintableWidth() / node.getBoundsInParent().getWidth(), jobSettings.getPageLayout().getPrintableHeight()/node.getBoundsInParent().getHeight());
+                node.getTransforms().add(scale);
                 // Print the node
                 boolean printed = job.printPage(node);
 
@@ -1980,6 +1982,7 @@ public class GUI extends Application {
                     System.out.println(job.jobStatusProperty().asString());
                     job.endJob();
                     System.out.println(job.jobStatusProperty().asString());
+
                 }
                 else
                 {
@@ -1997,6 +2000,9 @@ public class GUI extends Application {
         else
         {
             System.err.println("No printers installed.");
+        }
+        if(scale != null){
+            node.getTransforms().remove(scale);
         }
     }
     
