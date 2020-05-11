@@ -1763,15 +1763,46 @@ public class GUI extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
+//			    String userDirectory = System.getProperty("user.dir");
                 File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
                 ArrayList<String> campaigns = new ArrayList<String>();
-                for (File file : files) {
-                    if (file.isDirectory()) {
-                        campaigns.add(file.getName());
+                if(files != null){
+                    for (File file : files) {
+                        if (file.isDirectory()) {
+                            campaigns.add(file.getName());
+                        }
+                    }
+
+                    if(campaigns.size() == 0){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Load Campaign");
+                        alert.getDialogPane().getStylesheets().add("/GUI.css");
+                        alert.setHeaderText(null);
+                        alert.setContentText("There are no campaigns to load.");
+
+                        alert.showAndWait();
+                    }
+                    else{
+                        ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
+                        dialog.setTitle("AdAuction");
+                        dialog.setHeaderText("Load Campaign");
+                        dialog.setContentText("Select campaign to be loaded:");
+                        dialog.getDialogPane().getStylesheets().add("/GUI.css");
+
+
+                        Optional<String> result = dialog.showAndWait();
+                        if (result.isPresent()) {
+                            controller.loadCampaign(result.get());
+                            try {
+                                mainWindow();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            newWindow.close();
+                        }
                     }
                 }
-
-                if(campaigns.size() == 0){
+                else{
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Load Campaign");
                     alert.getDialogPane().getStylesheets().add("/GUI.css");
@@ -1779,25 +1810,6 @@ public class GUI extends Application {
                     alert.setContentText("There are no campaigns to load.");
 
                     alert.showAndWait();
-                }
-                else{
-                    ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
-                    dialog.setTitle("AdAuction");
-                    dialog.setHeaderText("Load Campaign");
-                    dialog.setContentText("Select campaign to be loaded:");
-                    dialog.getDialogPane().getStylesheets().add("/GUI.css");
-                    
-
-                    Optional<String> result = dialog.showAndWait();
-                    if (result.isPresent()) {
-                        controller.loadCampaign(result.get());
-                        try {
-                            mainWindow();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        newWindow.close();
-                    }
                 }
 			}
 		});
