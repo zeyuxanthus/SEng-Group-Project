@@ -147,6 +147,9 @@ public class Campaign implements Serializable {
 				String context = impressionValues[5];
 				Float impressionCost = Float.parseFloat(impressionValues[6]);
 
+				if(context.equals("Travel") || context.equals("Hobbies")){
+					System.out.println(context);
+				}
 				impressions.add(new Impression(dateTime,id,gender,ageGroup,income,context,impressionCost));
 			}
 			

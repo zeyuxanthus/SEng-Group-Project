@@ -222,9 +222,64 @@ public class GUI extends Application {
         
         settingOption = new ComboBox<String>(FXCollections.observableArrayList(settingsOptionText));
         settingOption.setValue("Settings");
-        
-        fileOption.setOnAction(e -> {
-            if (fileOption.getValue().equals("Load...")) {
+
+        options.getChildren().addAll(fileOption, settingOption);
+
+        toolBar.getChildren().add(options);
+        Button lineGraphButton = new Button();
+        Button histogramButton = new Button();
+        Button barChartButton = new Button();
+
+        histogramButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent arg0) {
+                histogramWindow();
+
+            }
+        });
+
+        lineGraphButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                lineWindow();
+            }
+        });
+
+        barChartButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                barWindow();
+            }
+        });
+
+
+        Image lineGraphimage = new Image(this.getClass().getResourceAsStream("/lineGraphIcon.png"), 100, 100, true, true);
+        Image histogramimage = new Image(this.getClass().getResourceAsStream("/barChartIcon.png"), 100, 100, true, true);
+        Image barChartImage = new Image(this.getClass().getResourceAsStream("/dataIcon.png"), 100, 100, true, true);
+
+        histogramButton.setGraphic(new ImageView(histogramimage));
+        barChartButton.setGraphic(new ImageView(barChartImage));
+        lineGraphButton.setGraphic(new ImageView(lineGraphimage));
+
+        VBox chart1 = new VBox();
+            chart1.getChildren().addAll(lineGraphButton, new Label("Create Line Graph"));
+            chart1.setAlignment(Pos.CENTER);
+        VBox chart2 = new VBox();
+            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram"));
+            chart2.setAlignment(Pos.CENTER);
+        VBox chart3 = new VBox();
+            chart3.getChildren().addAll(barChartButton, new Label("Create Bar Chart"));
+            chart3.setAlignment(Pos.CENTER);
+
+        chartOptions.getChildren().addAll(chart1, chart2, chart3);
+        BorderPane.setMargin(filtersAndMetrics, new Insets(60, 100, 10, 50));//top was 150
+        BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
+
+        // Top menu bar
+        Menu menu = new Menu("File");
+        MenuItem m1 = new MenuItem("Load...");
+            m1.setOnAction(event -> {
                 File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
                 ArrayList<String> campaigns = new ArrayList<String>();
                 for (File file : files) {
@@ -259,10 +314,13 @@ public class GUI extends Application {
                         alert.showAndWait();
                     }
                 }
-            }
-            else if (fileOption.getValue().equals("Save")) {
+            });
+        MenuItem m2 = new MenuItem("Save");
+        m2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
                 String campaignName = "Campaign " + System.nanoTime();
-            	controller.saveCampaign(campaignName);
+                controller.saveCampaign(campaignName);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Load Campaign");
@@ -270,98 +328,45 @@ public class GUI extends Application {
                 alert.setContentText("Campaign saved as \"" + campaignName + "\".");
                 alert.showAndWait();
             }
-            else if (fileOption.getValue().equals("Save as...")) {
-                TextInputDialog dialog = new TextInputDialog();
-                dialog.setTitle("AdAuction");
-                dialog.setHeaderText("Save campaign");
-                dialog.setContentText("Please enter the name of the campaign:");
+        });
+        MenuItem m3 = new MenuItem("Save as...");
+            m3.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("AdAuction");
+                    dialog.setHeaderText("Save campaign");
+                    dialog.setContentText("Please enter the name of the campaign:");
 
-                Optional<String> result = dialog.showAndWait();
-                if (result.isPresent()){
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText(null);
-                    alert.setTitle("Load Campaign");
-                    if(result.get().equals("")){
-                        alert.setContentText("Campaign saving failed. You need to provide the name of the campaign. Please try again.");
+                    Optional<String> result = dialog.showAndWait();
+                    if (result.isPresent()){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setTitle("Load Campaign");
+                        if(result.get().equals("")){
+                            alert.setContentText("Campaign saving failed. You need to provide the name of the campaign. Please try again.");
+
+                        }
+                        else if(!controller.isCampaignNameFree(result.get())){
+                            alert.setContentText("Campaign saving failed. The name is already used by another campaign. Please try again with a different name.");
+                        } else{
+                            controller.saveCampaign(result.get());
+
+                            alert.setContentText("Campaign saved as \"" + result.get() + "\".");
+                        }
+                        alert.showAndWait();
 
                     }
-                    else if(!controller.isCampaignNameFree(result.get())){
-                        alert.setContentText("Campaign saving failed. The name is already used by another campaign. Please try again with a different name.");
-                    } else{
-                        controller.saveCampaign(result.get());
-
-                        alert.setContentText("Campaign saved as \"" + result.get() + "\".");
-                    }
-                    alert.showAndWait();
-
                 }
-                
+            });
+        menu.getItems().addAll(m1, m2, m3);
+        MenuBar mb = new MenuBar();
+        mb.getMenus().add(menu);
 
-//                Scanner scanner = new Scanner(System.in);
-//            	System.out.println("Enter what you want to save the campaign as: ");
-//            	String name = scanner.nextLine();
-//            	controller.saveCampaign(name);
-//            	scanner.close();
-            }
-        });
+        VBox topBox = new VBox();
+        topBox.getChildren().addAll(mb, slider);
 
-
-        options.getChildren().addAll(fileOption, settingOption);
-        
-        toolBar.getChildren().add(options);
-        Button lineGraphButton = new Button();
-        Button histogramButton = new Button();
-        Button barChartButton = new Button();
-
-        histogramButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent arg0) {
-                histogramWindow();
-
-            }
-        });
-
-        lineGraphButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                lineWindow();
-            }
-        });
-        
-        barChartButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                barWindow();
-            }
-        });
-
-
-
-        Image lineGraphimage = new Image(this.getClass().getResourceAsStream("/lineGraphIcon.png"), 100, 100, true, true);
-        Image histogramimage = new Image(this.getClass().getResourceAsStream("/barChartIcon.png"), 100, 100, true, true);
-        Image barChartImage = new Image(this.getClass().getResourceAsStream("/dataIcon.png"), 100, 100, true, true);
-
-        histogramButton.setGraphic(new ImageView(histogramimage));
-        barChartButton.setGraphic(new ImageView(barChartImage));
-        lineGraphButton.setGraphic(new ImageView(lineGraphimage));
-
-        VBox chart1 = new VBox();
-            chart1.getChildren().addAll(lineGraphButton, new Label("Create Line Graph"));
-            chart1.setAlignment(Pos.CENTER);
-        VBox chart2 = new VBox();
-            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram"));
-            chart2.setAlignment(Pos.CENTER);
-        VBox chart3 = new VBox();
-            chart3.getChildren().addAll(barChartButton, new Label("Create Bar Chart"));
-            chart3.setAlignment(Pos.CENTER);
-
-        chartOptions.getChildren().addAll(chart1, chart2, chart3);
-        BorderPane.setMargin(filtersAndMetrics, new Insets(60, 100, 10, 50));//top was 150
-        BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
-
-
-        mainWindow.setTop(toolBar);
+        mainWindow.setTop(mb);
         mainWindow.setCenter(chartOptions);
         mainWindow.setRight(filtersAndMetrics);
         //mainWindow.setStyle("-fx-background-color: #c8e3f0;");
@@ -775,31 +780,31 @@ public class GUI extends Application {
         metricsAndCreate.getChildren().addAll(filterHistogram);
         
         HBox filterOptions = new HBox(10);
-        
+
         Stage window = new Stage();
         Label chartLabel = new Label("Histogram for cost variation");
 
         VBox filterPrintSave = new VBox(10);
 
         filterHistogram.setMinWidth(50);
-       
+
 
         Button printButton = new Button("Print");
         printButton.setOnAction(event -> {
             printChart(chart, window);
         });
-        
+
         printButton.setMinWidth(50);
         filterPrintSave.getChildren().addAll(filterHistogram, printButton);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
         filterOptions.setMargin(filterPane, new Insets(0, 20, 0, 0));
-        
+
         VBox vbox = new VBox(15);
         vbox.getChildren().addAll(chart,filterOptions);
         vbox.setStyle("-fx-background-color: #c8e3f0;");
         
-        
+
         Scene scene = new Scene(vbox, 800, 700);
         scene.getStylesheets().add("/GUI.css");
         window.setScene(scene);
@@ -911,7 +916,7 @@ public class GUI extends Application {
         windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
         windowLayout.setMargin(metricsGranularity, new Insets(0, 10, 0, 20));
         windowLayout.setMargin(createLineGraph, new Insets(0, 10, 0, 20));
-        
+
         Scene scene = new Scene(windowLayout, 400, 400);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
@@ -1025,7 +1030,7 @@ public class GUI extends Application {
         windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
         windowLayout.setMargin(metricsType, new Insets(0, 10, 0, 20));
         windowLayout.setMargin(filterBarChart, new Insets(0, 10, 0, 20));
-        
+
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 
         Scene scene = new Scene(windowLayout, 400, 400);
@@ -1176,7 +1181,7 @@ public class GUI extends Application {
         metricsGranularity.getChildren().addAll(granLabel, barType);
         HBox metricsAndCreate = new HBox(25);
        filterBarChart.setMinWidth(50);
-       
+
 
         Button printButton = new Button("Print");
         printButton.setOnAction(event -> {
@@ -1554,17 +1559,17 @@ public class GUI extends Application {
 
         metricsGranularity.getChildren().addAll(granLabel, granularity);
         HBox metricsAndCreate = new HBox(25);
-        
+
 
         VBox filterPrintSave = new VBox(10);
         filterLineGraph.setMinWidth(50);
-       
+
 
         Button printButton = new Button("Print");
         printButton.setOnAction(event -> {
             printChart(lineChart, stage);
         });
-        
+
         printButton.setMinWidth(50);
         filterPrintSave.getChildren().addAll(filterLineGraph, printButton);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
