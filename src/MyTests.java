@@ -1,4 +1,5 @@
 
+import javafx.scene.chart.BarChart;
 import org.junit.Test;
 import org.testng.Assert;
 
@@ -571,11 +572,11 @@ public class MyTests {
 
 
 
-    //------- TEST LINE GRAPH DATA POINTS ------------------------------------------------------------------------------
+    //------- TEST GRAPH DATA POINTS ------------------------------------------------------------------------------
 
     /**
      *
-     *      Tests for writing the line graph, checking between boundary dates and times
+     *      Tests for writing the graphs, checking between boundary dates and times for the graphs
      *
      */
 
@@ -593,7 +594,6 @@ public class MyTests {
         LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:00:00", formatter);
         LocalDateTime exitDate = LocalDateTime.parse("2015-01-04 00:00:16", formatter);
 
-        LocalDateTime entryDate2 = LocalDateTime.parse("2015-01-02 00:00:04", formatter);
         Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
 
         Controller controller = new Controller();
@@ -602,12 +602,9 @@ public class MyTests {
 
         ArrayList<DataPoint> datapoints = line.getDataPoints();
 
-        ArrayList mydatapoints = new ArrayList();
-        mydatapoints.add(new DataPoint<Integer, LocalDateTime>(22049, entryDate));
-        mydatapoints.add(new DataPoint<Integer, LocalDateTime>(32772, entryDate2 ));
-
-        // expecting two whole days between these two dates
-        assertEquals(2, datapoints.size());
+        // expecting three whole days between these two dates
+        // inclusive rather than exclusive
+        assertEquals(3, datapoints.size());
         assertEquals(33320, datapoints.get(0).getMetric());
         //checking first date is date expected from the dataset
         assertEquals("2015-01-01T12:00:02", datapoints.get(0).getStartTime().toString());
@@ -629,7 +626,6 @@ public class MyTests {
         LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:00:02", formatter);
         LocalDateTime exitDate = LocalDateTime.parse("2015-01-04 00:00:16", formatter);
 
-        LocalDateTime entryDate2 = LocalDateTime.parse("2015-01-02 00:00:04", formatter);
         Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
 
         Controller controller = new Controller();
@@ -638,19 +634,78 @@ public class MyTests {
 
         ArrayList<DataPoint> datapoints = line.getDataPoints();
 
-        ArrayList mydatapoints = new ArrayList();
-        mydatapoints.add(new DataPoint<Integer, LocalDateTime>(22049, entryDate));
-        mydatapoints.add(new DataPoint<Integer, LocalDateTime>(32772, entryDate2 ));
-
         // expecting two whole days between these two dates
-        assertEquals(2, datapoints.size());
+        // inclusive of the first date
+        assertEquals(3, datapoints.size());
         assertEquals(33320, datapoints.get(0).getMetric());
         //checking first date is date expected from the dataset
         assertEquals("2015-01-01T12:00:02", datapoints.get(0).getStartTime().toString());
         assertEquals(33978, datapoints.get(1).getMetric());
     }
 
-    // testing dates are what are expected
+
+
+    @Test
+    public void datapointsDatesBarChart(){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+
+
+        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:00:00", formatter);
+        LocalDateTime exitDate = LocalDateTime.parse("2015-01-04 00:00:16", formatter);
+
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+
+        BarGraph line = new BarGraph(Metric.TOTAL_IMPRESSIONS, BarChartType.DAY_OF_WEEK, filter, controller);
+
+        ArrayList<Bar> datapoints = line.getBars();
+
+        datapoints.get(0).getCategory();
+
+
+    }
+
+
+    @Test
+    public void datapointsDatesBoundaryDayBarChart(){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        ArrayList<String> context = new ArrayList<>();
+        ArrayList<String> income = new ArrayList<>();
+        String gender = null;
+        ArrayList<String> ageGroup = new ArrayList<>();
+
+
+        LocalDateTime entryDate = LocalDateTime.parse("2015-01-01 12:00:02", formatter);
+        LocalDateTime exitDate = LocalDateTime.parse("2015-01-04 00:00:16", formatter);
+
+        Filter filter = new Filter(entryDate, exitDate, context, gender, ageGroup, income);
+
+        Controller controller = new Controller();
+        controller.loadNewCampaign("/Users/danielraad/Desktop/2_week_campaign_2/server_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/click_log.csv", "/Users/danielraad/Desktop/2_week_campaign_2/impression_log.csv", 1);
+        LineGraph line = new LineGraph(Metric.TOTAL_IMPRESSIONS, TimeInterval.DAY, controller, filter);
+
+        ArrayList<DataPoint> datapoints = line.getDataPoints();
+
+        // expecting two whole days between these two dates
+        // inclusive of the first date
+        assertEquals(3, datapoints.size());
+        assertEquals(33320, datapoints.get(0).getMetric());
+        //checking first date is date expected from the dataset
+        assertEquals("2015-01-01T12:00:02", datapoints.get(0).getStartTime().toString());
+        assertEquals(33978, datapoints.get(1).getMetric());
+    }
+
+    // testing dates are what are expected when you have increased them using the functions
     @Test
     public void testDates(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -745,7 +800,6 @@ public class MyTests {
      */
 
 
-    //test will be written in increment 3
     @Test
     public void barChart(){
         Controller controller = new Controller();

@@ -1036,7 +1036,7 @@ public class GUI extends Application {
         Scene scene = new Scene(windowLayout, 425, 425);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
-        window.setTitle("Create LineGraph");
+        window.setTitle("Create Bar Chart");
         window.show();
 
 
@@ -1171,7 +1171,7 @@ public class GUI extends Application {
                 }
                 barChart.getData().clear();
                 barChart.getData().add(series2);
-                barChart.setTitle(metrics.get(0) + " line chart");
+                barChart.setTitle(metrics.get(0) + " Bar Chart");
             }
         });
 
