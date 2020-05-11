@@ -1194,7 +1194,8 @@ public class GUI extends Application {
         mainWindow.setMargin(filterOptions, new Insets(0, 20, 0, 10));
         Scene scene = new Scene(mainWindow, 900, 800);
         //lineChart.getData().add(series);
-        new ZoomManager<>(mainWindow, barChart, series);
+//        new ZoomManager<>(mainWindow, barChart, series);
+        barChart.getData().addAll(series);
         scene.getStylesheets().add("/GUI.css");
         stage.setScene(scene);
         stage.show();
@@ -1455,6 +1456,7 @@ public class GUI extends Application {
         HBox metricsGranularity = new HBox(10);
 
         Button filterLineGraph = new Button("Filter");
+        final VBox mainWindow = new VBox(20);
 
         filterLineGraph.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -1478,7 +1480,7 @@ public class GUI extends Application {
                 ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
                 ObservableList<Node> filterNodes = null;
                 filterNodes = impressionFilterOptions.getChildren();
-                
+
 
                 for (Node n : filterNodes) {
                     if (n instanceof VBox) {
@@ -1494,16 +1496,16 @@ public class GUI extends Application {
                                     filters.add("");
                                 }
                             } else if(m instanceof CheckComboBox) {
-                            	
+
                             	ArrayList<String> temp2 = new ArrayList<String>();
                             	List<Object> temp = ((CheckComboBox) m).getCheckModel().getCheckedItems();
                             	for (Object t : temp) {
                             		temp2.add(t.toString());
                             	}
                             	filterArrays.add(temp2);
-                            	
+
                             }
-                            
+
                         }
                     }
                 }
@@ -1526,7 +1528,7 @@ public class GUI extends Application {
 
                 if (filters.get(2) != null && !filters.get(2).equals(""))
                     gender = filters.get(2);
-                
+
                 context =  filterArrays.get(0);
                 ageGroups = filterArrays.get(1);
                 incomes = filterArrays.get(2);
@@ -1542,7 +1544,8 @@ public class GUI extends Application {
                     series2.getData().add(new XYChart.Data(dp.getStartTime().toString(), dp.getMetric()));
                 }
                 lineChart.getData().clear();
-                lineChart.getData().add(series2);
+//                lineChart.getData().add(series2);
+                new ZoomManager<>(mainWindow, lineChart, series2);
                 lineChart.setTitle(metrics.get(0) + " line chart");
             }
         });
@@ -1566,7 +1569,7 @@ public class GUI extends Application {
         filterPrintSave.getChildren().addAll(filterLineGraph, printButton);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         
-        VBox mainWindow = new VBox(20);
+
         HBox filterOptions = new HBox(10);
         filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
         ScrollPane pane = new ScrollPane();

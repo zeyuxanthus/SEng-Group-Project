@@ -38,5 +38,6 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="org.gillius:jfxutils:1.0" level="project" />
     <orderEntry type="library" name="controlsfx" level="project" />
+    <orderEntry type="library" name="controlsfx-11.0.1" level="project" />
   </component>
 </module>
