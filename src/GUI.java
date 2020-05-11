@@ -587,7 +587,7 @@ public class GUI extends Application {
         windowLayout.setMargin(metricsGranularity, new Insets(0, 10, 0, 20));
         windowLayout.setMargin(createChart, new Insets(0, 10, 0, 20));
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
-        Scene scene = new Scene(windowLayout, 400, 400);
+        Scene scene = new Scene(windowLayout, 425, 425);
 
         newWindow.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
@@ -912,7 +912,7 @@ public class GUI extends Application {
         windowLayout.setMargin(metricsGranularity, new Insets(0, 10, 0, 20));
         windowLayout.setMargin(createLineGraph, new Insets(0, 10, 0, 20));
         
-        Scene scene = new Scene(windowLayout, 400, 400);
+        Scene scene = new Scene(windowLayout, 425, 425);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
         window.setTitle("Create LineGraph");
@@ -1028,7 +1028,7 @@ public class GUI extends Application {
         
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 
-        Scene scene = new Scene(windowLayout, 400, 400);
+        Scene scene = new Scene(windowLayout, 425, 425);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
         window.setTitle("Create LineGraph");
