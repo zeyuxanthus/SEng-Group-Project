@@ -222,62 +222,9 @@ public class GUI extends Application {
         
         settingOption = new ComboBox<String>(FXCollections.observableArrayList(settingsOptionText));
         settingOption.setValue("Settings");
-
-        options.getChildren().addAll(fileOption, settingOption);
-
-        toolBar.getChildren().add(options);
-        Button lineGraphButton = new Button();
-        Button histogramButton = new Button();
-        Button barChartButton = new Button();
-
-        histogramButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent arg0) {
-                histogramWindow();
-
-            }
-        });
-
-        lineGraphButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                lineWindow();
-            }
-        });
-
-        barChartButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                barWindow();
-            }
-        });
-
-
-        Image lineGraphimage = new Image(this.getClass().getResourceAsStream("/lineGraphIcon.png"), 100, 100, true, true);
-        Image histogramimage = new Image(this.getClass().getResourceAsStream("/barChartIcon.png"), 100, 100, true, true);
-        Image barChartImage = new Image(this.getClass().getResourceAsStream("/dataIcon.png"), 100, 100, true, true);
-
-        histogramButton.setGraphic(new ImageView(histogramimage));
-        barChartButton.setGraphic(new ImageView(barChartImage));
-        lineGraphButton.setGraphic(new ImageView(lineGraphimage));
-
-        VBox chart1 = new VBox();
-            chart1.getChildren().addAll(lineGraphButton, new Label("Create Line Graph"));
-            chart1.setAlignment(Pos.CENTER);
-        VBox chart2 = new VBox();
-            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram"));
-            chart2.setAlignment(Pos.CENTER);
-        VBox chart3 = new VBox();
-            chart3.getChildren().addAll(barChartButton, new Label("Create Bar Chart"));
-            chart3.setAlignment(Pos.CENTER);
-
-        chartOptions.getChildren().addAll(chart1, chart2, chart3);
-        BorderPane.setMargin(filtersAndMetrics, new Insets(60, 100, 10, 50));//top was 150
-        BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
-
-        // Top menu bar
+        
         Menu menu = new Menu("File");
+        
         MenuItem m1 = new MenuItem("Load...");
             m1.setOnAction(event -> {
                 File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
@@ -287,10 +234,10 @@ public class GUI extends Application {
                         campaigns.add(file.getName());
                     }
                 }
-
                 if(campaigns.size() == 0){
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Load Campaign");
+                    alert.getDialogPane().getStylesheets().add("/GUI.css");
                     alert.setHeaderText(null);
                     alert.setContentText("There are no campaigns to load.");
 
@@ -298,6 +245,7 @@ public class GUI extends Application {
                 }
                 else{
                     ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
+                    dialog.getDialogPane().getStylesheets().add("/GUI.css");
                     dialog.setTitle("AdAuction");
                     dialog.setHeaderText("Load Campaign");
                     dialog.setContentText("Select campaign to be loaded:");
@@ -308,6 +256,7 @@ public class GUI extends Application {
                         controller.loadCampaign(result.get());
 
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.getDialogPane().getStylesheets().add("/GUI.css");
                         alert.setTitle("Load Campaign");
                         alert.setHeaderText(null);
                         alert.setContentText(result.get() + " has been loaded.");
@@ -323,10 +272,12 @@ public class GUI extends Application {
                 controller.saveCampaign(campaignName);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.getDialogPane().getStylesheets().add("/GUI.css");
                 alert.setTitle("Load Campaign");
                 alert.setHeaderText(null);
                 alert.setContentText("Campaign saved as \"" + campaignName + "\".");
                 alert.showAndWait();
+                
             }
         });
         MenuItem m3 = new MenuItem("Save as...");
@@ -334,6 +285,7 @@ public class GUI extends Application {
                 @Override
                 public void handle(ActionEvent event) {
                     TextInputDialog dialog = new TextInputDialog();
+                    dialog.getDialogPane().getStylesheets().add("/GUI.css");
                     dialog.setTitle("AdAuction");
                     dialog.setHeaderText("Save campaign");
                     dialog.setContentText("Please enter the name of the campaign:");
@@ -341,6 +293,7 @@ public class GUI extends Application {
                     Optional<String> result = dialog.showAndWait();
                     if (result.isPresent()){
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.getDialogPane().getStylesheets().add("/GUI.css");
                         alert.setHeaderText(null);
                         alert.setTitle("Load Campaign");
                         if(result.get().equals("")){
@@ -367,6 +320,62 @@ public class GUI extends Application {
         topBox.getChildren().addAll(mb, slider);
 
         mainWindow.setTop(mb);
+
+        options.getChildren().addAll(fileOption, settingOption);
+        
+        toolBar.getChildren().add(options);
+        Button lineGraphButton = new Button();
+        Button histogramButton = new Button();
+        Button barChartButton = new Button();
+
+        histogramButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent arg0) {
+                histogramWindow();
+
+            }
+        });
+
+        lineGraphButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                lineWindow();
+            }
+        });
+        
+        barChartButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                barWindow();
+            }
+        });
+
+
+
+        Image lineGraphimage = new Image(this.getClass().getResourceAsStream("/lineGraphIcon.png"), 100, 100, true, true);
+        Image histogramimage = new Image(this.getClass().getResourceAsStream("/barChartIcon.png"), 100, 100, true, true);
+        Image barChartImage = new Image(this.getClass().getResourceAsStream("/dataIcon.png"), 100, 100, true, true);
+
+        histogramButton.setGraphic(new ImageView(histogramimage));
+        barChartButton.setGraphic(new ImageView(barChartImage));
+        lineGraphButton.setGraphic(new ImageView(lineGraphimage));
+
+        VBox chart1 = new VBox();
+            chart1.getChildren().addAll(lineGraphButton, new Label("Create Line Graph"));
+            chart1.setAlignment(Pos.CENTER);
+        VBox chart2 = new VBox();
+            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram"));
+            chart2.setAlignment(Pos.CENTER);
+        VBox chart3 = new VBox();
+            chart3.getChildren().addAll(barChartButton, new Label("Create Bar Chart"));
+            chart3.setAlignment(Pos.CENTER);
+
+        chartOptions.getChildren().addAll(chart1, chart2, chart3);
+        BorderPane.setMargin(filtersAndMetrics, new Insets(60, 100, 10, 50));//top was 150
+        BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
+
+
         mainWindow.setCenter(chartOptions);
         mainWindow.setRight(filtersAndMetrics);
         //mainWindow.setStyle("-fx-background-color: #c8e3f0;");
@@ -500,18 +509,11 @@ public class GUI extends Application {
         TilePane impressionFilterOptions = impressionFilters();
 
         filterPane.getChildren().add(impressionFilterOptions);
-
-        ComboBox<TimeInterval> granularity =
-				new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
-
-        granularity.setValue(TimeInterval.DAY);
-        Label granLabel = new Label("Granularity: ");
         
         VBox windowLayout = new VBox(10);
-        HBox metricsGranularity = new HBox(10);
 
         Button createChart = new Button("Create");
-
+        
         createChart.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -576,7 +578,7 @@ public class GUI extends Application {
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 createHistogram(filter);
-
+                newWindow.close();
 
 
             }
@@ -584,12 +586,10 @@ public class GUI extends Application {
         });
 
 
-        metricsGranularity.getChildren().addAll(granLabel, granularity);
 
 
-        windowLayout.getChildren().addAll(filterPane, metricsGranularity, createChart);
+        windowLayout.getChildren().addAll(filterPane, createChart);
         windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
-        windowLayout.setMargin(metricsGranularity, new Insets(0, 10, 0, 20));
         windowLayout.setMargin(createChart, new Insets(0, 10, 0, 20));
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(windowLayout, 425, 425);
@@ -681,28 +681,63 @@ public class GUI extends Application {
 
         TilePane impressionFilterOptions = impressionFilters();
 
-        HBox impressionMetricsOptions = addImpHbox();
         VBox filterPane = new VBox(10);
-        filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
+        filterPane.getChildren().addAll(impressionFilterOptions);
         HBox metricsGranularity = new HBox(10);
 
+        ObservableList<Node> filterNodes = null;
+        filterNodes = impressionFilterOptions.getChildren();
+        
+        int a = 0;
+        int b = 0;
+
+        for (Node n : filterNodes) {
+            if (n instanceof VBox) {
+                for (Node m : ((VBox) n).getChildren()) {
+                     if (m instanceof ComboBox) {
+                        ((ComboBox) m).setValue(filters.getGender());
+                    } else if(m instanceof DatePicker) {
+                        try{
+                        	if (a == 0) {
+                        		((DatePicker) m).setValue(filters.getStartDate().toLocalDate());
+                        		a++;
+                        	}
+                        	else {
+                        		((DatePicker) m).setValue(filters.getEndDate().toLocalDate());
+                        	}
+                        }catch(NullPointerException e){
+                            
+                        }
+                    } else if(m instanceof CheckComboBox) {
+                    	
+                    	if (b == 0) {
+                    		for (Object o : filters.getContexts()) {
+                    			((CheckComboBox) m).getCheckModel().check(o);
+                    		}
+                    		b++;
+                    	}
+                    	else if (b == 1) {
+                    		for (Object o : filters.getAgeGroups()) {
+                    			((CheckComboBox) m).getCheckModel().check(o);
+                    		}
+                    		b++;
+                    	}
+                    	else {
+                    		for (Object o : filters.getIncomes()) {
+                    			((CheckComboBox) m).getCheckModel().check(o);
+                    		}
+                    		b++;
+                    	}               	
+                    }               
+                }
+            }
+        }
+        
         Button filterHistogram = new Button("Filter");
 
         filterHistogram.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
-                ArrayList<Metric> metrics = new ArrayList<Metric>();
-
-                ObservableList<Node> metricsNodes = null;
-  
-                metricsNodes = impressionMetricsOptions.getChildren();
-              
-                for (Node n : metricsNodes) {
-                    if (n instanceof ChoiceBox) {
-                        metrics.add((Metric) ((ChoiceBox) n).getValue());
-                    }
-                }
 
 
                 ArrayList<String> filters = new ArrayList<String>();
@@ -780,31 +815,31 @@ public class GUI extends Application {
         metricsAndCreate.getChildren().addAll(filterHistogram);
         
         HBox filterOptions = new HBox(10);
-
+        
         Stage window = new Stage();
         Label chartLabel = new Label("Histogram for cost variation");
 
         VBox filterPrintSave = new VBox(10);
 
         filterHistogram.setMinWidth(50);
-
+       
 
         Button printButton = new Button("Print");
         printButton.setOnAction(event -> {
             printChart(chart, window);
         });
-
+        
         printButton.setMinWidth(50);
         filterPrintSave.getChildren().addAll(filterHistogram, printButton);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
         filterOptions.setMargin(filterPane, new Insets(0, 20, 0, 0));
-
+        
         VBox vbox = new VBox(15);
         vbox.getChildren().addAll(chart,filterOptions);
         vbox.setStyle("-fx-background-color: #c8e3f0;");
         
-
+        
         Scene scene = new Scene(vbox, 800, 700);
         scene.getStylesheets().add("/GUI.css");
         window.setScene(scene);
@@ -906,6 +941,7 @@ public class GUI extends Application {
                 incomes = filterArrays.get(2);
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 createLineChart(metrics.get(0), filter, granularity.getValue());
+                window.close();
 
             }
         });
@@ -1021,6 +1057,7 @@ public class GUI extends Application {
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 createBarChart(metrics.get(0), filter, type.getValue());
+                window.close();
 
             }
         });
@@ -1030,7 +1067,7 @@ public class GUI extends Application {
         windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
         windowLayout.setMargin(metricsType, new Insets(0, 10, 0, 20));
         windowLayout.setMargin(filterBarChart, new Insets(0, 10, 0, 20));
-
+        
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 
         Scene scene = new Scene(windowLayout, 425, 425);
@@ -1072,7 +1109,7 @@ public class GUI extends Application {
 
         HBox impressionMetricsOptions = addImpHbox();
         VBox filterPane = new VBox(10);
-        Label granLabel = new Label("Granularity: ");
+        Label granLabel = new Label("Type: ");
         filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
 
 
@@ -1083,6 +1120,54 @@ public class GUI extends Application {
         VBox windowLayout = new VBox(10);
         HBox metricsGranularity = new HBox(10);
 
+        ObservableList<Node> filterNodes = null;
+        filterNodes = impressionFilterOptions.getChildren();
+        
+        int a = 0;
+        int b = 0;
+
+        for (Node n : filterNodes) {
+            if (n instanceof VBox) {
+                for (Node m : ((VBox) n).getChildren()) {
+                     if (m instanceof ComboBox) {
+                        ((ComboBox) m).setValue(filters.getGender());
+                    } else if(m instanceof DatePicker) {
+                        try{
+                        	if (a == 0) {
+                        		((DatePicker) m).setValue(filters.getStartDate().toLocalDate());
+                        		a++;
+                        	}
+                        	else {
+                        		((DatePicker) m).setValue(filters.getEndDate().toLocalDate());
+                        	}
+                        }catch(NullPointerException e){
+                            
+                        }
+                    } else if(m instanceof CheckComboBox) {
+                    	
+                    	if (b == 0) {
+                    		for (Object o : filters.getContexts()) {
+                    			((CheckComboBox) m).getCheckModel().check(o);
+                    		}
+                    		b++;
+                    	}
+                    	else if (b == 1) {
+                    		for (Object o : filters.getAgeGroups()) {
+                    			((CheckComboBox) m).getCheckModel().check(o);
+                    		}
+                    		b++;
+                    	}
+                    	else {
+                    		for (Object o : filters.getIncomes()) {
+                    			((CheckComboBox) m).getCheckModel().check(o);
+                    		}
+                    		b++;
+                    	}               	
+                    }               
+                }
+            }
+        }
+        
         Button filterBarChart = new Button("Filter");
 
         filterBarChart.setOnAction(new EventHandler<ActionEvent>() {
@@ -1106,6 +1191,7 @@ public class GUI extends Application {
                 ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
                 ObservableList<Node> filterNodes = null;
                 filterNodes = impressionFilterOptions.getChildren();
+                
                 
 
                 for (Node n : filterNodes) {
@@ -1171,7 +1257,7 @@ public class GUI extends Application {
                 }
                 barChart.getData().clear();
                 barChart.getData().add(series2);
-                barChart.setTitle(metrics.get(0) + " Bar Chart");
+                barChart.setTitle(metrics.get(0) + " Bar chart");
             }
         });
 
@@ -1181,7 +1267,7 @@ public class GUI extends Application {
         metricsGranularity.getChildren().addAll(granLabel, barType);
         HBox metricsAndCreate = new HBox(25);
        filterBarChart.setMinWidth(50);
-
+       
 
         Button printButton = new Button("Print");
         printButton.setOnAction(event -> {
@@ -1199,7 +1285,6 @@ public class GUI extends Application {
         mainWindow.setMargin(filterOptions, new Insets(0, 20, 0, 10));
         Scene scene = new Scene(mainWindow, 900, 800);
         //lineChart.getData().add(series);
-//        new ZoomManager<>(mainWindow, barChart, series);
         barChart.getData().addAll(series);
         scene.getStylesheets().add("/GUI.css");
         stage.setScene(scene);
@@ -1452,7 +1537,55 @@ public class GUI extends Application {
         Label granLabel = new Label("Granularity: ");
         filterPane.getChildren().addAll(impressionFilterOptions, impressionMetricsOptions);
 
+        ObservableList<Node> filterNodes = null;
+        filterNodes = impressionFilterOptions.getChildren();
+        
+        int a = 0;
+        int b = 0;
 
+        for (Node n : filterNodes) {
+            if (n instanceof VBox) {
+                for (Node m : ((VBox) n).getChildren()) {
+                     if (m instanceof ComboBox) {
+                        ((ComboBox) m).setValue(filters.getGender());
+                    } else if(m instanceof DatePicker) {
+                        try{
+                        	if (a == 0) {
+                        		((DatePicker) m).setValue(filters.getStartDate().toLocalDate());
+                        		a++;
+                        	}
+                        	else {
+                        		((DatePicker) m).setValue(filters.getEndDate().toLocalDate());
+                        	}
+                        }catch(NullPointerException e){
+                            
+                        }
+                    } else if(m instanceof CheckComboBox) {
+                    	
+                    	if (b == 0) {
+                    		for (Object o : filters.getContexts()) {
+                    			((CheckComboBox) m).getCheckModel().check(o);
+                    		}
+                    		b++;
+                    	}
+                    	else if (b == 1) {
+                    		for (Object o : filters.getAgeGroups()) {
+                    			((CheckComboBox) m).getCheckModel().check(o);
+                    		}
+                    		b++;
+                    	}
+                    	else {
+                    		for (Object o : filters.getIncomes()) {
+                    			((CheckComboBox) m).getCheckModel().check(o);
+                    		}
+                    		b++;
+                    	}               	
+                    }               
+                }
+            }
+        }
+        
+        
         ComboBox<TimeInterval> granularity =
                 new ComboBox<TimeInterval>(FXCollections.observableArrayList(granularityOptions));
         granularity.setValue(TimeInterval.DAY);
@@ -1485,8 +1618,9 @@ public class GUI extends Application {
                 ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
                 ObservableList<Node> filterNodes = null;
                 filterNodes = impressionFilterOptions.getChildren();
+                
 
-
+                
                 for (Node n : filterNodes) {
                     if (n instanceof VBox) {
                         for (Node m : ((VBox) n).getChildren()) {
@@ -1501,16 +1635,16 @@ public class GUI extends Application {
                                     filters.add("");
                                 }
                             } else if(m instanceof CheckComboBox) {
-
+                            	
                             	ArrayList<String> temp2 = new ArrayList<String>();
                             	List<Object> temp = ((CheckComboBox) m).getCheckModel().getCheckedItems();
                             	for (Object t : temp) {
                             		temp2.add(t.toString());
                             	}
                             	filterArrays.add(temp2);
-
+                            	
                             }
-
+                            
                         }
                     }
                 }
@@ -1533,7 +1667,7 @@ public class GUI extends Application {
 
                 if (filters.get(2) != null && !filters.get(2).equals(""))
                     gender = filters.get(2);
-
+                
                 context =  filterArrays.get(0);
                 ageGroups = filterArrays.get(1);
                 incomes = filterArrays.get(2);
@@ -1549,7 +1683,7 @@ public class GUI extends Application {
                     series2.getData().add(new XYChart.Data(dp.getStartTime().toString(), dp.getMetric()));
                 }
                 lineChart.getData().clear();
-//                lineChart.getData().add(series2);
+                //lineChart.getData().add(series2);
                 new ZoomManager<>(mainWindow, lineChart, series2);
                 lineChart.setTitle(metrics.get(0) + " line chart");
             }
@@ -1559,22 +1693,21 @@ public class GUI extends Application {
 
         metricsGranularity.getChildren().addAll(granLabel, granularity);
         HBox metricsAndCreate = new HBox(25);
-
+        
 
         VBox filterPrintSave = new VBox(10);
         filterLineGraph.setMinWidth(50);
-
+       
 
         Button printButton = new Button("Print");
         printButton.setOnAction(event -> {
             printChart(lineChart, stage);
         });
-
+        
         printButton.setMinWidth(50);
         filterPrintSave.getChildren().addAll(filterLineGraph, printButton);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         
-
         HBox filterOptions = new HBox(10);
         filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
         ScrollPane pane = new ScrollPane();
@@ -1643,6 +1776,7 @@ public class GUI extends Application {
                 if(campaigns.size() == 0){
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Load Campaign");
+                    alert.getDialogPane().getStylesheets().add("/GUI.css");
                     alert.setHeaderText(null);
                     alert.setContentText("There are no campaigns to load.");
 
@@ -1653,6 +1787,8 @@ public class GUI extends Application {
                     dialog.setTitle("AdAuction");
                     dialog.setHeaderText("Load Campaign");
                     dialog.setContentText("Select campaign to be loaded:");
+                    dialog.getDialogPane().getStylesheets().add("/GUI.css");
+                    
 
                     Optional<String> result = dialog.showAndWait();
                     if (result.isPresent()) {
@@ -1817,6 +1953,7 @@ public class GUI extends Application {
      */
     public void printChart(Node node, Stage stage){
 
+    	
         //Get the Default Printer
         Printer defaultPrinter = Printer.getDefaultPrinter();
 
@@ -1865,9 +2002,13 @@ public class GUI extends Application {
     
     public void displayError(String error) {
     	Stage window = new Stage();
+    	BorderPane bp = new BorderPane();
     	window.setTitle("Error");
     	Label errorLabel = new Label(error);
-    	Scene scene = new Scene(errorLabel, 400, 100);
+    	bp.setCenter(errorLabel);
+    	
+    	Scene scene = new Scene(bp, 400, 100);
+    	scene.getStylesheets().add("/GUI.css");
     	window.setScene(scene);
     	window.show();
     	
