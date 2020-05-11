@@ -5,9 +5,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Scanner;
+
+import org.controlsfx.control.CheckComboBox;
 
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
@@ -17,6 +21,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.print.JobSettings;
+import javafx.print.PrintColor;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -36,6 +44,8 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+
 
 public class GUI extends Application {
     private static Controller controller;
@@ -52,9 +62,9 @@ public class GUI extends Application {
 			TimeInterval.MONTH};
     private final BarChartType[] barChartType = {BarChartType.DAY_OF_WEEK, BarChartType.TIME_OF_DAY};
     private final String[] genders = {"","Male", "Female"};
-    private final String[] ageGroups = {"", "<25", "25-34", "35-44", "45-54", ">54"};
-    private final String[] incomeGroups = {"", "Low", "Medium", "High"};
-    private final String[] contextGroups = {"", "News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel"};
+    private final String[] ageGroups = {"<25", "25-34", "35-44", "45-54", ">54"};
+    private final String[] incomeGroups = {"Low", "Medium", "High"};
+    private final String[] contextGroups = {"News", "Shopping", "Social Media", "Blog", "Hobbies", "Travel"};
     final String cssDefault = "-fx-border-color: black;\n"
             + "-fx-border-insets: 50.0 10.0 0.0 10.0;\n"
             + "-fx-border-width: 3;\n"
@@ -106,7 +116,7 @@ public class GUI extends Application {
 
         BorderPane mainWindow = new BorderPane();
         HBox toolBar = new HBox();
-        VBox chartOptions = new VBox(10);
+        VBox chartOptions = new VBox(20);
         HBox mainArea = new HBox(10);
         HBox options = new HBox();
 	    
@@ -128,8 +138,10 @@ public class GUI extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
                 ObservableList<Node> filterNodes = null;
                 filterNodes = impressionFilterOptions.getChildren();
+                
 
                 for (Node n : filterNodes) {
                     if (n instanceof VBox) {
@@ -144,7 +156,17 @@ public class GUI extends Application {
                                 }catch(NullPointerException e){
                                     filters.add("");
                                 }
+                            } else if(m instanceof CheckComboBox) {
+                            	
+                            	ArrayList<String> temp2 = new ArrayList<String>();
+                            	List<Object> temp = ((CheckComboBox) m).getCheckModel().getCheckedItems();
+                            	for (Object t : temp) {
+                            		temp2.add(t.toString());
+                            	}
+                            	filterArrays.add(temp2);
+                            	
                             }
+                            
                         }
                     }
                 }
@@ -162,16 +184,15 @@ public class GUI extends Application {
                     startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
-                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                    endDate = LocalDate.parse(filters.get(1), formatter).atTime(23, 59, 59);
                 }
+
                 if (filters.get(2) != null && !filters.get(2).equals(""))
-                    context.add(filters.get(2));
-                if (filters.get(3) != null && !filters.get(3).equals(""))
-                    gender = filters.get(3);
-                if (filters.get(4) != null && !filters.get(4).equals(""))
-                    ageGroups.add(filters.get(4));
-                if (filters.get(5) != null && !filters.get(5).equals(""))
-                    incomes.add(filters.get(5));
+                    gender = filters.get(2);
+                
+                context =  filterArrays.get(0);
+                ageGroups = filterArrays.get(1);
+                incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 ArrayList<Click> clicks = controller.filterClickLog(filter);
@@ -212,18 +233,42 @@ public class GUI extends Application {
                     }
                 }
 
-                ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
-                dialog.setTitle("AdAuction");
-                dialog.setHeaderText("Load Campaign");
-                dialog.setContentText("Select campaign to be loaded:");
+                if(campaigns.size() == 0){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Load Campaign");
+                    alert.setHeaderText(null);
+                    alert.setContentText("There are no campaigns to load.");
 
-                Optional<String> result = dialog.showAndWait();
-                if (result.isPresent()) {
-                    controller.loadCampaign(result.get());
+                    alert.showAndWait();
+                }
+                else{
+                    ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
+                    dialog.setTitle("AdAuction");
+                    dialog.setHeaderText("Load Campaign");
+                    dialog.setContentText("Select campaign to be loaded:");
+
+                    Optional<String> result = dialog.showAndWait();
+                    String campaignName;
+                    if (result.isPresent()){
+                        controller.loadCampaign(result.get());
+
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Load Campaign");
+                        alert.setHeaderText(null);
+                        alert.setContentText(result.get() + " has been loaded.");
+                        alert.showAndWait();
+                    }
                 }
             }
             else if (fileOption.getValue().equals("Save")) {
-            	controller.saveCampaign("Campaign " + System.nanoTime());
+                String campaignName = "Campaign " + System.nanoTime();
+            	controller.saveCampaign(campaignName);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Load Campaign");
+                alert.setHeaderText(null);
+                alert.setContentText("Campaign saved as \"" + campaignName + "\".");
+                alert.showAndWait();
             }
             else if (fileOption.getValue().equals("Save as...")) {
                 TextInputDialog dialog = new TextInputDialog();
@@ -233,8 +278,24 @@ public class GUI extends Application {
 
                 Optional<String> result = dialog.showAndWait();
                 if (result.isPresent()){
-                    controller.saveCampaign(result.get());
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setTitle("Load Campaign");
+                    if(result.get().equals("")){
+                        alert.setContentText("Campaign saving failed. You need to provide the name of the campaign. Please try again.");
+
+                    }
+                    else if(!controller.isCampaignNameFree(result.get())){
+                        alert.setContentText("Campaign saving failed. The name is already used by another campaign. Please try again with a different name.");
+                    } else{
+                        controller.saveCampaign(result.get());
+
+                        alert.setContentText("Campaign saved as \"" + result.get() + "\".");
+                    }
+                    alert.showAndWait();
+
                 }
+                
 
 //                Scanner scanner = new Scanner(System.in);
 //            	System.out.println("Enter what you want to save the campaign as: ");
@@ -285,11 +346,17 @@ public class GUI extends Application {
         barChartButton.setGraphic(new ImageView(barChartImage));
         lineGraphButton.setGraphic(new ImageView(lineGraphimage));
 
+        VBox chart1 = new VBox();
+            chart1.getChildren().addAll(lineGraphButton, new Label("Create Line Graph"));
+            chart1.setAlignment(Pos.CENTER);
+        VBox chart2 = new VBox();
+            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram"));
+            chart2.setAlignment(Pos.CENTER);
+        VBox chart3 = new VBox();
+            chart3.getChildren().addAll(barChartButton, new Label("Create Bar Chart"));
+            chart3.setAlignment(Pos.CENTER);
 
-        Label chart1 = new Label("Create Line Graph");
-        Label chart2 = new Label("Create Histogram");
-        Label chart3 = new Label("Create Bar Chart");
-        chartOptions.getChildren().addAll(lineGraphButton, chart1, histogramButton, chart2, barChartButton, chart3);
+        chartOptions.getChildren().addAll(chart1, chart2, chart3);
         BorderPane.setMargin(filtersAndMetrics, new Insets(60, 100, 10, 50));//top was 150
         BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
 
@@ -309,7 +376,7 @@ public class GUI extends Application {
 
         root.getChildren().add(layering);
 	    root.setAutoSizeChildren(true);
-        Scene scene = new Scene(root, 900, 550);
+        Scene scene = new Scene(root, 1200, 600);
         scene.getStylesheets().add("/GUI.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Ad Auction Dashboard");
@@ -445,54 +512,62 @@ public class GUI extends Application {
             @Override
             public void handle(ActionEvent event) {
 
-                ArrayList<String> filters = new ArrayList<String>();
-                ObservableList<Node> filterNodes = null;
-               filterNodes = impressionFilterOptions.getChildren();
+            	 ArrayList<String> filters = new ArrayList<String>();
+                 ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
+                 ObservableList<Node> filterNodes = null;
+                 filterNodes = impressionFilterOptions.getChildren();
+                 
 
+                 for (Node n : filterNodes) {
+                     if (n instanceof VBox) {
+                         for (Node m : ((VBox) n).getChildren()) {
+                             if (m instanceof TextField) {
+                                 filters.add(((TextField) m).getText());
+                             } else if (m instanceof ComboBox) {
+                                 filters.add((String) ((ComboBox) m).getValue());
+                             } else if(m instanceof DatePicker) {
+                                 try{
+                                     filters.add(((DatePicker) m).getValue().toString());
+                                 }catch(NullPointerException e){
+                                     filters.add("");
+                                 }
+                             } else if(m instanceof CheckComboBox) {
+                             	
+                             	ArrayList<String> temp2 = new ArrayList<String>();
+                             	List<Object> temp = ((CheckComboBox) m).getCheckModel().getCheckedItems();
+                             	for (Object t : temp) {
+                             		temp2.add(t.toString());
+                             	}
+                             	filterArrays.add(temp2);
+                             	
+                             }
+                             
+                         }
+                     }
+                 }
 
+                 LocalDateTime startDate = null;
+                 LocalDateTime endDate = null;
+                 ArrayList<String> context = new ArrayList<String>();
+                 ArrayList<String> ageGroups = new ArrayList<String>();
+                 ArrayList<String> incomes = new ArrayList<String>();
+                 String gender = new String();
+                 gender = null;
+                 //Same situation as above, this time looking for each filter
+                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                 if (!filters.get(0).equals("") && filters.get(0) != null) {
+                     startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
+                 }
+                 if (!filters.get(1).equals("") && filters.get(1) != null) {
+                     endDate = LocalDate.parse(filters.get(1), formatter).atTime(23, 59, 59);
+                 }
 
-
-                for (Node n : filterNodes) {
-                    if (n instanceof VBox) {
-                        for (Node m : ((VBox) n).getChildren()) {
-                            if (m instanceof TextField) {
-                                filters.add(((TextField) m).getText());
-                            } else if (m instanceof ComboBox) {
-                                filters.add((String) ((ComboBox) m).getValue());
-                            } else if(m instanceof DatePicker) {
-                                try{
-                                    filters.add(((DatePicker) m).getValue().toString());
-                                }catch(NullPointerException e){
-                                    filters.add("");
-                                }
-                            }
-                        }
-                    }
-                }
-
-                LocalDateTime startDate = null;
-                LocalDateTime endDate = null;
-                ArrayList<String> context = new ArrayList<String>();
-                ArrayList<String> ageGroups = new ArrayList<String>();
-                ArrayList<String> incomes = new ArrayList<String>();
-                String gender = new String();
-                gender = null;
-                //Same situation as above, this time looking for each filter
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                if (!filters.get(0).equals("") && filters.get(0) != null) {
-                    startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
-                }
-                if (!filters.get(1).equals("") && filters.get(1) != null) {
-                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
-                }
-                if (filters.get(2) != null && !filters.get(2).equals(""))
-                    context.add(filters.get(2));
-                if (filters.get(3) != null && !filters.get(3).equals(""))
-                    gender = filters.get(3);
-                if (filters.get(4) != null && !filters.get(4).equals(""))
-                    ageGroups.add(filters.get(4));
-                if (filters.get(5) != null && !filters.get(5).equals(""))
-                    incomes.add(filters.get(5));
+                 if (filters.get(2) != null && !filters.get(2).equals(""))
+                     gender = filters.get(2);
+                 
+                 context =  filterArrays.get(0);
+                 ageGroups = filterArrays.get(1);
+                 incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 createHistogram(filter);
@@ -508,8 +583,12 @@ public class GUI extends Application {
 
 
         windowLayout.getChildren().addAll(filterPane, metricsGranularity, createChart);
+        windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
+        windowLayout.setMargin(metricsGranularity, new Insets(0, 10, 0, 20));
+        windowLayout.setMargin(createChart, new Insets(0, 10, 0, 20));
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
         Scene scene = new Scene(windowLayout, 400, 400);
+
         newWindow.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
         newWindow.setTitle("Create Histogram");
@@ -542,14 +621,14 @@ public class GUI extends Application {
         Label genderLabel = new Label("Gender");
         Label incomeLabel = new Label("Income");
         
-        DatePicker entryDate = new DatePicker();
-        DatePicker exitDate = new DatePicker();
+        DatePicker entryDate = new DatePicker(controller.getCampaignStartDate());
+        DatePicker exitDate = new DatePicker(controller.getCampaignEndDate());
 //        entryDate.setPromptText("Date From");
 //        exitDate.setPromptText("Date Until");
-        ComboBox<String> age = new ComboBox<String>(FXCollections.observableArrayList(ageGroups));
-        ComboBox<String> context = new ComboBox<String>(FXCollections.observableArrayList(contextGroups));
+        CheckComboBox<String> age = new CheckComboBox<String>(FXCollections.observableArrayList(ageGroups));
+        CheckComboBox<String> context = new CheckComboBox<String>(FXCollections.observableArrayList(contextGroups));
         ComboBox<String> gender = new ComboBox<String>(FXCollections.observableArrayList(genders));
-        ComboBox<String> income = new ComboBox<String>(FXCollections.observableArrayList(incomeGroups));
+        CheckComboBox<String> income = new CheckComboBox<String>(FXCollections.observableArrayList(incomeGroups));
 
         age.setPrefWidth(100);
         context.setPrefWidth(100);
@@ -607,23 +686,25 @@ public class GUI extends Application {
         filterHistogram.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ArrayList<String> filters = new ArrayList<String>();
-                ArrayList<Metric> metrics = new ArrayList<Metric>();
-                ObservableList<Node> filterNodes = null;
-                ObservableList<Node> metricsNodes = null;
-                
-                
-                
-                metricsNodes = impressionMetricsOptions.getChildren();
-                filterNodes = impressionFilterOptions.getChildren();
 
-                
+                ArrayList<Metric> metrics = new ArrayList<Metric>();
+
+                ObservableList<Node> metricsNodes = null;
+  
+                metricsNodes = impressionMetricsOptions.getChildren();
+              
                 for (Node n : metricsNodes) {
                     if (n instanceof ChoiceBox) {
                         metrics.add((Metric) ((ChoiceBox) n).getValue());
                     }
                 }
 
+
+                ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
+                ObservableList<Node> filterNodes = null;
+                filterNodes = impressionFilterOptions.getChildren();
+                
 
                 for (Node n : filterNodes) {
                     if (n instanceof VBox) {
@@ -638,7 +719,17 @@ public class GUI extends Application {
                                 }catch(NullPointerException e){
                                     filters.add("");
                                 }
+                            } else if(m instanceof CheckComboBox) {
+                            	
+                            	ArrayList<String> temp2 = new ArrayList<String>();
+                            	List<Object> temp = ((CheckComboBox) m).getCheckModel().getCheckedItems();
+                            	for (Object t : temp) {
+                            		temp2.add(t.toString());
+                            	}
+                            	filterArrays.add(temp2);
+                            	
                             }
+                            
                         }
                     }
                 }
@@ -656,16 +747,15 @@ public class GUI extends Application {
                     startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
-                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                    endDate = LocalDate.parse(filters.get(1), formatter).atTime(23, 59, 59);
                 }
+
                 if (filters.get(2) != null && !filters.get(2).equals(""))
-                    context.add(filters.get(2));
-                if (filters.get(3) != null && !filters.get(3).equals(""))
-                    gender = filters.get(3);
-                if (filters.get(4) != null && !filters.get(4).equals(""))
-                    ageGroups.add(filters.get(4));
-                if (filters.get(5) != null && !filters.get(5).equals(""))
-                    incomes.add(filters.get(5));
+                    gender = filters.get(2);
+                
+                context =  filterArrays.get(0);
+                ageGroups = filterArrays.get(1);
+                incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 Histogram histogram = controller.createHistogram(5, 2, filter);
@@ -685,15 +775,32 @@ public class GUI extends Application {
         metricsAndCreate.getChildren().addAll(filterHistogram);
         
         HBox filterOptions = new HBox(10);
-        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
-   
+        
         Stage window = new Stage();
         Label chartLabel = new Label("Histogram for cost variation");
+
+        VBox filterPrintSave = new VBox(10);
+
+        filterHistogram.setMinWidth(50);
+       
+
+        Button printButton = new Button("Print");
+        printButton.setOnAction(event -> {
+            printChart(chart, window);
+        });
+        
+        printButton.setMinWidth(50);
+        filterPrintSave.getChildren().addAll(filterHistogram, printButton);
+        metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
+        filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
+        filterOptions.setMargin(filterPane, new Insets(0, 20, 0, 0));
+        
         VBox vbox = new VBox(15);
-        vbox.getChildren().addAll(chart, filterOptions);
+        vbox.getChildren().addAll(chart,filterOptions);
         vbox.setStyle("-fx-background-color: #c8e3f0;");
         
-        Scene scene = new Scene(vbox, 700, 700);
+        
+        Scene scene = new Scene(vbox, 800, 700);
         scene.getStylesheets().add("/GUI.css");
         window.setScene(scene);
         window.show();
@@ -722,12 +829,12 @@ public class GUI extends Application {
         createLineGraph.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ArrayList<String> filters = new ArrayList<String>();
+
                 ArrayList<Metric> metrics = new ArrayList<Metric>();
-                ObservableList<Node> filterNodes = null;
+
                 ObservableList<Node> metricsNodes = null;
                 metricsNodes = impressionMetricsOptions.getChildren();
-                filterNodes = impressionFilterOptions.getChildren();
+
 
                 for (Node n : metricsNodes) {
                     if (n instanceof ChoiceBox) {
@@ -735,6 +842,12 @@ public class GUI extends Application {
                     }
                 }
 
+
+                ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
+                ObservableList<Node> filterNodes = null;
+                filterNodes = impressionFilterOptions.getChildren();
+                
 
                 for (Node n : filterNodes) {
                     if (n instanceof VBox) {
@@ -749,7 +862,17 @@ public class GUI extends Application {
                                 }catch(NullPointerException e){
                                     filters.add("");
                                 }
+                            } else if(m instanceof CheckComboBox) {
+                            	
+                            	ArrayList<String> temp2 = new ArrayList<String>();
+                            	List<Object> temp = ((CheckComboBox) m).getCheckModel().getCheckedItems();
+                            	for (Object t : temp) {
+                            		temp2.add(t.toString());
+                            	}
+                            	filterArrays.add(temp2);
+                            	
                             }
+                            
                         }
                     }
                 }
@@ -767,17 +890,15 @@ public class GUI extends Application {
                     startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
-                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                    endDate = LocalDate.parse(filters.get(1), formatter).atTime(23, 59, 59);
                 }
-                if (filters.get(2) != null && !filters.get(2).equals(""))
-                    context.add(filters.get(2));
-                if (filters.get(3) != null && !filters.get(3).equals(""))
-                    gender = filters.get(3);
-                if (filters.get(4) != null && !filters.get(4).equals(""))
-                    ageGroups.add(filters.get(4));
-                if (filters.get(5) != null && !filters.get(5).equals(""))
-                    incomes.add(filters.get(5));
 
+                if (filters.get(2) != null && !filters.get(2).equals(""))
+                    gender = filters.get(2);
+                
+                context =  filterArrays.get(0);
+                ageGroups = filterArrays.get(1);
+                incomes = filterArrays.get(2);
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 createLineChart(metrics.get(0), filter, granularity.getValue());
 
@@ -787,7 +908,10 @@ public class GUI extends Application {
         metricsGranularity.getChildren().addAll(granLabel, granularity);
         windowLayout.getChildren().addAll(filterPane, metricsGranularity, createLineGraph);
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
-
+        windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
+        windowLayout.setMargin(metricsGranularity, new Insets(0, 10, 0, 20));
+        windowLayout.setMargin(createLineGraph, new Insets(0, 10, 0, 20));
+        
         Scene scene = new Scene(windowLayout, 400, 400);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
@@ -819,12 +943,12 @@ public class GUI extends Application {
         filterBarChart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ArrayList<String> filters = new ArrayList<String>();
+
                 ArrayList<Metric> metrics = new ArrayList<Metric>();
-                ObservableList<Node> filterNodes = null;
+
                 ObservableList<Node> metricsNodes = null;
                 metricsNodes = impressionMetricsOptions.getChildren();
-                filterNodes = impressionFilterOptions.getChildren();
+
 
                 for (Node n : metricsNodes) {
                     if (n instanceof ChoiceBox) {
@@ -832,6 +956,12 @@ public class GUI extends Application {
                     }
                 }
 
+
+                ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
+                ObservableList<Node> filterNodes = null;
+                filterNodes = impressionFilterOptions.getChildren();
+                
 
                 for (Node n : filterNodes) {
                     if (n instanceof VBox) {
@@ -846,7 +976,17 @@ public class GUI extends Application {
                                 }catch(NullPointerException e){
                                     filters.add("");
                                 }
+                            } else if(m instanceof CheckComboBox) {
+                            	
+                            	ArrayList<String> temp2 = new ArrayList<String>();
+                            	List<Object> temp = ((CheckComboBox) m).getCheckModel().getCheckedItems();
+                            	for (Object t : temp) {
+                            		temp2.add(t.toString());
+                            	}
+                            	filterArrays.add(temp2);
+                            	
                             }
+                            
                         }
                     }
                 }
@@ -864,16 +1004,15 @@ public class GUI extends Application {
                     startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
-                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                    endDate = LocalDate.parse(filters.get(1), formatter).atTime(23, 59, 59);
                 }
+
                 if (filters.get(2) != null && !filters.get(2).equals(""))
-                    context.add(filters.get(2));
-                if (filters.get(3) != null && !filters.get(3).equals(""))
-                    gender = filters.get(3);
-                if (filters.get(4) != null && !filters.get(4).equals(""))
-                    ageGroups.add(filters.get(4));
-                if (filters.get(5) != null && !filters.get(5).equals(""))
-                    incomes.add(filters.get(5));
+                    gender = filters.get(2);
+                
+                context =  filterArrays.get(0);
+                ageGroups = filterArrays.get(1);
+                incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 createBarChart(metrics.get(0), filter, type.getValue());
@@ -883,6 +1022,10 @@ public class GUI extends Application {
 
         metricsType.getChildren().addAll(barTypeLabel, type);
         windowLayout.getChildren().addAll(filterPane, metricsType, filterBarChart);
+        windowLayout.setMargin(filterPane, new Insets(20, 10, 0, 20));
+        windowLayout.setMargin(metricsType, new Insets(0, 10, 0, 20));
+        windowLayout.setMargin(filterBarChart, new Insets(0, 10, 0, 20));
+        
         windowLayout.setStyle("-fx-background-color: #c8e3f0;");
 
         Scene scene = new Scene(windowLayout, 400, 400);
@@ -940,12 +1083,12 @@ public class GUI extends Application {
         filterBarChart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ArrayList<String> filters = new ArrayList<String>();
+
                 ArrayList<Metric> metrics = new ArrayList<Metric>();
-                ObservableList<Node> filterNodes = null;
+
                 ObservableList<Node> metricsNodes = null;
                 metricsNodes = impressionMetricsOptions.getChildren();
-                filterNodes = impressionFilterOptions.getChildren();
+
 
                 for (Node n : metricsNodes) {
                     if (n instanceof ChoiceBox) {
@@ -953,6 +1096,12 @@ public class GUI extends Application {
                     }
                 }
 
+
+                ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
+                ObservableList<Node> filterNodes = null;
+                filterNodes = impressionFilterOptions.getChildren();
+                
 
                 for (Node n : filterNodes) {
                     if (n instanceof VBox) {
@@ -967,7 +1116,17 @@ public class GUI extends Application {
                                 }catch(NullPointerException e){
                                     filters.add("");
                                 }
+                            } else if(m instanceof CheckComboBox) {
+                            	
+                            	ArrayList<String> temp2 = new ArrayList<String>();
+                            	List<Object> temp = ((CheckComboBox) m).getCheckModel().getCheckedItems();
+                            	for (Object t : temp) {
+                            		temp2.add(t.toString());
+                            	}
+                            	filterArrays.add(temp2);
+                            	
                             }
+                            
                         }
                     }
                 }
@@ -985,16 +1144,15 @@ public class GUI extends Application {
                     startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
-                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                    endDate = LocalDate.parse(filters.get(1), formatter).atTime(23, 59, 59);
                 }
+
                 if (filters.get(2) != null && !filters.get(2).equals(""))
-                    context.add(filters.get(2));
-                if (filters.get(3) != null && !filters.get(3).equals(""))
-                    gender = filters.get(3);
-                if (filters.get(4) != null && !filters.get(4).equals(""))
-                    ageGroups.add(filters.get(4));
-                if (filters.get(5) != null && !filters.get(5).equals(""))
-                    incomes.add(filters.get(5));
+                    gender = filters.get(2);
+                
+                context =  filterArrays.get(0);
+                ageGroups = filterArrays.get(1);
+                incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 BarGraph barGraph = new BarGraph(metrics.get(0), barType.getValue(), filter, controller); //this is where the
@@ -1014,15 +1172,26 @@ public class GUI extends Application {
 
         barChart.setMinHeight(600);
         
+        VBox filterPrintSave = new VBox(10);
         metricsGranularity.getChildren().addAll(granLabel, barType);
         HBox metricsAndCreate = new HBox(25);
-        metricsAndCreate.getChildren().addAll(metricsGranularity, filterBarChart);
+       filterBarChart.setMinWidth(50);
+       
+
+        Button printButton = new Button("Print");
+        printButton.setOnAction(event -> {
+            printChart(barChart, stage);
+        });
         
+        printButton.setMinWidth(50);
+        filterPrintSave.getChildren().addAll(filterBarChart, printButton);
+        metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         VBox mainWindow = new VBox(20);
         HBox filterOptions = new HBox(10);
         filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
         mainWindow.getChildren().addAll(barChart, filterOptions);
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
+        mainWindow.setMargin(filterOptions, new Insets(0, 20, 0, 10));
         Scene scene = new Scene(mainWindow, 900, 800);
         //lineChart.getData().add(series);
         new ZoomManager<>(mainWindow, barChart, series);
@@ -1036,21 +1205,24 @@ public class GUI extends Application {
     //Metric
     public HBox addImpHbox() {
         ChoiceBox<Metric> impressionMetricChoices = new ChoiceBox<Metric>();
-        impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSIONS);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSION_COST);
-        impressionMetricChoices.getItems().add(Metric.COST_PER_AQUISITION);
-        impressionMetricChoices.getItems().add(Metric.COST_PER_CLICK);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_UNIQUES);
-        impressionMetricChoices.setValue(Metric.TOTAL_IMPRESSIONS);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICKS);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICK_COST);
-        impressionMetricChoices.getItems().add(Metric.CLICK_THROUGH_RATE);
-        impressionMetricChoices.getItems().add(Metric.COST_PER_1000_IMPRESSIONS);
-        impressionMetricChoices.setValue(Metric.TOTAL_CLICKS);
-        impressionMetricChoices.getItems().add(Metric.BOUNCES);
-        impressionMetricChoices.getItems().add(Metric.BOUNCE_RATE);
-        impressionMetricChoices.getItems().add(Metric.TOTAL_CONVERSIONS);
-        impressionMetricChoices.getItems().add(Metric.CONVERSION_RATE);
+        for(Metric metric : Metric.values()){
+            impressionMetricChoices.getItems().add(metric);
+        }
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSIONS);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_IMPRESSION_COST);
+//        impressionMetricChoices.getItems().add(Metric.COST_PER_AQUISITION);
+//        impressionMetricChoices.getItems().add(Metric.COST_PER_CLICK);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_UNIQUES);
+//        impressionMetricChoices.setValue(Metric.TOTAL_IMPRESSIONS);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICKS);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_CLICK_COST);
+//        impressionMetricChoices.getItems().add(Metric.CLICK_THROUGH_RATE);
+//        impressionMetricChoices.getItems().add(Metric.COST_PER_1000_IMPRESSIONS);
+//        impressionMetricChoices.setValue(Metric.TOTAL_CLICKS);
+//        impressionMetricChoices.getItems().add(Metric.BOUNCES);
+//        impressionMetricChoices.getItems().add(Metric.BOUNCE_RATE);
+//        impressionMetricChoices.getItems().add(Metric.TOTAL_CONVERSIONS);
+//        impressionMetricChoices.getItems().add(Metric.CONVERSION_RATE);
         impressionMetricChoices.setValue(Metric.BOUNCES);
         Label impressionMetricLabel = new Label("Metric: ");
         HBox impMetricBox = new HBox(impressionMetricLabel, impressionMetricChoices);
@@ -1287,12 +1459,12 @@ public class GUI extends Application {
         filterLineGraph.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ArrayList<String> filters = new ArrayList<String>();
+
                 ArrayList<Metric> metrics = new ArrayList<Metric>();
-                ObservableList<Node> filterNodes = null;
+
                 ObservableList<Node> metricsNodes = null;
                 metricsNodes = impressionMetricsOptions.getChildren();
-                filterNodes = impressionFilterOptions.getChildren();
+
                 ObservableList<Node> createNodes = metricsGranularity.getChildren();
 
                 for (Node n : metricsNodes) {
@@ -1301,6 +1473,12 @@ public class GUI extends Application {
                     }
                 }
 
+
+                ArrayList<String> filters = new ArrayList<String>();
+                ArrayList<ArrayList<String>> filterArrays = new ArrayList<ArrayList<String>>();
+                ObservableList<Node> filterNodes = null;
+                filterNodes = impressionFilterOptions.getChildren();
+                
 
                 for (Node n : filterNodes) {
                     if (n instanceof VBox) {
@@ -1315,7 +1493,17 @@ public class GUI extends Application {
                                 }catch(NullPointerException e){
                                     filters.add("");
                                 }
+                            } else if(m instanceof CheckComboBox) {
+                            	
+                            	ArrayList<String> temp2 = new ArrayList<String>();
+                            	List<Object> temp = ((CheckComboBox) m).getCheckModel().getCheckedItems();
+                            	for (Object t : temp) {
+                            		temp2.add(t.toString());
+                            	}
+                            	filterArrays.add(temp2);
+                            	
                             }
+                            
                         }
                     }
                 }
@@ -1333,16 +1521,15 @@ public class GUI extends Application {
                     startDate = LocalDate.parse(filters.get(0), formatter).atStartOfDay();
                 }
                 if (!filters.get(1).equals("") && filters.get(1) != null) {
-                    endDate = LocalDate.parse(filters.get(1), formatter).atStartOfDay();
+                    endDate = LocalDate.parse(filters.get(1), formatter).atTime(23, 59, 59);
                 }
+
                 if (filters.get(2) != null && !filters.get(2).equals(""))
-                    context.add(filters.get(2));
-                if (filters.get(3) != null && !filters.get(3).equals(""))
-                    gender = filters.get(3);
-                if (filters.get(4) != null && !filters.get(4).equals(""))
-                    ageGroups.add(filters.get(4));
-                if (filters.get(5) != null && !filters.get(5).equals(""))
-                    incomes.add(filters.get(5));
+                    gender = filters.get(2);
+                
+                context =  filterArrays.get(0);
+                ageGroups = filterArrays.get(1);
+                incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
                 LineGraph lineGraph = new LineGraph(metrics.get(0), granularity.getValue(), controller, filter); //this is where the
@@ -1364,7 +1551,20 @@ public class GUI extends Application {
 
         metricsGranularity.getChildren().addAll(granLabel, granularity);
         HBox metricsAndCreate = new HBox(25);
-        metricsAndCreate.getChildren().addAll(metricsGranularity, filterLineGraph);
+        
+
+        VBox filterPrintSave = new VBox(10);
+        filterLineGraph.setMinWidth(50);
+       
+
+        Button printButton = new Button("Print");
+        printButton.setOnAction(event -> {
+            printChart(lineChart, stage);
+        });
+        
+        printButton.setMinWidth(50);
+        filterPrintSave.getChildren().addAll(filterLineGraph, printButton);
+        metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         
         VBox mainWindow = new VBox(20);
         HBox filterOptions = new HBox(10);
@@ -1374,8 +1574,9 @@ public class GUI extends Application {
 
 
         mainWindow.getChildren().addAll(lineChart, filterOptions);
+        mainWindow.setMargin(filterOptions, new Insets(0, 20, 0, 10));
         mainWindow.setStyle("-fx-background-color: #c8e3f0;");
-        Scene scene = new Scene(mainWindow, 800, 800);
+        Scene scene = new Scene(mainWindow, 900, 800);
 
 
         new ZoomManager<>(mainWindow, lineChart, series);
@@ -1383,6 +1584,7 @@ public class GUI extends Application {
         stage.setScene(scene);
         stage.show();
 
+//        printChart(lineChart, stage);
     }
     private void fileChooserWindow() {
 
@@ -1430,20 +1632,30 @@ public class GUI extends Application {
                     }
                 }
 
-                ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
-                dialog.setTitle("AdAuction");
-                dialog.setHeaderText("Load Campaign");
-                dialog.setContentText("Select campaign to be loaded:");
+                if(campaigns.size() == 0){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Load Campaign");
+                    alert.setHeaderText(null);
+                    alert.setContentText("There are no campaigns to load.");
 
-                Optional<String> result = dialog.showAndWait();
-                if (result.isPresent()) {
-                    controller.loadCampaign(result.get());
-                    try {
-                        mainWindow();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    alert.showAndWait();
+                }
+                else{
+                    ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
+                    dialog.setTitle("AdAuction");
+                    dialog.setHeaderText("Load Campaign");
+                    dialog.setContentText("Select campaign to be loaded:");
+
+                    Optional<String> result = dialog.showAndWait();
+                    if (result.isPresent()) {
+                        controller.loadCampaign(result.get());
+                        try {
+                            mainWindow();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        newWindow.close();
                     }
-                    newWindow.close();
                 }
 			}
 		});
@@ -1584,10 +1796,63 @@ public class GUI extends Application {
         //fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
 
 
-        Scene scene = new Scene(fileChooserLayout, 400, 350);
+        Scene scene = new Scene(fileChooserLayout, 600, 400);
         fileChooserLayout.getStylesheets().add("/GUI.css");
         newWindow.setScene(scene);
         newWindow.show();
+    }
+
+    /**
+     *
+     * @param node - element to be printed
+     * @param stage - stage containing the chart
+     */
+    public void printChart(Node node, Stage stage){
+
+        //Get the Default Printer
+        Printer defaultPrinter = Printer.getDefaultPrinter();
+
+        if (defaultPrinter != null)
+        {
+            System.out.println(defaultPrinter.getName());
+
+            // Create a printer job for the default printer
+            PrinterJob job = PrinterJob.createPrinterJob();
+            JobSettings jobSettings = job.getJobSettings();
+            jobSettings.setPrintColor(PrintColor.MONOCHROME);
+
+            if (job != null && job.showPageSetupDialog(stage))
+            {
+                // Show the printer job status
+                System.out.println(job.jobStatusProperty().asString());
+
+                // Print the node
+                boolean printed = job.printPage(node);
+
+                if (printed)
+                {
+                    // End the printer job
+                    System.out.println(job.jobStatusProperty().asString());
+                    job.endJob();
+                    System.out.println(job.jobStatusProperty().asString());
+                }
+                else
+                {
+                    // Write Error Message
+                    System.err.println("Printing failed.");
+                }
+            }
+            else
+            {
+                // Write Error Message
+                System.err.println("Could not create a printer job.");
+            }
+
+        }
+        else
+        {
+            System.err.println("No printers installed.");
+        }
     }
     
     public void displayError(String error) {

@@ -95,6 +95,9 @@ public class LineGraph {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
         ArrayList<Impression> impressionLog = controller.filterImpressionLog(filter);
         Collections.sort(impressionLog);
+        if(impressionLog.size() == 0){
+            return dataPoints;
+        }
         LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
 
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
@@ -117,9 +120,7 @@ public class LineGraph {
             }
             i++;
         }
-        for(DataPoint d : dataPoints){
-            System.out.println(d.getMetric());
-        }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcImpressions(impressions), startDateTime));
         return dataPoints;
     }
 
@@ -127,8 +128,12 @@ public class LineGraph {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
         ArrayList<Impression> impressionLog = controller.filterImpressionLog(filter);
         Collections.sort(impressionLog);
-        LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
 
+        if(impressionLog.size() == 0){
+            return dataPoints;
+        }
+
+        LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
         int i = 0;
         ArrayList<Impression> impressions = new ArrayList<Impression>();
@@ -147,6 +152,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcTotalImpCost(impressions), startDateTime));
         return dataPoints;
     }
 
@@ -154,6 +160,10 @@ public class LineGraph {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
         ArrayList<Click> clickLog = controller.filterClickLog(filter);
         clickLog.sort(getClickComparator());
+
+        if(clickLog.size() == 0){
+            return dataPoints;
+        }
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
@@ -173,6 +183,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcClicks(clicks), startDateTime));
         return dataPoints;
     }
 
@@ -180,6 +191,10 @@ public class LineGraph {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
         ArrayList<Click> clickLog = controller.filterClickLog(filter);
         clickLog.sort(getClickComparator());
+
+        if(clickLog.size() == 0){
+            return dataPoints;
+        }
 
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
@@ -199,6 +214,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcTotalClickCost(clicks), startDateTime));
         return dataPoints;
     }
 
@@ -210,7 +226,6 @@ public class LineGraph {
         for(int i = 0; i < clickCosts.size(); i++){
             dataPoints.add(new DataPoint<Double, LocalDateTime>((clickCosts.get(i).getMetric() + impressionCosts.get(i).getMetric()), clickCosts.get(i).getStartTime()));
         }
-
         return dataPoints;
     }
 
@@ -218,8 +233,12 @@ public class LineGraph {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
         ArrayList<ServerEntry> serverEntriesLog = controller.filterServerLog(filter);
         Collections.sort(serverEntriesLog);
-        LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
 
+        if(serverEntriesLog.size() == 0){
+            return dataPoints;
+        }
+
+        LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate();
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
         int i = 0;
         ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
@@ -238,6 +257,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcConversions(serverEntries), startDateTime));
         return dataPoints;
     }
 
@@ -256,6 +276,11 @@ public class LineGraph {
     private ArrayList<DataPoint<Integer, LocalDateTime>> calculateBounces() {
         ArrayList<DataPoint<Integer, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Integer, LocalDateTime>>();
         ArrayList<ServerEntry> serverEntriesLog = controller.filterServerLog(filter);
+
+        if(serverEntriesLog.size() == 0){
+            return dataPoints;
+        }
+
         Collections.sort(serverEntriesLog);
         LocalDateTime startDateTime = serverEntriesLog.get(0).getEntryDate(); //TODO handle index out of bound exception
 
@@ -264,6 +289,7 @@ public class LineGraph {
         ArrayList<ServerEntry> serverEntries = new ArrayList<ServerEntry>();
         while(serverEntriesLog.size() > i){
             ServerEntry serverEntry = serverEntriesLog.get(i);
+            System.out.println(serverEntry.getEntryDate() + " isBefore " + endDateTime + " " + serverEntry.getEntryDate().isBefore(endDateTime));
             if(serverEntry.getEntryDate().isBefore(endDateTime)){
                 serverEntries.add(serverEntry);
             }
@@ -277,6 +303,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcBounces(serverEntries), startDateTime));
         return dataPoints;
     }
 
@@ -296,6 +323,10 @@ public class LineGraph {
         ArrayList<Click> clickLog = controller.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
+        if(clickLog.size() == 0){
+            return dataPoints;
+        }
+
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
         int i = 0;
@@ -314,6 +345,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Integer, LocalDateTime>(controller.calcUniques(clicks), startDateTime));
         return dataPoints;
     }
 
@@ -345,6 +377,10 @@ public class LineGraph {
         ArrayList<Click> clickLog = controller.filterClickLog(filter);
         clickLog.sort(getClickComparator());
 
+        if(clickLog.size() == 0){
+            return dataPoints;
+        }
+
         LocalDateTime startDateTime = clickLog.get(0).getDateTime();
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
         int i = 0;
@@ -363,6 +399,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcCPC(clicks), startDateTime));
         return dataPoints;
     }
 
@@ -370,6 +407,10 @@ public class LineGraph {
         ArrayList<DataPoint<Double, LocalDateTime>> dataPoints = new ArrayList<DataPoint<Double, LocalDateTime>>();
         ArrayList<Impression> impressionLog = controller.filterImpressionLog(filter);
         Collections.sort(impressionLog);
+
+        if(impressionLog.size() == 0){
+            return dataPoints;
+        }
 
         LocalDateTime startDateTime = impressionLog.get(0).getDateTime();
         LocalDateTime endDateTime = getEndDateTime(startDateTime);
@@ -389,6 +430,7 @@ public class LineGraph {
             }
             i++;
         }
+        dataPoints.add(new DataPoint<Double, LocalDateTime>(controller.calcCPM(impressions), startDateTime));
         return dataPoints;
     }
 
@@ -407,7 +449,7 @@ public class LineGraph {
                 endDateTime = startDateTime.plusDays(1);
                 break;
             case WEEK:
-                endDateTime= startDateTime.plusWeeks(1);
+                endDateTime = startDateTime.plusWeeks(1);
                 break;
             case MONTH:
                 endDateTime = startDateTime.plusMonths(1);

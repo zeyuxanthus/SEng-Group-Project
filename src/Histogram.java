@@ -46,6 +46,10 @@ public class Histogram {
         Collections.sort(clicks);
 
         // Find range of values
+        if(clicks.size() == 0){
+            this.histogramBars = histogramBars;
+            return;
+        }
         double lowestCost = clicks.get(0).getClickCost();
         double highestCost = clicks.get(clicks.size() - 1).getClickCost();
 

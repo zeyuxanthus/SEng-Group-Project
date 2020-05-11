@@ -8,13 +8,14 @@
 
 .choice-box .context-menu { -fx-background-color: #5babd1; -fx-border-color: #5babd1; -fx-text-fill: #e4f1f7;}
 
-.choice-box .menu-item:focused { -fx-background-color: #248fc1; }
+.choice-box .menu-item:focused { -fx-background-color: #248fc1; -fx-text-fill: #e4f1f7;}
 
-.choice-box:hover{ -fx-background-color: #248fc1; }
+.choice-box:hover{ -fx-background-color: #248fc1; -fx-text-fill: #e4f1f7; }
 
 .choice-box {
   -fx-background-color: #5babd1; 
   -fx-mark-color: #e4f1f7;
+  -fx-text-fill: #e4f1f7;
 }
 
 
@@ -42,7 +43,7 @@
 }
 
 .combo-box .arrow, .combo-box .arrow-button{
-    -fx-background-color: transparent;
+     -fx-mark-color: #e4f1f7;
 }
 
 .button {

@@ -2,6 +2,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -210,7 +212,6 @@ public class Controller {
 		System.out.println("Method took:" + (endTime - startTime) / 1000000);
     }
 
-
 	public double getBounceRate(){
 		return campaign.getBounceRate();
 	}
@@ -244,11 +245,11 @@ public class Controller {
 	}
 
 	public double getCPC(){
-		return campaign.getCTR();
+		return campaign.getCPC();
 	}
 
 	public double getCPM(){
-		return campaign.getCTR();
+		return campaign.getCPM();
 	}
 
 	public double getTotalCost(){
@@ -294,7 +295,7 @@ public class Controller {
 		// Predicate for startDate
 		Predicate<Impression> startDatePredicate;
 		if(filter.getStartDate() != null){
-			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
+			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()) || c.getDateTime().isEqual(filter.getStartDate()) ; // TODO Discuss if it needs to be inclusive
 		}
 		else{
 			System.out.println("startDate is null");
@@ -304,7 +305,7 @@ public class Controller {
 		// Predicate for endDate
 		Predicate<Impression> endDatePredicate;
 		if(filter.getEndDate() != null){
-			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate());
+			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate()) || c.getDateTime().isEqual(filter.getEndDate());
 		}
 		else{
 			System.out.println("endDate is null");
@@ -372,7 +373,7 @@ public class Controller {
 		// Predicate for startDate
 		Predicate<ServerEntry> startDatePredicate;
 		if(filter.getStartDate() != null){
-			startDatePredicate = c -> c.getEntryDate().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
+			startDatePredicate = c -> c.getEntryDate().isAfter(filter.getStartDate()) || c.getEntryDate().isEqual(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
 		}
 		else{
 			System.out.println("startDate is null");
@@ -382,7 +383,7 @@ public class Controller {
 		// Predicate for endDate
 		Predicate<ServerEntry> endDatePredicate;
 		if(filter.getEndDate() != null){
-			endDatePredicate = c -> c.getEntryDate().isBefore(filter.getEndDate());
+			endDatePredicate = c -> c.getEntryDate().isBefore(filter.getEndDate()) || c.getEntryDate().isEqual(filter.getEndDate());
 		}
 		else{
 			System.out.println("endDate is null");
@@ -450,7 +451,7 @@ public class Controller {
 		// Predicate for startDate
 		Predicate<Click> startDatePredicate;
 		if(filter.getStartDate() != null){
-			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
+			startDatePredicate = c -> c.getDateTime().isAfter(filter.getStartDate()) || c.getDateTime().isEqual(filter.getStartDate()); // TODO Discuss if it needs to be inclusive
 		}
 		else{
 			System.out.println("startDate is null");
@@ -460,7 +461,7 @@ public class Controller {
 		// Predicate for endDate
 		Predicate<Click> endDatePredicate;
 		if(filter.getEndDate() != null){
-			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate());
+			endDatePredicate = c -> c.getDateTime().isBefore(filter.getEndDate()) || c.getDateTime().isEqual(filter.getEndDate());
 		}
 		else{
 			System.out.println("endDate is null");
@@ -620,7 +621,11 @@ public class Controller {
 				totalConversions += 1;
 			}
 		}
-		System.out.println(totalConversions);
+
+		if(totalClicks <= 0 || totalConversions <= 0){
+			return 0;
+		}
+
 		double conversionRate =   (double) totalConversions / totalClicks;
 		return  conversionRate;
 	}
@@ -633,6 +638,7 @@ public class Controller {
 				myBounces += 1;
 			}
 		}
+
 		return myBounces;
 	}
 
@@ -645,6 +651,9 @@ public class Controller {
 			}
 		}
 		int totalClicks = clickArray.size();
+		if(totalClicks <= 0 || bounces <= 0){
+			return 0;
+		}
 		double bounceRate = (double) bounces / totalClicks;
 		return bounceRate;
 	}
@@ -659,6 +668,11 @@ public class Controller {
 	}
 
 	public double calcCTR(ArrayList<Click> clickArray, ArrayList<Impression> impressionArray){
+
+		if(clickArray.size() <= 0 || impressionArray.size() <= 0){
+			return 0;
+		}
+
 		double CTR =  ((double) clickArray.size() / impressionArray.size());
 		return  CTR;
 	}
@@ -683,6 +697,11 @@ public class Controller {
 				totalConversions += 1;
 			}
 		}
+
+		if(totalCost <= 0 || totalConversions <= 0){
+			return 0;
+		}
+
 		double CPA = totalCost / totalConversions;
 		return CPA;
 	}
@@ -692,6 +711,11 @@ public class Controller {
 		for (Click click: clickArray) {
 			totalClickCost += click.getClickCost();
 		}
+
+		if(totalClickCost <= 0 || clickArray.size() <= 0){
+			return 0;
+		}
+
 		double CPC = (totalClickCost / clickArray.size());
 		return CPC;
 	}
@@ -701,7 +725,72 @@ public class Controller {
 		for (Impression imp: impressionArray) {
 			totalImpCost += imp.getImpressionCost();
 		}
+
+		if(totalImpCost <= 0 || impressionArray.size() <= 0){
+			return 0;
+		}
+
 		double CPM =   ((double) totalImpCost / impressionArray.size()) * 1000;
 		return CPM;
+	}
+
+	public boolean isCampaignNameFree(String name) {
+		File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
+		ArrayList<String> campaigns = new ArrayList<String>();
+		for (File file : files) {
+			if (file.isDirectory()) {
+				campaigns.add(file.getName());
+			}
+		}
+		for(String campaignName : campaigns){
+			if(campaignName.equals(name)){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public LocalDate getCampaignStartDate() {
+		LocalDateTime earliestTime = LocalDateTime.MAX;
+		for(Click click : campaign.getClicks()){
+			if(click.getDateTime().isBefore(earliestTime)){
+				earliestTime = click.getDateTime();
+			}
+		}
+		for(Impression impression : campaign.getImpressions()){
+			if(impression.getDateTime().isBefore(earliestTime)){
+				earliestTime = impression.getDateTime();
+			}
+		}
+
+		for(ServerEntry se : campaign.getServerEntries()){
+			if(se.getEntryDate().isBefore(earliestTime)){
+				earliestTime = se.getEntryDate();
+			}
+		}
+
+		return earliestTime.toLocalDate();
+	}
+
+	public LocalDate getCampaignEndDate() {
+		LocalDateTime latestTime = LocalDateTime.MIN;
+		for(Click click : campaign.getClicks()){
+			if(click.getDateTime().isAfter(latestTime)){
+				latestTime = click.getDateTime();
+			}
+		}
+		for(Impression impression : campaign.getImpressions()){
+			if(impression.getDateTime().isAfter(latestTime)){
+				latestTime = impression.getDateTime();
+			}
+		}
+
+		for(ServerEntry se : campaign.getServerEntries()){
+			if(se.getEntryDate().isAfter(latestTime)){
+				latestTime = se.getEntryDate();
+			}
+		}
+
+		return latestTime.toLocalDate();
 	}
 }
