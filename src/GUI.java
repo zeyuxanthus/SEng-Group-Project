@@ -89,6 +89,8 @@ public class GUI extends Application {
 
     private NumberFormat format = NumberFormat.getNumberInstance(Locale.UK);
 
+    private Background back = new Background(new BackgroundFill(Color.web("c8e3f0"),CornerRadii.EMPTY,Insets.EMPTY));
+
     public GUI() {
     }
 
@@ -117,22 +119,22 @@ public class GUI extends Application {
         Canvas canvas = new Canvas();
 
         BorderPane mainWindow = new BorderPane();
-        HBox toolBar = new HBox();
+        BorderPane toolBar = new BorderPane();
         VBox chartOptions = new VBox(20);
         HBox mainArea = new HBox(10);
         HBox options = new HBox();
 	    
-	Slider slider = new Slider(6,20,10);
+//	Slider slider = new Slider(6,20,10);
 
         // Centre: metrics and filters
         VBox filtersAndMetrics = new VBox(20);
         TilePane impressionFilterOptions = impressionFilters();
         BorderPane filters = new BorderPane();
         Button filterButton = new Button("Apply Filters");
-        filters.setAlignment(filterButton, Pos.BOTTOM_RIGHT);
-        filterButton.setAlignment(Pos.BOTTOM_RIGHT);
+        filters.setAlignment(filterButton, Pos.BOTTOM_LEFT);
+     //   filterButton.setAlignment(Pos.BOTTOM_RIGHT);
         filters.setLeft(impressionFilterOptions);
-        filters.setRight(filterButton);
+        filters.setCenter(filterButton);
         filtersAndMetrics.getChildren().addAll(getMetricsWindow(), new Separator(), filters);
         filtersAndMetrics.setMargin(filters, new Insets(0, 10, 0, 10));
 
@@ -221,15 +223,17 @@ public class GUI extends Application {
 
         fileOption = new ComboBox<String>(FXCollections.observableArrayList(fileOptionText));
         fileOption.setValue("File");
-
-        settingOption = new ComboBox<String>(FXCollections.observableArrayList(settingsOptionText));
-        settingOption.setValue("Settings");
         
+     //   settingOption = new ComboBox<String>(FXCollections.observableArrayList(settingsOptionText));
+     //   settingOption.setValue("Settings");
+
+
+
         Menu menu = new Menu("File");
         
         MenuItem m1 = new MenuItem("Load...");
             m1.setOnAction(event -> {
-                File[] files = new File(System.getProperty("user.dir") + File.separator + Controller.AD_AUCTION_FOLDER + File.separator + Controller.CAMPAIGN_FOLDER).listFiles();
+                File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
                 ArrayList<String> campaigns = new ArrayList<String>();
                 for (File file : files) {
                     if (file.isDirectory()) {
@@ -256,7 +260,7 @@ public class GUI extends Application {
                     String campaignName;
                     if (result.isPresent()){
                         controller.loadCampaign(result.get());
-                        primaryStage.setTitle("Ad Auction Dashboard - " + controller.getCampaign().getName());
+
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.getDialogPane().getStylesheets().add("/GUI.css");
                         alert.setTitle("Load Campaign");
@@ -317,14 +321,30 @@ public class GUI extends Application {
         menu.getItems().addAll(m1, m2, m3);
         MenuBar mb = new MenuBar();
         mb.getMenus().add(menu);
-        VBox topBox = new VBox();
-        topBox.getChildren().addAll(mb, slider);
 
-        mainWindow.setTop(mb);
+        ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Paint fill = colorPicker.getValue();
+                BackgroundFill backgroundFill = new BackgroundFill(fill, CornerRadii.EMPTY,Insets.EMPTY);
+                Background background = new Background(backgroundFill);
+                back = background;
+                // add back on top
+                mainWindow.setBackground(background);
+                //   histogramWindow().setBackground(background);
+                mb.setBackground(background);
+            }
+        });
 
-        options.getChildren().addAll(fileOption,  settingOption);
+      //  VBox topBox = new VBox();
+      //  topBox.getChildren().addAll(mb );
+
+      //  mainWindow.setTop(mb);
+
+        options.getChildren().addAll(mb,colorPicker);
         
-        toolBar.getChildren().add(options);
+       // toolBar.getChildren().add(options);
         Button lineGraphButton = new Button();
         Button histogramButton = new Button();
         Button barChartButton = new Button();
@@ -333,7 +353,8 @@ public class GUI extends Application {
 
             @Override
             public void handle(ActionEvent arg0) {
-                histogramWindow();
+                histogramWindow().setBackground(back);
+
 
             }
         });
@@ -341,14 +362,14 @@ public class GUI extends Application {
         lineGraphButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                lineWindow();
+                lineWindow().setBackground(back);
             }
         });
         
         barChartButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                barWindow();
+                barWindow().setBackground(back);
             }
         });
 
@@ -366,7 +387,7 @@ public class GUI extends Application {
             chart1.getChildren().addAll(lineGraphButton, new Label("Create Line Graph"));
             chart1.setAlignment(Pos.CENTER);
         VBox chart2 = new VBox();
-            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram" ));
+            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram"));
             chart2.setAlignment(Pos.CENTER);
         VBox chart3 = new VBox();
             chart3.getChildren().addAll(barChartButton, new Label("Create Bar Chart"));
@@ -377,24 +398,64 @@ public class GUI extends Application {
         BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
 
 
-        mainWindow.setCenter(chartOptions);
-        mainWindow.setRight(filtersAndMetrics);
+
+        Slider slider = new Slider();
+
+        slider.setMax(18.5);
+        slider.setMin(10);
+        //  slider.setValue(20);
+        //   slider.setMaxWidth(200);
+
+
+        Label fontSize = new Label("Font size ");
+        Label fontLabel = new Label();
+        fontLabel.setText(String.valueOf(slider.getValue()));
+        HBox fontHbox = new HBox();
+
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                fontLabel.setText(String.format("%.0f",t1));
+                //     impressionFilterOptions.setStyle(String.valueOf(Font.font(slider.getValue())));
+
+                //  bounceLabel.setFont(Font.font(slider.getValue()));
+
+
+                chartOptions.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+                filtersAndMetrics.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+                //  filters.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+                //  impressionFilterOptions.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+                options.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+
+                //  mainWindow.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+
+            }
+        });
+
+        fontHbox.getChildren().addAll(fontSize,fontLabel,slider);
+
+
         //mainWindow.setStyle("-fx-background-color: #c8e3f0;");
 	    
-	    HBox h = new HBox(mainWindow,slider);
-	    h.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.valueProperty()));
-	    layering.getChildren().addAll(canvas, h);
+	 //   HBox h = new HBox(mainWindow,slider);
+	 //   h.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.valueProperty()));
+	    layering.getChildren().addAll(canvas, mainWindow);
 	    slider.setMaxWidth(100);
-	
+	    toolBar.setRight(fontHbox);
+	    toolBar.setLeft(options);
+	    mainWindow.setTop(toolBar);
+        mainWindow.setLeft(chartOptions);
+        mainWindow.setCenter(filtersAndMetrics);
+        mainWindow.setStyle("-fx-background-color: #c8e3f0;");
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
 
         root.getChildren().add(layering);
 	    root.setAutoSizeChildren(true);
-        Scene scene = new Scene(root, 1200, 600);
+        Scene scene = new Scene(root, 1700, 700);
         scene.getStylesheets().add("/GUI.css");
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Ad Auction Dashboard - " + controller.getCampaign().getName());
+        primaryStage.setTitle("Ad Auction Dashboard");
         primaryStage.show();
 
         //controller.createBarChar(Metric.TOTAL_IMPRESSIONS, BarChartType.DAY_OF_WEEK,
@@ -503,7 +564,7 @@ public class GUI extends Application {
         return windowLayout;
     }
 
-    private void histogramWindow() {
+    private VBox histogramWindow() {
         Stage newWindow = new Stage();
         VBox filterPane = new VBox(10);
 
@@ -578,7 +639,7 @@ public class GUI extends Application {
                  incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
-                createHistogram(filter);
+                createHistogram(filter).setBackground(back);
                 newWindow.close();
 
 
@@ -597,12 +658,13 @@ public class GUI extends Application {
 
         newWindow.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
-        newWindow.setTitle("Create Histogram - " + controller.getCampaign().getName());
+        newWindow.setTitle("Create Histogram");
         newWindow.show();
 
-//
-//        newWindow.setTitle("Create Histogram");
-//        newWindow.show();
+
+        newWindow.setTitle("Create Histogram");
+        newWindow.show();
+        return windowLayout;
     }
 
 
@@ -658,7 +720,7 @@ public class GUI extends Application {
         return filters;
     }
 
-    private void createHistogram(Filter filters) {
+    private VBox createHistogram(Filter filters) {
         Histogram histogram = controller.createHistogram(5, 2, filters);
         ArrayList<HistogramBar> histogramBars = histogram.getHistogramBars();
 
@@ -843,13 +905,13 @@ public class GUI extends Application {
         
         Scene scene = new Scene(vbox, 800, 700);
         scene.getStylesheets().add("/GUI.css");
-        window.setTitle("Historgram - " + controller.getCampaign().getName());
         window.setScene(scene);
         window.show();
 
+        return vbox;
     }
 
-    private void lineWindow() {
+    private VBox lineWindow() {
         Stage window = new Stage();
 
         TilePane impressionFilterOptions = impressionFilters();
@@ -942,7 +1004,7 @@ public class GUI extends Application {
                 ageGroups = filterArrays.get(1);
                 incomes = filterArrays.get(2);
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
-                createLineChart(metrics.get(0), filter, granularity.getValue());
+                createLineChart(metrics.get(0), filter, granularity.getValue()).setBackground(back);
                 window.close();
 
             }
@@ -958,13 +1020,14 @@ public class GUI extends Application {
         Scene scene = new Scene(windowLayout, 425, 425);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
-        window.setTitle("Create LineGraph - " + controller.getCampaign().getName());
+        window.setTitle("Create LineGraph");
         window.show();
 
+        return windowLayout;
 
     }
     
-    private void barWindow() {
+    private VBox barWindow() {
         Stage window = new Stage();
 
         TilePane impressionFilterOptions = impressionFilters();
@@ -1058,7 +1121,7 @@ public class GUI extends Application {
                 incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
-                createBarChart(metrics.get(0), filter, type.getValue());
+                createBarChart(metrics.get(0), filter, type.getValue()).setBackground(back);
                 window.close();
 
             }
@@ -1075,15 +1138,16 @@ public class GUI extends Application {
         Scene scene = new Scene(windowLayout, 425, 425);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
-        window.setTitle("Create Bar Chart - " + controller.getCampaign().getName());
+        window.setTitle("Create Bar Chart");
         window.show();
 
+        return windowLayout;
 
     }
     
-    private void createBarChart(Metric metric, Filter filters, BarChartType type) {
+    private VBox createBarChart(Metric metric, Filter filters, BarChartType type) {
         Stage stage = new Stage();
-        stage.setTitle("Bar Chart - " + controller.getCampaign().getName());
+        stage.setTitle("Bar Chart");
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("" + type);
@@ -1291,6 +1355,8 @@ public class GUI extends Application {
         scene.getStylesheets().add("/GUI.css");
         stage.setScene(scene);
         stage.show();
+
+        return mainWindow;
 
     }
 
@@ -1501,9 +1567,9 @@ public class GUI extends Application {
 //    }
 
 
-    private void createLineChart(Metric metric, Filter filters, TimeInterval interval) {
+    private VBox createLineChart(Metric metric, Filter filters, TimeInterval interval) {
         Stage stage = new Stage();
-        stage.setTitle("Line Chart - " + controller.getCampaign().getName());
+        stage.setTitle("Line Chart");
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Date");
@@ -1727,6 +1793,7 @@ public class GUI extends Application {
         stage.setScene(scene);
         stage.show();
 
+        return mainWindow;
 //        printChart(lineChart, stage);
     }
     private void fileChooserWindow() {
@@ -1738,8 +1805,6 @@ public class GUI extends Application {
     	bounceBox.getChildren().addAll(bounceLabel, bounceField);
     	
     	Button loadButton = new Button("Load Previous...");
-
-    	Button deleteButton = new Button("Delete Previous..");
     	
         VBox fileChooserButtons = new VBox(10);
        
@@ -1770,7 +1835,7 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 //			    String userDirectory = System.getProperty("user.dir");
-                File[] files = new File(System.getProperty("user.dir") + File.separator + Controller.AD_AUCTION_FOLDER + File.separator + Controller.CAMPAIGN_FOLDER).listFiles();
+                File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
                 ArrayList<String> campaigns = new ArrayList<String>();
                 if(files != null){
                     for (File file : files) {
@@ -1819,65 +1884,7 @@ public class GUI extends Application {
                 }
 			}
 		});
-
-
-
-        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-//			    String userDirectory = System.getProperty("user.dir");
-                File[] files = new File(System.getProperty("user.dir") + File.separator + Controller.AD_AUCTION_FOLDER + File.separator + Controller.CAMPAIGN_FOLDER).listFiles();
-                ArrayList<String> campaigns = new ArrayList<String>();
-                if(files != null){
-                    for (File file : files) {
-                        if (file.isDirectory()) {
-                            campaigns.add(file.getName());
-                        }
-                    }
-
-                    if(campaigns.size() == 0){
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Delete Campaign");
-                        alert.getDialogPane().getStylesheets().add("/GUI.css");
-                        alert.setHeaderText(null);
-                        alert.setContentText("There are no campaigns to show.");
-
-                        alert.showAndWait();
-                    }
-                    else{
-                        ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
-                        dialog.setTitle("AdAuction");
-                        dialog.setHeaderText("Delete Campaign");
-                        dialog.setContentText("Select campaign to be deleted:");
-                        dialog.getDialogPane().getStylesheets().add("/GUI.css");
-
-
-//                        CheckComboBox<String> result = new CheckComboBox<>(FXCollections.observableArrayList());
-
-                        Optional<String> result = dialog.showAndWait();
-                        if (result.isPresent()) {
-                            File currentFile = new File(System.getProperty("user.dir") + File.separator + Controller.AD_AUCTION_FOLDER + File.separator + Controller.CAMPAIGN_FOLDER + File.separator +  result.get());
-                            try {
-                                currentFile.delete();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }
-                }
-                else{
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Delete Campaign");
-                    alert.getDialogPane().getStylesheets().add("/GUI.css");
-                    alert.setHeaderText(null);
-                    alert.setContentText("There are no campaigns to show.");
-
-                    alert.showAndWait();
-                }
-            }
-        });
+        
         
         loadImpressions.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -1992,7 +1999,8 @@ public class GUI extends Application {
                 }
             }
         });
-	    Slider slider = new Slider();
+
+        Slider slider = new Slider();
         //  fileChooserLayout.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.valueProperty()));
         slider.setMax(28);
         slider.setMin(10);
@@ -2027,7 +2035,6 @@ public class GUI extends Application {
         });
 
         fontHbox.getChildren().addAll(fontSize,fontLabel,slider);
-	    
 
         loadServer.setMinWidth(125);
         loadClicks.setMinWidth(125);
@@ -2035,17 +2042,16 @@ public class GUI extends Application {
 
         
 
-        fileChooserButtons.getChildren().addAll(loadButton, deleteButton, clicksVBox, impressionVBox, serverVBox, bounceBox, continueButton);
+        fileChooserButtons.getChildren().addAll(loadButton, clicksVBox, impressionVBox, serverVBox, bounceBox, continueButton);
         fileChooserButtons.setMargin(loadButton, new Insets(20, 10, 10, 20));
-        fileChooserButtons.setMargin(deleteButton, new Insets(5, 10, 10, 20));
         fileChooserButtons.setMargin(clicksVBox, new Insets(5, 10, 0, 20));
         fileChooserButtons.setMargin(impressionVBox, new Insets(10, 10, 0, 20));
         fileChooserButtons.setMargin(serverVBox, new Insets(10, 10, 0, 20));
         fileChooserButtons.setMargin(continueButton, new Insets(30, 10, 10, 20));
         fileChooserButtons.setMargin(bounceBox, new Insets(10, 10, 10, 20));
 
-       // fileChooserLayout.getChildren().addAll(fileChooserButtons,slider);
-	fileChooserLayout.setLeft(fileChooserButtons);
+      //  fileChooserLayout.getChildren().addAll(fileChooserButtons,slider);
+        fileChooserLayout.setLeft(fileChooserButtons);
         fileChooserLayout.setRight(fontHbox);
         fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
 
