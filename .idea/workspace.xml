@@ -6,13 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Nike.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Nike.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MyTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyTests.java" afterDir="false" />
-    </list>
+    <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,8 +22,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="1038" column="40" selection-start-line="1038" selection-start-column="40" selection-end-line="1038" selection-end-column="40" />
+            <state relative-caret-position="655">
+              <caret line="1173" column="62" selection-start-line="1173" selection-start-column="62" selection-end-line="1173" selection-end-column="62" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3461#3462#0" expanded="true" />
@@ -295,7 +289,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/IJ/PleaseWorkNow/src/Main.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589218448776" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589273765753" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../controlsfx.jar!/" />
     <property name="project.structure.last.edited" value="Project" />
@@ -432,7 +426,7 @@
       <workItem from="1588930922801" duration="1520000" />
       <workItem from="1588961240222" duration="658000" />
       <workItem from="1589021059522" duration="22078000" />
-      <workItem from="1589214559057" duration="3414000" />
+      <workItem from="1589214559057" duration="3820000" />
     </task>
     <task id="LOCAL-00001" summary="Test Git IntelliJ">
       <created>1584892594479</created>
@@ -659,7 +653,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="129785000" />
+    <option name="totallyTimeSpent" value="130191000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1020,16 +1014,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/MyTests.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="670" column="8" lean-forward="true" selection-start-line="670" selection-start-column="8" selection-end-line="670" selection-end-column="8" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/BarChartType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1044,10 +1028,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/MyTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="670" column="8" lean-forward="true" selection-start-line="670" selection-start-column="8" selection-end-line="670" selection-end-column="8" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="1038" column="40" selection-start-line="1038" selection-start-column="40" selection-end-line="1038" selection-end-column="40" />
+        <state relative-caret-position="655">
+          <caret line="1173" column="62" selection-start-line="1173" selection-start-column="62" selection-end-line="1173" selection-end-column="62" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3461#3462#0" expanded="true" />
