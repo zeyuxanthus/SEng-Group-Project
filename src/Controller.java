@@ -45,6 +45,17 @@ public class Controller {
 	public void loadNewCampaign(String serverFilePath, String clickFilePath, String impressionFilePath, int bounceDefinition){
 		this.bounceDefinition = bounceDefinition;
 		campaign = new Campaign(serverFilePath, clickFilePath, impressionFilePath, this);
+		campaign.setName("Untitled Campaign");
+	}
+
+	/**
+	 * 	Create new campaign with a name
+	 */
+
+	public void loadOldCampaign(String serverFilePath, String clickFilePath, String impressionFilePath, int bounceDefinition, String name){
+		this.bounceDefinition = bounceDefinition;
+		campaign = new Campaign(serverFilePath, clickFilePath, impressionFilePath, this);
+		campaign.setName(name);
 	}
 
 	/**
@@ -132,7 +143,7 @@ public class Controller {
 
 //save the log file 
     public void saveCampaign(String campaignName){
-		Path path = Paths.get(System.getProperty("user.dir") + "\\" + AD_AUCTION_FOLDER + "\\" + CAMPAIGN_FOLDER + "\\" + campaignName);
+		Path path = Paths.get(System.getProperty("user.dir") + File.separator + AD_AUCTION_FOLDER + File.separator + CAMPAIGN_FOLDER + File.separator + campaignName);
 
 		// Create directories if the don't yet exist
 		if (!Files.exists(path)) {
@@ -150,9 +161,9 @@ public class Controller {
 		File clickSource = new File(campaign.clickPath);
 		File impressionSource = new File(campaign.impressionPath);
 
-		File serverDestination = new File(path + "\\" + SERVER_LOG_NAME);
-		File clickDestination = new File(path + "\\" + CLICK_LOG_NAME);
-		File impressionDestination = new File(path + "\\" + IMPRESSION_LOG_NAME);
+		File serverDestination = new File(path + File.separator + SERVER_LOG_NAME);
+		File clickDestination = new File(path + File.separator + CLICK_LOG_NAME);
+		File impressionDestination = new File(path + File.separator + IMPRESSION_LOG_NAME);
 
 		HashMap<File, File> sourcesAndDestinations = new HashMap<>();
 		sourcesAndDestinations.put(serverSource, serverDestination);
@@ -177,7 +188,7 @@ public class Controller {
 		}
 
 		// Create config file
-		File file = new File( path + "\\config.txt");
+		File file = new File( path + File.separator + "config.txt");
 		try{
 			String str = Integer.toString(bounceDefinition);
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
@@ -193,14 +204,14 @@ public class Controller {
 
     public void loadCampaign(String campaignName){
         long startTime = System.nanoTime();
-		Path path = Paths.get(System.getProperty("user.dir") + "\\" + AD_AUCTION_FOLDER + "\\" + CAMPAIGN_FOLDER + "\\" + campaignName);
+		Path path = Paths.get(System.getProperty("user.dir") + File.separator + AD_AUCTION_FOLDER + File.separator + CAMPAIGN_FOLDER + File.separator + campaignName);
 	    try {
-			BufferedReader reader = new BufferedReader(new FileReader(path + "\\config.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader(path + File.separator + "config.txt"));
 			String line = reader.readLine();
 			String[] list = line.split(" ");
 			System.out.println(list[0]);
 
-	    	loadNewCampaign(path + "\\" + SERVER_LOG_NAME, path + "\\" + CLICK_LOG_NAME, path + "\\" + IMPRESSION_LOG_NAME, Integer.parseInt(list[0]));
+	    	loadOldCampaign(path + File.separator + SERVER_LOG_NAME, path + File.separator + CLICK_LOG_NAME, path + File.separator + IMPRESSION_LOG_NAME, Integer.parseInt(list[0]), campaignName);
 
 	    	System.out.println(gui == null);
         }catch (FileNotFoundException e){
@@ -735,7 +746,20 @@ public class Controller {
 	}
 
 	public boolean isCampaignNameFree(String name) {
-		File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
+
+		Path path = Paths.get(System.getProperty("user.dir") + File.separator + AD_AUCTION_FOLDER + File.separator + CAMPAIGN_FOLDER + File.separator);
+
+		// Create directories if the don't yet exist
+		if (!Files.exists(path)) {
+			try {
+				Files.createDirectories(path);
+			} catch (IOException e) {
+				//fail to create directory
+				e.printStackTrace();
+			}
+		}
+
+		File[] files = new File(System.getProperty("user.dir") + File.separator + Controller.AD_AUCTION_FOLDER + File.separator + Controller.CAMPAIGN_FOLDER).listFiles();
 		ArrayList<String> campaigns = new ArrayList<String>();
 		for (File file : files) {
 			if (file.isDirectory()) {

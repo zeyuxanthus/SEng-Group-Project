@@ -41,6 +41,8 @@ public class Campaign implements Serializable {
 	private double CPC; // cost-per-click
 	private double CPM; // cost-per-thousand impressions
 
+	private String campaignName;
+
 	private Controller controller;
 	public String serverPath;
 	public String clickPath;
@@ -67,6 +69,14 @@ public class Campaign implements Serializable {
 		calculateMetrics(clicks, impressions, serverEntries);
 	}
 
+
+	public void setName(String name){
+		this.campaignName = name;
+	}
+
+	public String getName(){
+		return campaignName;
+	}
 
 	public void loadClickLog (String clickFileName){
 		ArrayList<Click> clicks = new ArrayList<Click>();

@@ -225,7 +225,7 @@ public class GUI extends Application {
         
         MenuItem m1 = new MenuItem("Load...");
             m1.setOnAction(event -> {
-                File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
+                File[] files = new File(System.getProperty("user.dir") + File.separator + Controller.AD_AUCTION_FOLDER + File.separator + Controller.CAMPAIGN_FOLDER).listFiles();
                 ArrayList<String> campaigns = new ArrayList<String>();
                 for (File file : files) {
                     if (file.isDirectory()) {
@@ -363,7 +363,7 @@ public class GUI extends Application {
             chart1.getChildren().addAll(lineGraphButton, new Label("Create Line Graph"));
             chart1.setAlignment(Pos.CENTER);
         VBox chart2 = new VBox();
-            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram"));
+            chart2.getChildren().addAll(histogramButton, new Label("Create Histogram" ));
             chart2.setAlignment(Pos.CENTER);
         VBox chart3 = new VBox();
             chart3.getChildren().addAll(barChartButton, new Label("Create Bar Chart"));
@@ -391,7 +391,7 @@ public class GUI extends Application {
         Scene scene = new Scene(root, 1200, 600);
         scene.getStylesheets().add("/GUI.css");
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Ad Auction Dashboard");
+        primaryStage.setTitle("Ad Auction Dashboard - " + controller.getCampaign().getName());
         primaryStage.show();
 
         //controller.createBarChar(Metric.TOTAL_IMPRESSIONS, BarChartType.DAY_OF_WEEK,
@@ -594,12 +594,12 @@ public class GUI extends Application {
 
         newWindow.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
-        newWindow.setTitle("Create Histogram");
+        newWindow.setTitle("Create Histogram - " + controller.getCampaign().getName());
         newWindow.show();
 
-
-        newWindow.setTitle("Create Histogram");
-        newWindow.show();
+//
+//        newWindow.setTitle("Create Histogram");
+//        newWindow.show();
     }
 
 
@@ -840,6 +840,7 @@ public class GUI extends Application {
         
         Scene scene = new Scene(vbox, 800, 700);
         scene.getStylesheets().add("/GUI.css");
+        window.setTitle("Historgram - " + controller.getCampaign().getName());
         window.setScene(scene);
         window.show();
 
@@ -954,7 +955,7 @@ public class GUI extends Application {
         Scene scene = new Scene(windowLayout, 425, 425);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
-        window.setTitle("Create LineGraph");
+        window.setTitle("Create LineGraph - " + controller.getCampaign().getName());
         window.show();
 
 
@@ -1071,7 +1072,7 @@ public class GUI extends Application {
         Scene scene = new Scene(windowLayout, 425, 425);
         window.setScene(scene);
         scene.getStylesheets().add("/GUI.css");
-        window.setTitle("Create Bar Chart");
+        window.setTitle("Create Bar Chart - " + controller.getCampaign().getName());
         window.show();
 
 
@@ -1079,7 +1080,7 @@ public class GUI extends Application {
     
     private void createBarChart(Metric metric, Filter filters, BarChartType type) {
         Stage stage = new Stage();
-        stage.setTitle("Bar Chart");
+        stage.setTitle("Bar Chart - " + controller.getCampaign().getName());
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("" + type);
@@ -1499,7 +1500,7 @@ public class GUI extends Application {
 
     private void createLineChart(Metric metric, Filter filters, TimeInterval interval) {
         Stage stage = new Stage();
-        stage.setTitle("Line Chart");
+        stage.setTitle("Line Chart - " + controller.getCampaign().getName());
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Date");
@@ -1734,6 +1735,8 @@ public class GUI extends Application {
     	bounceBox.getChildren().addAll(bounceLabel, bounceField);
     	
     	Button loadButton = new Button("Load Previous...");
+
+    	Button deleteButton = new Button("Delete Previous..");
     	
         VBox fileChooserButtons = new VBox(10);
        
@@ -1764,7 +1767,7 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 //			    String userDirectory = System.getProperty("user.dir");
-                File[] files = new File(System.getProperty("user.dir") + "\\" + Controller.AD_AUCTION_FOLDER + "\\" + Controller.CAMPAIGN_FOLDER).listFiles();
+                File[] files = new File(System.getProperty("user.dir") + File.separator + Controller.AD_AUCTION_FOLDER + File.separator + Controller.CAMPAIGN_FOLDER).listFiles();
                 ArrayList<String> campaigns = new ArrayList<String>();
                 if(files != null){
                     for (File file : files) {
@@ -1813,7 +1816,65 @@ public class GUI extends Application {
                 }
 			}
 		});
-        
+
+
+
+        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+//			    String userDirectory = System.getProperty("user.dir");
+                File[] files = new File(System.getProperty("user.dir") + File.separator + Controller.AD_AUCTION_FOLDER + File.separator + Controller.CAMPAIGN_FOLDER).listFiles();
+                ArrayList<String> campaigns = new ArrayList<String>();
+                if(files != null){
+                    for (File file : files) {
+                        if (file.isDirectory()) {
+                            campaigns.add(file.getName());
+                        }
+                    }
+
+                    if(campaigns.size() == 0){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Delete Campaign");
+                        alert.getDialogPane().getStylesheets().add("/GUI.css");
+                        alert.setHeaderText(null);
+                        alert.setContentText("There are no campaigns to show.");
+
+                        alert.showAndWait();
+                    }
+                    else{
+                        ChoiceDialog<String> dialog = new ChoiceDialog<>(campaigns.get(0), campaigns);
+                        dialog.setTitle("AdAuction");
+                        dialog.setHeaderText("Delete Campaign");
+                        dialog.setContentText("Select campaign to be deleted:");
+                        dialog.getDialogPane().getStylesheets().add("/GUI.css");
+
+
+//                        CheckComboBox<String> result = new CheckComboBox<>(FXCollections.observableArrayList());
+
+                        Optional<String> result = dialog.showAndWait();
+                        if (result.isPresent()) {
+                            File currentFile = new File(System.getProperty("user.dir") + File.separator + Controller.AD_AUCTION_FOLDER + File.separator + Controller.CAMPAIGN_FOLDER + File.separator +  result.get());
+                            try {
+                                currentFile.delete();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                }
+                else{
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Delete Campaign");
+                    alert.getDialogPane().getStylesheets().add("/GUI.css");
+                    alert.setHeaderText(null);
+                    alert.setContentText("There are no campaigns to show.");
+
+                    alert.showAndWait();
+                }
+            }
+        });
         
         loadImpressions.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -1938,8 +1999,9 @@ public class GUI extends Application {
 
         
 
-        fileChooserButtons.getChildren().addAll(loadButton, clicksVBox, impressionVBox, serverVBox, bounceBox, continueButton);
+        fileChooserButtons.getChildren().addAll(loadButton, deleteButton, clicksVBox, impressionVBox, serverVBox, bounceBox, continueButton);
         fileChooserButtons.setMargin(loadButton, new Insets(20, 10, 10, 20));
+        fileChooserButtons.setMargin(deleteButton, new Insets(20, 10, 10, 20));
         fileChooserButtons.setMargin(clicksVBox, new Insets(5, 10, 0, 20));
         fileChooserButtons.setMargin(impressionVBox, new Insets(10, 10, 0, 20));
         fileChooserButtons.setMargin(serverVBox, new Insets(10, 10, 0, 20));

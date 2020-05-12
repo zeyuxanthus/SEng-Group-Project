@@ -7,26 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$10.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$11.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$12.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$12.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$13.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$13.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$14.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$14.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$15.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$15.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$16.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$16.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$17.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$17.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$8.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI$9.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AdAuction/GUI.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AdAuction/GUI.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Campaign.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Campaign.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -39,41 +23,159 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/PleaseWorkNow$Main.ic" NAME="Main Coverage Results" MODIFIED="1588959282926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="1068642574">
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="JAVA" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.vcs.git.usages">
-        <counts>
-          <entry key="git.branch.merge" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="JAVA" value="140" />
-          <entry key="PLAIN_TEXT" value="41" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
-              <caret line="1809" column="76" lean-forward="true" selection-start-line="1809" selection-start-column="76" selection-end-line="1809" selection-end-column="76" />
+            <state relative-caret-position="114">
+              <caret line="1861" column="29" selection-start-line="1861" selection-start-column="29" selection-end-line="1861" selection-end-column="29" />
               <folding>
-                <element signature="e#5039#5058#0" expanded="true" />
-                <element signature="e#23288#23307#0" expanded="true" />
-                <element signature="e#32452#32471#0" expanded="true" />
-                <element signature="e#38598#38617#0" expanded="true" />
-                <element signature="e#43674#43693#0" expanded="true" />
-                <element signature="e#51483#51502#0" expanded="true" />
-                <element signature="e#70177#70196#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#3395#3396#0" expanded="true" />
+                <element signature="e#3432#3433#0" expanded="true" />
+                <element signature="e#3459#3460#0" expanded="true" />
+                <element signature="e#3483#3484#0" expanded="true" />
+                <element signature="e#4888#4896#0" expanded="true" />
+                <element signature="e#4973#4992#0" expanded="true" />
+                <element signature="e#6079#6087#0" expanded="true" />
+                <element signature="e#6695#6703#0" expanded="true" />
+                <element signature="e#6766#6774#0" expanded="true" />
+                <element signature="e#6835#6843#0" expanded="true" />
+                <element signature="e#10049#10057#0" expanded="true" />
+                <element signature="e#14990#14991#0" expanded="true" />
+                <element signature="e#15034#15035#0" expanded="true" />
+                <element signature="e#15204#15205#0" expanded="true" />
+                <element signature="e#15247#15248#0" expanded="true" />
+                <element signature="e#23136#23144#0" expanded="true" />
+                <element signature="e#23222#23241#0" expanded="true" />
+                <element signature="e#24347#24355#0" expanded="true" />
+                <element signature="e#24977#24985#0" expanded="true" />
+                <element signature="e#25049#25057#0" expanded="true" />
+                <element signature="e#25119#25127#0" expanded="true" />
+                <element signature="e#27896#27904#0" expanded="true" />
+                <element signature="e#28009#28017#0" expanded="true" />
+                <element signature="e#28115#28123#0" expanded="true" />
+                <element signature="e#28225#28233#0" expanded="true" />
+                <element signature="e#29466#29482#0" expanded="true" />
+                <element signature="e#32301#32309#0" expanded="true" />
+                <element signature="e#32386#32405#0" expanded="true" />
+                <element signature="e#33492#33500#0" expanded="true" />
+                <element signature="e#34108#34116#0" expanded="true" />
+                <element signature="e#34179#34187#0" expanded="true" />
+                <element signature="e#34248#34256#0" expanded="true" />
+                <element signature="e#37559#37573#0" expanded="true" />
+                <element signature="e#38034#38042#0" expanded="true" />
+                <element signature="e#38447#38455#0" expanded="true" />
+                <element signature="e#38532#38551#0" expanded="true" />
+                <element signature="e#39638#39646#0" expanded="true" />
+                <element signature="e#40254#40262#0" expanded="true" />
+                <element signature="e#40325#40333#0" expanded="true" />
+                <element signature="e#40394#40402#0" expanded="true" />
+                <element signature="e#42649#42663#0" expanded="true" />
+                <element signature="e#43110#43118#0" expanded="true" />
+                <element signature="e#43523#43531#0" expanded="true" />
+                <element signature="e#43608#43627#0" expanded="true" />
+                <element signature="e#44714#44722#0" expanded="true" />
+                <element signature="e#45330#45338#0" expanded="true" />
+                <element signature="e#45401#45409#0" expanded="true" />
+                <element signature="e#45470#45478#0" expanded="true" />
+                <element signature="e#47645#47661#0" expanded="true" />
+                <element signature="e#48598#48612#0" expanded="true" />
+                <element signature="e#50919#50927#0" expanded="true" />
+                <element signature="e#51332#51340#0" expanded="true" />
+                <element signature="e#51417#51436#0" expanded="true" />
+                <element signature="e#52540#52548#0" expanded="true" />
+                <element signature="e#53156#53164#0" expanded="true" />
+                <element signature="e#53227#53235#0" expanded="true" />
+                <element signature="e#53296#53304#0" expanded="true" />
+                <element signature="e#56434#56442#0" expanded="true" />
+                <element signature="e#66014#66030#0" expanded="true" />
+                <element signature="e#69007#69021#0" expanded="true" />
+                <element signature="e#69528#69536#0" expanded="true" />
+                <element signature="e#70026#70034#0" expanded="true" />
+                <element signature="e#70111#70130#0" expanded="true" />
+                <element signature="e#71234#71242#0" expanded="true" />
+                <element signature="e#71850#71858#0" expanded="true" />
+                <element signature="e#71921#71929#0" expanded="true" />
+                <element signature="e#71990#71998#0" expanded="true" />
+                <element signature="e#77267#77275#0" expanded="true" />
+                <element signature="e#79846#79854#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Controller.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="328" column="19" selection-start-line="328" selection-start-column="12" selection-end-line="328" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/MyTests.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="670" column="8" selection-start-line="670" selection-start-column="8" selection-end-line="670" selection-end-column="8" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/BarChartType.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="12" selection-start-column="12" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/BarGraph.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="510">
+              <caret line="259" column="24" selection-start-line="259" selection-start-column="21" selection-end-line="259" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Bar.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+              <folding>
+                <element signature="e#476#477#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Campaign.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="77" column="28" selection-start-line="77" selection-start-column="28" selection-end-line="77" selection-end-column="28" />
+              <folding>
+                <element signature="e#2140#2141#0" expanded="true" />
+                <element signature="e#2172#2173#0" expanded="true" />
+                <element signature="e#2194#2195#0" expanded="true" />
+                <element signature="e#2220#2221#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -91,36 +193,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>metric</find>
-      <find>Metric</find>
-      <find>impressionMetricsOptions</find>
-      <find>addImpHbox</find>
-      <find>Load Previous</find>
-      <find>getCPC</find>
-      <find>calcBounceRate</find>
-      <find>filter</find>
-      <find>calc</find>
-      <find>filterClickL</find>
-      <find>atStartOfDay</find>
-      <find>calculateMetrics</find>
-      <find>Load...</find>
-      <find>calculateBounces()</find>
-      <find>DatePicker</find>
-      <find>save</find>
-      <find>Apply Filters</find>
-      <find>filterClickLog</find>
-      <find>atStartOfDay()</find>
-      <find>zoomMana</find>
-      <find>create</find>
-      <find>lineWindow</find>
-      <find>SCENE</find>
-      <find>LINEwin</find>
       <find>histogramwindow</find>
       <find>window</find>
       <find>linewindow</find>
       <find>bar</find>
       <find>createBar</find>
+      <find>isCampaign</find>
+      <find>start</find>
+      <find>controller</find>
+      <find>ad A</find>
+      <find>create his</find>
+      <find>histogr</find>
+      <find>line chart</find>
+      <find>histogram</find>
       <find>barwindow</find>
+      <find>-</find>
+      <find>controller.get</find>
+      <find>controller.getCam</find>
+      <find>loadCam</find>
+      <find>controller.getCampaign().get</find>
+      <find>save</find>
+      <find>\\</find>
+      <find>IScAMP</find>
+      <find>saveCam</find>
+      <find>isCam</find>
+      <find>isCa</find>
+      <find>load previ</find>
+      <find>context</find>
+      <find>checkCom</find>
+      <find>delete</find>
+      <find>loadButton</find>
     </findStrings>
     <replaceStrings>
       <replace>controller</replace>
@@ -158,9 +260,7 @@
         <option value="$PROJECT_DIR$/src/BarChartType.java" />
         <option value="$PROJECT_DIR$/src/Bar.java" />
         <option value="$PROJECT_DIR$/src/BarChart.java" />
-        <option value="$PROJECT_DIR$/src/Campaign.java" />
         <option value="$PROJECT_DIR$/src/LineGraph.java" />
-        <option value="$PROJECT_DIR$/src/Controller.java" />
         <option value="$PROJECT_DIR$/src/DataPoint.java" />
         <option value="$PROJECT_DIR$/src/Metric.java" />
         <option value="$PROJECT_DIR$/src/ResizableChartWithinScrollPane.java" />
@@ -168,19 +268,15 @@
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/Histogram.java" />
         <option value="$PROJECT_DIR$/src/LineGraph.java" />
-        <option value="$PROJECT_DIR$/src/Controller.java" />
         <option value="$PROJECT_DIR$/src/LICENSE" />
         <option value="$PROJECT_DIR$/src/ZoomManager.java" />
         <option value="$PROJECT_DIR$/src/MyTests.java" />
+        <option value="$PROJECT_DIR$/src/Campaign.java" />
+        <option value="$PROJECT_DIR$/src/Controller.java" />
+        <option value="$PROJECT_DIR$/src/Controller.java" />
         <option value="$PROJECT_DIR$/src/GUI.java" />
       </list>
     </option>
-  </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="MavenProjectNavigator">
     <treeState>
@@ -200,6 +296,22 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="SEng-Group-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SEng-Group-Project" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SEng-Group-Project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SEng-Group-Project" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -216,46 +328,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-              <item name="_windows" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-              <item name="codestyles" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-              <item name="inspection" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PleaseWorkNow" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="PleaseWorkNow" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -266,7 +338,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/IJ/PleaseWorkNow/src/Main.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589225107690" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589278020623" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="C:/../../controlsfx.jar!/" />
     <property name="project.structure.last.edited" value="Project" />
@@ -637,7 +709,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="130892000" />
+    <option name="totallyTimeSpent" value="134722000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -649,10 +721,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1673774" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15450644" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -661,7 +733,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4968017" visible="true" weight="0.20151679" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4968017" visible="true" weight="0.20240964" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -744,6 +816,20 @@
                 </list>
               </option>
             </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
           </value>
         </entry>
       </map>
@@ -906,13 +992,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AdAuction/Campaign/Users/danielraad/Desktop/test/config.txt" />
-    <entry file="file://$PROJECT_DIR$/src/Campaign.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-494">
-          <caret line="222" column="32" selection-start-line="222" selection-start-column="16" selection-end-line="222" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -927,13 +1006,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3945">
-          <caret line="300" column="52" selection-start-line="300" selection-start-column="52" selection-end-line="300" selection-end-column="52" />
         </state>
       </provider>
     </entry>
@@ -965,24 +1037,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Bar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+          <folding>
+            <element signature="e#476#477#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/MyTests.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
-          <caret line="670" column="8" lean-forward="true" selection-start-line="670" selection-start-column="8" selection-end-line="670" selection-end-column="8" />
+          <caret line="670" column="8" selection-start-line="670" selection-start-column="8" selection-end-line="670" selection-end-column="8" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1003,18 +1074,108 @@
     <entry file="file://$PROJECT_DIR$/.idea/libraries/controlsfx_11_0_1.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Campaign.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="77" column="28" selection-start-line="77" selection-start-column="28" selection-end-line="77" selection-end-column="28" />
+          <folding>
+            <element signature="e#2140#2141#0" expanded="true" />
+            <element signature="e#2172#2173#0" expanded="true" />
+            <element signature="e#2194#2195#0" expanded="true" />
+            <element signature="e#2220#2221#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="328" column="19" selection-start-line="328" selection-start-column="12" selection-end-line="328" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="1809" column="76" lean-forward="true" selection-start-line="1809" selection-start-column="76" selection-end-line="1809" selection-end-column="76" />
+        <state relative-caret-position="114">
+          <caret line="1861" column="29" selection-start-line="1861" selection-start-column="29" selection-end-line="1861" selection-end-column="29" />
           <folding>
-            <element signature="e#5039#5058#0" expanded="true" />
-            <element signature="e#23288#23307#0" expanded="true" />
-            <element signature="e#32452#32471#0" expanded="true" />
-            <element signature="e#38598#38617#0" expanded="true" />
-            <element signature="e#43674#43693#0" expanded="true" />
-            <element signature="e#51483#51502#0" expanded="true" />
-            <element signature="e#70177#70196#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#3395#3396#0" expanded="true" />
+            <element signature="e#3432#3433#0" expanded="true" />
+            <element signature="e#3459#3460#0" expanded="true" />
+            <element signature="e#3483#3484#0" expanded="true" />
+            <element signature="e#4888#4896#0" expanded="true" />
+            <element signature="e#4973#4992#0" expanded="true" />
+            <element signature="e#6079#6087#0" expanded="true" />
+            <element signature="e#6695#6703#0" expanded="true" />
+            <element signature="e#6766#6774#0" expanded="true" />
+            <element signature="e#6835#6843#0" expanded="true" />
+            <element signature="e#10049#10057#0" expanded="true" />
+            <element signature="e#14990#14991#0" expanded="true" />
+            <element signature="e#15034#15035#0" expanded="true" />
+            <element signature="e#15204#15205#0" expanded="true" />
+            <element signature="e#15247#15248#0" expanded="true" />
+            <element signature="e#23136#23144#0" expanded="true" />
+            <element signature="e#23222#23241#0" expanded="true" />
+            <element signature="e#24347#24355#0" expanded="true" />
+            <element signature="e#24977#24985#0" expanded="true" />
+            <element signature="e#25049#25057#0" expanded="true" />
+            <element signature="e#25119#25127#0" expanded="true" />
+            <element signature="e#27896#27904#0" expanded="true" />
+            <element signature="e#28009#28017#0" expanded="true" />
+            <element signature="e#28115#28123#0" expanded="true" />
+            <element signature="e#28225#28233#0" expanded="true" />
+            <element signature="e#29466#29482#0" expanded="true" />
+            <element signature="e#32301#32309#0" expanded="true" />
+            <element signature="e#32386#32405#0" expanded="true" />
+            <element signature="e#33492#33500#0" expanded="true" />
+            <element signature="e#34108#34116#0" expanded="true" />
+            <element signature="e#34179#34187#0" expanded="true" />
+            <element signature="e#34248#34256#0" expanded="true" />
+            <element signature="e#37559#37573#0" expanded="true" />
+            <element signature="e#38034#38042#0" expanded="true" />
+            <element signature="e#38447#38455#0" expanded="true" />
+            <element signature="e#38532#38551#0" expanded="true" />
+            <element signature="e#39638#39646#0" expanded="true" />
+            <element signature="e#40254#40262#0" expanded="true" />
+            <element signature="e#40325#40333#0" expanded="true" />
+            <element signature="e#40394#40402#0" expanded="true" />
+            <element signature="e#42649#42663#0" expanded="true" />
+            <element signature="e#43110#43118#0" expanded="true" />
+            <element signature="e#43523#43531#0" expanded="true" />
+            <element signature="e#43608#43627#0" expanded="true" />
+            <element signature="e#44714#44722#0" expanded="true" />
+            <element signature="e#45330#45338#0" expanded="true" />
+            <element signature="e#45401#45409#0" expanded="true" />
+            <element signature="e#45470#45478#0" expanded="true" />
+            <element signature="e#47645#47661#0" expanded="true" />
+            <element signature="e#48598#48612#0" expanded="true" />
+            <element signature="e#50919#50927#0" expanded="true" />
+            <element signature="e#51332#51340#0" expanded="true" />
+            <element signature="e#51417#51436#0" expanded="true" />
+            <element signature="e#52540#52548#0" expanded="true" />
+            <element signature="e#53156#53164#0" expanded="true" />
+            <element signature="e#53227#53235#0" expanded="true" />
+            <element signature="e#53296#53304#0" expanded="true" />
+            <element signature="e#56434#56442#0" expanded="true" />
+            <element signature="e#66014#66030#0" expanded="true" />
+            <element signature="e#69007#69021#0" expanded="true" />
+            <element signature="e#69528#69536#0" expanded="true" />
+            <element signature="e#70026#70034#0" expanded="true" />
+            <element signature="e#70111#70130#0" expanded="true" />
+            <element signature="e#71234#71242#0" expanded="true" />
+            <element signature="e#71850#71858#0" expanded="true" />
+            <element signature="e#71921#71929#0" expanded="true" />
+            <element signature="e#71990#71998#0" expanded="true" />
+            <element signature="e#77267#77275#0" expanded="true" />
+            <element signature="e#79846#79854#0" expanded="true" />
           </folding>
         </state>
       </provider>
