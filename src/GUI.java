@@ -1740,7 +1740,7 @@ public class GUI extends Application {
     	
         VBox fileChooserButtons = new VBox(10);
        
-        HBox fileChooserLayout = new HBox(10);
+        BorderPane fileChooserLayout = new BorderPane();
 
         HBox impressionVBox = new HBox(50);
         HBox clicksVBox = new HBox(50);
@@ -1989,9 +1989,42 @@ public class GUI extends Application {
                 }
             }
         });
+	    Slider slider = new Slider();
+        //  fileChooserLayout.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.valueProperty()));
+        slider.setMax(28);
+        slider.setMin(10);
+        slider.setValue(14);
+        slider.setMaxWidth(150);
 
-	    Slider slider = new Slider(6,20,10);
-            fileChooserLayout.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.valueProperty()));
+
+        Label fontSize = new Label("Font size ");
+        Label fontLabel = new Label();
+        fontLabel.setText(String.valueOf(slider.getValue()));
+        HBox fontHbox = new HBox();
+        //  fontLabel.setMinSize(10,10);
+
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                fontLabel.setText(String.format("%.0f",t1));
+
+                bounceLabel.setFont(Font.font(slider.getValue()));
+                bounceField.setFont(Font.font(slider.getValue()));
+                loadButton.setFont(Font.font(slider.getValue()));
+                loadImpressions.setFont(Font.font(slider.getValue()));
+                loadClicks.setFont(Font.font(slider.getValue()));
+                loadServer.setFont(Font.font(slider.getValue()));
+                continueButton.setFont(Font.font(slider.getValue()));
+                serverFileLabel.setFont(Font.font(slider.getValue()));
+                clickFileLabel.setFont(Font.font(slider.getValue()));
+                impressionFileLabel.setFont(Font.font(slider.getValue()));
+                //  fileChooserLayout.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.getValue()));
+
+            }
+        });
+
+        fontHbox.getChildren().addAll(fontSize,fontLabel,slider);
+	    
 
         loadServer.setMinWidth(125);
         loadClicks.setMinWidth(125);
@@ -2008,11 +2041,13 @@ public class GUI extends Application {
         fileChooserButtons.setMargin(continueButton, new Insets(30, 10, 10, 20));
         fileChooserButtons.setMargin(bounceBox, new Insets(10, 10, 10, 20));
 
-        fileChooserLayout.getChildren().addAll(fileChooserButtons,slider);
-        //fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
+       // fileChooserLayout.getChildren().addAll(fileChooserButtons,slider);
+	fileChooserLayout.setLeft(fileChooserButtons);
+        fileChooserLayout.setRight(fontHbox);
+        fileChooserLayout.setStyle("-fx-background-color: #c8e3f0;");
 
 
-        Scene scene = new Scene(fileChooserLayout, 600, 400);
+        Scene scene = new Scene(fileChooserLayout, 1050, 500);
         fileChooserLayout.getStylesheets().add("/GUI.css");
         newWindow.setScene(scene);
         newWindow.show();
