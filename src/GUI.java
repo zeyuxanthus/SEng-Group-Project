@@ -1,6 +1,6 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +13,9 @@ import java.util.Scanner;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.print.*;
+import javafx.scene.image.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
@@ -37,8 +39,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -76,6 +76,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.NumberFormat;
@@ -337,7 +338,7 @@ public class GUI extends Application {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.getDialogPane().getStylesheets().add("/GUI.css");
                         alert.setHeaderText(null);
-                        alert.setTitle("Load Campaign");
+                        alert.setTitle("Save Campaign");
                         if(result.get().equals("")){
                             alert.setContentText("Campaign saving failed. You need to provide the name of the campaign. Please try again.");
 
@@ -923,9 +924,14 @@ public class GUI extends Application {
         printButton.setOnAction(event -> {
             printChart(chart, window);
         });
-        
+
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(event ->{
+            saveAsPng(window);
+        });
+
         printButton.setMinWidth(50);
-        filterPrintSave.getChildren().addAll(filterHistogram, printButton);
+        filterPrintSave.getChildren().addAll(filterHistogram, printButton, saveButton);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         filterOptions.getChildren().addAll(filterPane, metricsAndCreate);
         filterOptions.setMargin(filterPane, new Insets(0, 20, 0, 0));
@@ -1366,12 +1372,18 @@ public class GUI extends Application {
        
 
         Button printButton = new Button("Print");
+        Button saveButton = new Button("Save");
+
         printButton.setOnAction(event -> {
             printChart(barChart, stage);
         });
+
+        saveButton.setOnAction(event -> {
+            saveAsPng(stage);
+        });
         
         printButton.setMinWidth(50);
-        filterPrintSave.getChildren().addAll(filterBarChart, printButton);
+        filterPrintSave.getChildren().addAll(filterBarChart, printButton, saveButton);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         VBox mainWindow = new VBox(20);
         HBox filterOptions = new HBox(10);
@@ -1386,6 +1398,43 @@ public class GUI extends Application {
         stage.setScene(scene);
         stage.show();
 
+    }
+
+
+    public void saveAsPng(Stage stage) {
+        String timeStamp = new SimpleDateFormat("HHmmss_yyyyMMdd").format(Calendar.getInstance().getTime());
+        WritableImage image = stage.getScene().snapshot(null);
+
+
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.getDialogPane().getStylesheets().add("/GUI.css");
+        dialog.setTitle("AdAuction");
+        dialog.setHeaderText("Save campaign");
+        dialog.setContentText("Please enter the name of the campaign:");
+        File file = null;
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.getDialogPane().getStylesheets().add("/GUI.css");
+            alert.setHeaderText(null);
+            alert.setTitle("Save Campaign");
+            if (result.get().equals("")) {
+                alert.setContentText("Chart saving failed. You need to provide the name of the chart. Please try again.");
+            } else {
+                alert.setContentText("Campaign saved as \"" + result.get() + "\".");
+                file = new File(result.get() + timeStamp + ".png");
+
+            }
+
+            alert.showAndWait();
+
+
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -1799,9 +1848,14 @@ public class GUI extends Application {
         printButton.setOnAction(event -> {
             printChart(lineChart, stage);
         });
+
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(event -> {
+            saveAsPng(stage);
+        });
         
         printButton.setMinWidth(50);
-        filterPrintSave.getChildren().addAll(filterLineGraph, printButton);
+        filterPrintSave.getChildren().addAll(filterLineGraph, printButton, saveButton);
         metricsAndCreate.getChildren().addAll(metricsGranularity, filterPrintSave);
         
         HBox filterOptions = new HBox(10);
@@ -2108,6 +2162,7 @@ public class GUI extends Application {
                 bounceLabel.setFont(Font.font(slider.getValue()));
                 bounceField.setFont(Font.font(slider.getValue()));
                 loadButton.setFont(Font.font(slider.getValue()));
+                deleteButton.setFont(Font.font(slider.getValue()));
                 loadImpressions.setFont(Font.font(slider.getValue()));
                 loadClicks.setFont(Font.font(slider.getValue()));
                 loadServer.setFont(Font.font(slider.getValue()));

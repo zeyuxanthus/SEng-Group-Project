@@ -256,16 +256,6 @@ public class Campaign implements Serializable {
 		CPM = controller.calcCPM(impList);
 	}
 
-	public void saveAsPng(Stage stage) {
-		String timeStamp = new SimpleDateFormat("HHmmss_yyyyMMdd").format(Calendar.getInstance().getTime());
-		WritableImage image = stage.getScene().snapshot(null);
-		File file = new File("Chart" + timeStamp + ".png");
-		try {
-			ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 
 
