@@ -11,7 +11,10 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Scanner;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.print.*;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 import org.controlsfx.control.CheckComboBox;
