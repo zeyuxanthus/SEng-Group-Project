@@ -48,6 +48,43 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.print.*;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.chart.*;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.transform.Scale;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.controlsfx.control.CheckComboBox;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+
 
 public class GUI extends Application {
     private static Controller controller;
@@ -88,6 +125,9 @@ public class GUI extends Application {
     private TextField conversionRateField;
 
     private NumberFormat format = NumberFormat.getNumberInstance(Locale.UK);
+	
+	private Background back = new Background(new BackgroundFill(Color.web("c8e3f0"),CornerRadii.EMPTY,Insets.EMPTY));
+
 
     public GUI() {
     }
@@ -117,20 +157,20 @@ public class GUI extends Application {
         Canvas canvas = new Canvas();
 
         BorderPane mainWindow = new BorderPane();
-        HBox toolBar = new HBox();
+        BorderPane toolBar = new BorderPane();
         VBox chartOptions = new VBox(20);
         HBox mainArea = new HBox(10);
         HBox options = new HBox();
 	    
-	Slider slider = new Slider(6,20,10);
+	//Slider slider = new Slider(6,20,10);
 
         // Centre: metrics and filters
         VBox filtersAndMetrics = new VBox(20);
         TilePane impressionFilterOptions = impressionFilters();
         BorderPane filters = new BorderPane();
         Button filterButton = new Button("Apply Filters");
-        filters.setAlignment(filterButton, Pos.BOTTOM_RIGHT);
-        filterButton.setAlignment(Pos.BOTTOM_RIGHT);
+        filters.setAlignment(filterButton, Pos.BOTTOM_LEFT);
+       // filterButton.setAlignment(Pos.BOTTOM_RIGHT);
         filters.setLeft(impressionFilterOptions);
         filters.setRight(filterButton);
         filtersAndMetrics.getChildren().addAll(getMetricsWindow(), new Separator(), filters);
@@ -222,8 +262,8 @@ public class GUI extends Application {
         fileOption = new ComboBox<String>(FXCollections.observableArrayList(fileOptionText));
         fileOption.setValue("File");
 
-        settingOption = new ComboBox<String>(FXCollections.observableArrayList(settingsOptionText));
-        settingOption.setValue("Settings");
+     //   settingOption = new ComboBox<String>(FXCollections.observableArrayList(settingsOptionText));
+     //   settingOption.setValue("Settings");
         
         Menu menu = new Menu("File");
         
@@ -317,14 +357,29 @@ public class GUI extends Application {
         menu.getItems().addAll(m1, m2, m3);
         MenuBar mb = new MenuBar();
         mb.getMenus().add(menu);
-        VBox topBox = new VBox();
-        topBox.getChildren().addAll(mb, slider);
+     //   VBox topBox = new VBox();
+     //   topBox.getChildren().addAll(mb, slider);
 
-        mainWindow.setTop(mb);
+     //   mainWindow.setTop(mb);
+	ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Paint fill = colorPicker.getValue();
+                BackgroundFill backgroundFill = new BackgroundFill(fill, CornerRadii.EMPTY,Insets.EMPTY);
+                Background background = new Background(backgroundFill);
+                back = background;
+                // add back on top
+                mainWindow.setBackground(background);
+                //   histogramWindow().setBackground(background);
+                mb.setBackground(background);
+            }
+        });
 
-        options.getChildren().addAll(fileOption,  settingOption);
+
+        options.getChildren().addAll(mb,colorPicker);
         
-        toolBar.getChildren().add(options);
+       // toolBar.getChildren().add(options);
         Button lineGraphButton = new Button();
         Button histogramButton = new Button();
         Button barChartButton = new Button();
@@ -377,24 +432,63 @@ public class GUI extends Application {
         BorderPane.setMargin(chartOptions, new Insets(50, 25, 10, 50));
 
 
-        mainWindow.setCenter(chartOptions);
-        mainWindow.setRight(filtersAndMetrics);
+       Slider slider = new Slider();
+
+        slider.setMax(18.5);
+        slider.setMin(10);
+        //  slider.setValue(20);
+        //   slider.setMaxWidth(200);
+
+
+        Label fontSize = new Label("Font size ");
+        Label fontLabel = new Label();
+        fontLabel.setText(String.valueOf(slider.getValue()));
+        HBox fontHbox = new HBox();
+
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                fontLabel.setText(String.format("%.0f",t1));
+                //     impressionFilterOptions.setStyle(String.valueOf(Font.font(slider.getValue())));
+
+                //  bounceLabel.setFont(Font.font(slider.getValue()));
+
+
+                chartOptions.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+                filtersAndMetrics.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+                //  filters.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+                //  impressionFilterOptions.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+                options.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+
+                //  mainWindow.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt;", slider.getValue()));
+
+            }
+        });
+
+        fontHbox.getChildren().addAll(fontSize,fontLabel,slider);
+
+
         //mainWindow.setStyle("-fx-background-color: #c8e3f0;");
 	    
-	    HBox h = new HBox(mainWindow,slider);
-	    h.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.valueProperty()));
-	    layering.getChildren().addAll(canvas, h);
+	 //   HBox h = new HBox(mainWindow,slider);
+	 //   h.styleProperty().bind(Bindings.format("-fx-font-size: %.1fpt; -fx-background-color: #c8e3f0;", slider.valueProperty()));
+	    layering.getChildren().addAll(canvas, mainWindow);
 	    slider.setMaxWidth(100);
-	
+	    toolBar.setRight(fontHbox);
+	    toolBar.setLeft(options);
+	    mainWindow.setTop(toolBar);
+        mainWindow.setLeft(chartOptions);
+        mainWindow.setCenter(filtersAndMetrics);
+        mainWindow.setStyle("-fx-background-color: #c8e3f0;");
         canvas.widthProperty().bind(primaryStage.widthProperty());
         canvas.heightProperty().bind(primaryStage.heightProperty());
 
         root.getChildren().add(layering);
 	    root.setAutoSizeChildren(true);
-        Scene scene = new Scene(root, 1200, 600);
+        Scene scene = new Scene(root, 1700, 700);
         scene.getStylesheets().add("/GUI.css");
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Ad Auction Dashboard - " + controller.getCampaign().getName());
+        primaryStage.setTitle("Ad Auction Dashboard");
         primaryStage.show();
 
         //controller.createBarChar(Metric.TOTAL_IMPRESSIONS, BarChartType.DAY_OF_WEEK,
