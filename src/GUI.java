@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import javafx.print.*;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 import org.controlsfx.control.CheckComboBox;
 
@@ -217,7 +218,7 @@ public class GUI extends Application {
 
         fileOption = new ComboBox<String>(FXCollections.observableArrayList(fileOptionText));
         fileOption.setValue("File");
-        
+
         settingOption = new ComboBox<String>(FXCollections.observableArrayList(settingsOptionText));
         settingOption.setValue("Settings");
         
@@ -252,7 +253,7 @@ public class GUI extends Application {
                     String campaignName;
                     if (result.isPresent()){
                         controller.loadCampaign(result.get());
-
+                        primaryStage.setTitle("Ad Auction Dashboard - " + controller.getCampaign().getName());
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.getDialogPane().getStylesheets().add("/GUI.css");
                         alert.setTitle("Load Campaign");
@@ -313,13 +314,12 @@ public class GUI extends Application {
         menu.getItems().addAll(m1, m2, m3);
         MenuBar mb = new MenuBar();
         mb.getMenus().add(menu);
-
         VBox topBox = new VBox();
         topBox.getChildren().addAll(mb, slider);
 
         mainWindow.setTop(mb);
 
-        options.getChildren().addAll(fileOption, settingOption);
+        options.getChildren().addAll(fileOption,  settingOption);
         
         toolBar.getChildren().add(options);
         Button lineGraphButton = new Button();

@@ -7,10 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Campaign.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Campaign.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -28,8 +24,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="1861" column="29" selection-start-line="1861" selection-start-column="29" selection-end-line="1861" selection-end-column="29" />
+            <state relative-caret-position="96">
+              <caret line="255" column="80" selection-start-line="255" selection-start-column="80" selection-end-line="255" selection-end-column="80" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3395#3396#0" expanded="true" />
@@ -110,7 +106,7 @@
         <entry file="file://$PROJECT_DIR$/src/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="195">
-              <caret line="328" column="19" selection-start-line="328" selection-start-column="12" selection-end-line="328" selection-end-column="19" />
+              <caret line="213" column="39" selection-start-line="213" selection-start-column="35" selection-end-line="213" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -193,10 +189,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>histogramwindow</find>
-      <find>window</find>
-      <find>linewindow</find>
-      <find>bar</find>
       <find>createBar</find>
       <find>isCampaign</find>
       <find>start</find>
@@ -210,7 +202,6 @@
       <find>-</find>
       <find>controller.get</find>
       <find>controller.getCam</find>
-      <find>loadCam</find>
       <find>controller.getCampaign().get</find>
       <find>save</find>
       <find>\\</find>
@@ -223,6 +214,11 @@
       <find>checkCom</find>
       <find>delete</find>
       <find>loadButton</find>
+      <find>loadCam</find>
+      <find>load</find>
+      <find>file</find>
+      <find>&quot;File</find>
+      <find>fileOption</find>
     </findStrings>
     <replaceStrings>
       <replace>controller</replace>
@@ -338,7 +334,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/IJ/PleaseWorkNow/src/Main.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589278020623" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589279606375" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="C:/../../controlsfx.jar!/" />
     <property name="project.structure.last.edited" value="Project" />
@@ -709,7 +705,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="134722000" />
+    <option name="totallyTimeSpent" value="136060000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -722,7 +718,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15450644" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -1097,14 +1092,14 @@
     <entry file="file://$PROJECT_DIR$/src/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
-          <caret line="328" column="19" selection-start-line="328" selection-start-column="12" selection-end-line="328" selection-end-column="19" />
+          <caret line="213" column="39" selection-start-line="213" selection-start-column="35" selection-end-line="213" selection-end-column="39" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="1861" column="29" selection-start-line="1861" selection-start-column="29" selection-end-line="1861" selection-end-column="29" />
+        <state relative-caret-position="96">
+          <caret line="255" column="80" selection-start-line="255" selection-start-column="80" selection-end-line="255" selection-end-column="80" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3395#3396#0" expanded="true" />
