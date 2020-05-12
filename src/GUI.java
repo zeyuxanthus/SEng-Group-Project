@@ -2001,7 +2001,7 @@ public class GUI extends Application {
 
         fileChooserButtons.getChildren().addAll(loadButton, deleteButton, clicksVBox, impressionVBox, serverVBox, bounceBox, continueButton);
         fileChooserButtons.setMargin(loadButton, new Insets(20, 10, 10, 20));
-        fileChooserButtons.setMargin(deleteButton, new Insets(20, 10, 10, 20));
+        fileChooserButtons.setMargin(deleteButton, new Insets(5, 10, 10, 20));
         fileChooserButtons.setMargin(clicksVBox, new Insets(5, 10, 0, 20));
         fileChooserButtons.setMargin(impressionVBox, new Insets(10, 10, 0, 20));
         fileChooserButtons.setMargin(serverVBox, new Insets(10, 10, 0, 20));

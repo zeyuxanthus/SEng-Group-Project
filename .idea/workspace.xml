@@ -6,9 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
-    </list>
+    <list default="true" id="96f5439a-fc27-43ff-8e76-79a1ed051bad" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +22,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="255" column="80" selection-start-line="255" selection-start-column="80" selection-end-line="255" selection-end-column="80" />
+            <state relative-caret-position="195">
+              <caret line="2001" column="72" selection-start-line="2001" selection-start-column="60" selection-end-line="2001" selection-end-column="72" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3395#3396#0" expanded="true" />
@@ -189,7 +187,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>createBar</find>
       <find>isCampaign</find>
       <find>start</find>
       <find>controller</find>
@@ -212,13 +209,14 @@
       <find>load previ</find>
       <find>context</find>
       <find>checkCom</find>
-      <find>delete</find>
       <find>loadButton</find>
       <find>loadCam</find>
       <find>load</find>
       <find>file</find>
       <find>&quot;File</find>
       <find>fileOption</find>
+      <find>delete</find>
+      <find>deletebutton</find>
     </findStrings>
     <replaceStrings>
       <replace>controller</replace>
@@ -334,7 +332,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/IJ/PleaseWorkNow/src/Main.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589279606375" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1589279797027" />
     <property name="create.test.in.the.same.root" value="true" />
     <property name="last_opened_file_path" value="C:/../../controlsfx.jar!/" />
     <property name="project.structure.last.edited" value="Project" />
@@ -705,7 +703,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="136060000" />
+    <option name="totallyTimeSpent" value="136300000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -718,6 +716,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15450644" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -1098,8 +1097,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="255" column="80" selection-start-line="255" selection-start-column="80" selection-end-line="255" selection-end-column="80" />
+        <state relative-caret-position="195">
+          <caret line="2001" column="72" selection-start-line="2001" selection-start-column="60" selection-end-line="2001" selection-end-column="72" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3395#3396#0" expanded="true" />
