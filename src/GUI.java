@@ -597,7 +597,7 @@ public class GUI extends Application {
         return windowLayout;
     }
 
-    private void histogramWindow() {
+    private VBox histogramWindow() {
         Stage newWindow = new Stage();
         VBox filterPane = new VBox(10);
 
@@ -672,7 +672,7 @@ public class GUI extends Application {
                  incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
-                createHistogram(filter);
+                createHistogram(filter).setBackground(back);
                 newWindow.close();
 
 
@@ -694,6 +694,7 @@ public class GUI extends Application {
         newWindow.setTitle("Create Histogram - " + controller.getCampaign().getName());
         newWindow.show();
 
+	return windowLayout;
 //
 //        newWindow.setTitle("Create Histogram");
 //        newWindow.show();
@@ -752,7 +753,7 @@ public class GUI extends Application {
         return filters;
     }
 
-    private void createHistogram(Filter filters) {
+    private VBox createHistogram(Filter filters) {
         Histogram histogram = controller.createHistogram(5, 2, filters);
         ArrayList<HistogramBar> histogramBars = histogram.getHistogramBars();
 
@@ -941,9 +942,10 @@ public class GUI extends Application {
         window.setScene(scene);
         window.show();
 
+	return vbox;
     }
 
-    private void lineWindow() {
+    private VBox lineWindow() {
         Stage window = new Stage();
 
         TilePane impressionFilterOptions = impressionFilters();
@@ -1036,7 +1038,7 @@ public class GUI extends Application {
                 ageGroups = filterArrays.get(1);
                 incomes = filterArrays.get(2);
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
-                createLineChart(metrics.get(0), filter, granularity.getValue());
+                createLineChart(metrics.get(0), filter, granularity.getValue()).setBackground(back);
                 window.close();
 
             }
@@ -1055,10 +1057,11 @@ public class GUI extends Application {
         window.setTitle("Create LineGraph - " + controller.getCampaign().getName());
         window.show();
 
+	return windowLayout;
 
     }
     
-    private void barWindow() {
+    private VBox barWindow() {
         Stage window = new Stage();
 
         TilePane impressionFilterOptions = impressionFilters();
@@ -1152,7 +1155,7 @@ public class GUI extends Application {
                 incomes = filterArrays.get(2);
 
                 Filter filter = new Filter(startDate, endDate, context, gender, ageGroups, incomes);
-                createBarChart(metrics.get(0), filter, type.getValue());
+                createBarChart(metrics.get(0), filter, type.getValue()).setBackground(back);
                 window.close();
 
             }
@@ -1172,10 +1175,11 @@ public class GUI extends Application {
         window.setTitle("Create Bar Chart - " + controller.getCampaign().getName());
         window.show();
 
+	return windowLayout;
 
     }
     
-    private void createBarChart(Metric metric, Filter filters, BarChartType type) {
+    private VBox createBarChart(Metric metric, Filter filters, BarChartType type) {
         Stage stage = new Stage();
         stage.setTitle("Bar Chart - " + controller.getCampaign().getName());
         final CategoryAxis xAxis = new CategoryAxis();
@@ -1385,6 +1389,8 @@ public class GUI extends Application {
         scene.getStylesheets().add("/GUI.css");
         stage.setScene(scene);
         stage.show();
+	
+	return mainWindow;
 
     }
 
@@ -1595,7 +1601,7 @@ public class GUI extends Application {
 //    }
 
 
-    private void createLineChart(Metric metric, Filter filters, TimeInterval interval) {
+    private VBox createLineChart(Metric metric, Filter filters, TimeInterval interval) {
         Stage stage = new Stage();
         stage.setTitle("Line Chart - " + controller.getCampaign().getName());
         CategoryAxis xAxis = new CategoryAxis();
@@ -1820,6 +1826,8 @@ public class GUI extends Application {
         scene.getStylesheets().add("/GUI.css");
         stage.setScene(scene);
         stage.show();
+	    
+	return mainWindow;
 
 //        printChart(lineChart, stage);
     }
